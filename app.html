@@ -39,6 +39,7 @@
     </div>
   </a>
   <div class="hud">
+    <button class="btn unwell" type="button" id="unwellBtn">I feel unwell</button>
     <div class="chip"><input id="crewName" style="background:transparent;border:0;outline:0;width:110px;font-weight:600" value="Cmdr. Rivera" aria-label="Crew member name"></div>
     <div class="chip">Mission day <b id="mday">—</b></div>
     <div class="chip"><select id="envSel" aria-label="Mission environment"></select></div>
@@ -106,6 +107,10 @@
       <div class="badges" id="badges"></div>
     </div>
     <div class="card">
+      <h2>Space weather <span class="srcbadge" style="font-size:10px;padding:3px 8px">NASA DONKI</span></h2>
+      <div id="swx" aria-live="polite"><div class="libempty" style="padding:4px 0">Checking live solar activity…</div></div>
+    </div>
+    <div class="card">
       <h2>Radiation budget</h2>
       <div id="radbox"></div>
     </div>
@@ -128,6 +133,8 @@
       <button class="btn" id="nextDayBtn" title="Simulation: close out today and start the next mission day">End day → next mission day</button>
       <span style="flex:1"></span>
       <button class="btn" id="exportBtn">Export data</button>
+      <button class="btn" id="backupBtn" type="button">Download backup</button>
+      <label class="btn" for="restoreFile" style="cursor:pointer">Restore backup</label><input type="file" id="restoreFile" accept="application/json,.json" hidden>
       <button class="btn warn" id="resetBtn">Reset demo data</button>
     </div>
   </div>
@@ -182,6 +189,12 @@
 <footer class="appfoot"><a href="privacy.html">Privacy</a><span>·</span><a href="index.html#guide">How to use</a><span>·</span><span>Prototype, not a medical device</span><span>·</span><span>Built with AI assistance (Claude)</span><span id="offlineTag" class="offtag"></span></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-label="Export"><div class="card"><h2>Export <button class="btn" id="mClose" style="padding:4px 10px">Close</button></h2><p style="font-size:13px;color:var(--muted);margin-top:0" id="mHint">A short, readable report for the flight surgeon. Switch to JSON for the full record.</p><div class="seg sm" id="mSeg" style="margin-bottom:8px"><button data-f="report" class="on">Report</button><button data-f="json">Full JSON</button></div><textarea id="mText" readonly aria-label="Export content"></textarea><div class="btns"><button class="btn pri" id="mCopy">Copy</button></div></div></div>
+<div class="modal hidden" id="unwellModal" role="dialog" aria-modal="true" aria-labelledby="unwellTitle"><div class="card" style="max-width:640px">
+  <h2 id="unwellTitle">What do you feel right now? <button class="btn" type="button" id="unwellClose" style="padding:4px 10px">Close</button></h2>
+  <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px">Tick everything that applies. Sonnenblume points you to the right protocol and tells you how urgent it is.</p>
+  <div id="unwellList" class="unwell-list"></div>
+  <div id="unwellResult" aria-live="polite"></div>
+</div></div>
 <div class="modal esc hidden" id="escModal" role="alertdialog" aria-modal="true" aria-label="Crew alert sent"><div class="card"><h2 style="color:var(--alert)">Crew alert sent</h2><div id="escBody" style="font-size:14px;line-height:1.5"></div><div class="btns"><button class="btn pri" id="escOk">Acknowledge</button></div></div></div>
 
 <script src="js/body.js"></script>

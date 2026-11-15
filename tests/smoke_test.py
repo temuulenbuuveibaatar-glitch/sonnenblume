@@ -23,6 +23,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
     def log_message(self, *a): pass
     def do_GET(self):
+        if self.path.startswith("/api/spaceweather"):
+            body = json.dumps({"source":"NASA DONKI (CCMC)","fetched":"2026-11-15T12:00:00Z","feeds":{"flares":True,"particles":True,"storms":True},
+                "flares":[{"id":"F1","peak":"2026-11-14T10:00Z","cls":"M2.1","source":"N10E20","link":""}],"particles":[],
+                "storms":[{"id":"G1","start":"2026-10-31T18:00Z","kp":6,"link":""}]}).encode()
+            self.send_response(200); self.send_header("Content-Type", "application/json"); self.end_headers(); self.wfile.write(body); return
         if self.path.startswith("/api/kb"):  # mirror production when no database is configured
             body = b'{"source":"none","count":0,"records":[]}'
             self.send_response(200); self.send_header("Content-Type", "application/json"); self.end_headers(); self.wfile.write(body); return
@@ -72,7 +77,7 @@ with sync_playwright() as p:
                 pg.evaluate(f"location.hash='{v}'"); pg.wait_for_timeout(400)
                 check(f"view {v} renders", pg.locator(f"#v-{v}").is_visible())
             check("no fault bar on clean run", pg.locator("#faultBar").count() == 0)
-            check("library loads 266 records", "266" in pg.locator("#kbSrc").inner_text(), pg.locator("#kbSrc").inner_text())
+            check("library loads 302 records", "302" in pg.locator("#kbSrc").inner_text(), pg.locator("#kbSrc").inner_text())
         ctx.close()
     ctx = b.new_context(); pg = ctx.new_page(); r = pg.goto(BASE + "/missing-page.html")
     check("unknown page shows 404 page", r.status == 404 and "Lost in space" in pg.content()); ctx.close()
@@ -145,6 +150,31 @@ with sync_playwright() as p:
     pg.keyboard.press("Escape")
     check("the alert is logged in crew comms", pg.locator("#comms .msg").count() > 0)
     check("clinical flows produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
+    ctx.close()
+
+    print("New features")
+    ctx = b.new_context(); pg = ctx.new_page(); errs = page_errors(pg); pg.goto(BASE + "/app.html"); pg.wait_for_timeout(2000)
+    check("space weather panel shows NASA data", "flares" in pg.locator("#swx").inner_text())
+    pg.click("#unwellBtn"); pg.locator("#unwellList label", has_text="Chest pain").click(); pg.wait_for_timeout(200)
+    check("triage: chest pain is Act now", "Act now" in pg.locator("#unwellResult").inner_text())
+    pg.locator("#unwellResult .kbl").first.click(); pg.wait_for_timeout(300)
+    check("triage opens the chest pain protocol", "Chest pain" in pg.locator("#kbDetail h3").inner_text())
+    pg.fill("#kbQ", "Promethazine"); pg.wait_for_timeout(150); pg.locator("#kbList .libitem").first.click()
+    check("medicine has official DailyMed link", pg.locator('#kbDetail a[href^="https://dailymed.nlm.nih.gov"]').count() == 1)
+    pg.fill("#kbQ", ""); pg.locator("#kbTypes button[data-t=guide]").click(); pg.wait_for_timeout(150)
+    check("procedure guides listed", pg.locator("#kbList .libitem").count() >= 18)
+    pg.evaluate("location.hash='log'"); pg.wait_for_timeout(300)
+    with pg.expect_download() as dl: pg.click("#backupBtn")
+    path = dl.value.path(); data = json.loads(open(path).read())
+    check("backup file downloads", data.get("app") == "sonnenblume" and len(data["state"]["days"]) > 0)
+    pg.evaluate(f"localStorage.setItem('{KEY}',JSON.stringify({{env:'iss',days:[{{day:1,symptoms:[]}}]}}))"); pg.reload(); pg.wait_for_timeout(1200)
+    pg.evaluate("location.hash='log'"); pg.wait_for_timeout(300)
+    pg.set_input_files("#restoreFile", path); pg.wait_for_timeout(800)
+    check("backup restores", pg.evaluate(f"JSON.parse(localStorage.getItem('{KEY}')).days.length") > 5)
+    bad = pathlib.Path(path).with_name("bad.json"); bad.write_text('{"app":"x"}')
+    pg.set_input_files("#restoreFile", str(bad)); pg.wait_for_timeout(500)
+    check("invalid backup is rejected", "not a valid" in pg.locator("#toast").inner_text())
+    check("new features produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
     ctx.close()
 
     # optional accessibility scan (runs when axe-core is installed: npm i axe-core)

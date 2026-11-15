@@ -8,6 +8,7 @@
   "kb-medication-3.json",
   "kb-protocol.json",
   "kb-protocol-2.json",
+  "kb-guide.json",
   "kb-shielding.json",
   "kb-condition.json",
   "kb-radiation_event.json",
@@ -15,5 +16,5 @@
   "kb-countermeasure.json",
   "kb-source.json"
  ],
- "count": 266
+ "count": 302
 }

@@ -184,14 +184,6 @@ function buildBody(rng){
   tube('heart','o',smooth([[432,262],[434,232],[432,200]]),VEN,9,{under:'#123c66'});                                     // superior vena cava
   tube('heart','o',smooth([[448,288],[462,262],[478,252],[496,258]]),PULA,8,{under:'#24306e'});                           // pulmonary trunk → left
   tube('heart','o',smooth([[448,288],[440,264],[420,256],[398,262]]),PULA,7,{under:'#24306e'});                           // → right pulmonary artery
-  const HEART=smooth([[430,276],[452,266],[478,276],[496,302],[494,330],[480,352],[458,368],[438,358],[422,334],[418,304]],true);
-  organ('heart','o',HEART,'#b02d36',{pat:'myo'});
-  fl('o',smooth([[422,300],[436,284],[444,300],[440,330],[426,330]],true),'#8a2a3a',.55);                                 // right atrium
-  ln('o',smooth([[452,272],[460,300],[458,330],[446,356]]),'#e0b24a',2.2,'stroke-opacity:.8');                            // interventricular groove fat
-  ln('o',smooth([[452,272],[460,300],[458,330],[446,356]]),ART,1.4);                                                      // LAD coronary artery
-  ln('o',smooth([[430,290],[426,320],[438,350]]),ART,1.2);ln('o',smooth([[458,300],[478,320],[484,340]]),VEN,1,'stroke-opacity:.8');
-  for(let i=0;i<6;i++){const p=lerp([456,282],[448,350],i/6);ln('o',smooth([p,[p[0]+10+R()*8,p[1]+6+R()*6]]),ART,.6);}
-
   // ================= LUNGS (zone: lungs) with bronchial tree + pulmonary vessels =================
   const LUNG_R=smooth([[426,226],[406,222],[386,236],[370,268],[362,310],[360,352],[372,372],[404,366],[424,358],[432,324],[432,268]],true);
   const LUNG_L=smooth([[454,226],[474,222],[494,236],[510,268],[518,310],[520,352],[508,372],[478,366],[462,356],[470,330],[454,312],[456,268]],true);
@@ -204,6 +196,16 @@ function buildBody(rng){
   [[[424,250],2.2],[[456,250],.95]].forEach(([p,a])=>{tree(p,a+.15,22,3.2,4,'#e8d3a8');});                              // bronchi
   [[[410,262],2.4],[[470,262],.75]].forEach(([p,a])=>{tree(p,a+.4,18,1.6,4,PULA);tree(p,a-.3,18,1.4,4,PULV);});
   both(smooth([[392,250],[380,290],[376,340]]),d=>ln('o',d,'#fff',3,'stroke-opacity:.16'));
+  // heart sits in front, between the lungs (cardiac notch)
+  add('o','<path class="decof" style="fill:#000;opacity:.25;filter:blur(3px)" d="'+smooth([[432,284],[452,274],[474,282],[490,304],[492,330],[480,354],[460,370],[442,364],[428,342],[424,310]],true)+'"/>');
+  const HEART=smooth([[432,280],[452,270],[474,278],[490,300],[492,326],[480,350],[460,366],[442,360],[428,338],[424,306]],true);
+  organ('heart','o',HEART,'#b02d36',{pat:'myo'});
+  fl('o',smooth([[422,300],[436,284],[444,300],[440,330],[426,330]],true),'#8a2a3a',.55);                                 // right atrium
+  ln('o',smooth([[452,272],[460,300],[458,330],[446,356]]),'#e0b24a',2.2,'stroke-opacity:.8');                            // interventricular groove fat
+  ln('o',smooth([[452,272],[460,300],[458,330],[446,356]]),ART,1.4);                                                      // LAD coronary artery
+  ln('o',smooth([[430,290],[426,320],[438,350]]),ART,1.2);ln('o',smooth([[458,300],[478,320],[484,340]]),VEN,1,'stroke-opacity:.8');
+  for(let i=0;i<6;i++){const p=lerp([456,282],[448,350],i/6);ln('o',smooth([p,[p[0]+10+R()*8,p[1]+6+R()*6]]),ART,.6);}
+
   ln('o',smooth([[358,380],[392,368],[440,376],[488,368],[522,380]]),'#7e2427',6,'stroke-opacity:.9');                   // diaphragm
 
   // ================= ABDOMEN (zone: metabolism) =================

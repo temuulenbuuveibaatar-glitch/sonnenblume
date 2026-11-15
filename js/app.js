@@ -739,8 +739,8 @@ function renderGuide(){
 
 // ---------- Knowledge base (Azure Cosmos DB, with bundled fallback) ----------
 const KB={records:[],byId:{},source:'',ready:false,type:'protocol',q:'',sel:null,disclaimer:''};
-const KBT={protocol:'Protocols',medication:'Medications',shielding:'Radiation shielding',condition:'Conditions',countermeasure:'Countermeasures',radiation_event:'Solar events',dose_rate:'Dose rates',source:'Sources'};
-const KBT1={protocol:'Protocol',medication:'Medication',shielding:'Shielding material',condition:'Condition',countermeasure:'Countermeasure',radiation_event:'Solar event',dose_rate:'Dose rate',source:'Source'};
+const KBT={protocol:'Protocols',guide:'Procedure guides',medication:'Medications',shielding:'Radiation shielding',condition:'Conditions',countermeasure:'Countermeasures',radiation_event:'Solar events',dose_rate:'Dose rates',source:'Sources'};
+const KBT1={protocol:'Protocol',guide:'Procedure guide',medication:'Medication',shielding:'Shielding material',condition:'Condition',countermeasure:'Countermeasure',radiation_event:'Solar event',dose_rate:'Dose rate',source:'Source'};
 async function loadKB(){
   const idx=await fetch('data/index.json').then(r=>r.json()).catch(()=>null);
   if(idx)KB.disclaimer=idx.disclaimer||'';
@@ -786,6 +786,8 @@ function kbDetail(r){
     h+=L('When to use',P(d.trigger))+L('Steps',`<ol>${d.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`)+L('Escalate',P(d.escalate))+L('Note',P(d.comms_note));
     const meds=(d.medications||[]).map(id=>KB.byId[id]).filter(Boolean);
     h+=L('Medications in this protocol',meds.map(m=>{const ps=pharmStatus(m.id);return kbLink(m)+(ps?`<span class="stock pst ${ps.s}">${ps.qty} left${ps.s!=='ok'?' · '+esc(ps.t):''}</span> `:'');}).join(''));
+    const gd=kbFor('guide',g=>(g.indicators||[]).some(k=>(r.indicators||[]).includes(k))).slice(0,3);
+    if(gd.length)h+=L('How-to guides',gd.map(kbLink).join(''));
     h+=runnerHTML(r);
   }else if(r.type==='medication'){
     h+=`<table style="margin-top:10px"><tr><td>Class</td><td>${esc(d.drug_class)}</td></tr><tr><td>Form</td><td>${esc(d.form)}</td></tr><tr><td>Prescription</td><td>${d.prescription?'Yes, crew medical officer':'No'}</td></tr></table>`;
@@ -795,10 +797,16 @@ function kbDetail(r){
     if(ps)h+=L('Onboard stock',`<p><b style="font-family:var(--mono)">${ps.qty}</b> left · expires ${esc(ps.exp)} · <span class="pst ${ps.s}">${esc(ps.t)}</span></p><p style="margin-top:8px"><button class="btn" data-use="${esc(r.id)}" ${ps.qty?'':'disabled'}>Record one dose used</button> <button class="btn" data-goto="pharmacy">Open pharmacy</button></p>`);
     const pr=kbFor('protocol',p=>(p.data.medications||[]).includes(r.id));
     h+=L('Used in protocols',pr.map(kbLink).join(''));
+    const links=(d.links||[]).filter(x=>x&&typeof x.url==='string'&&/^https:\/\/(dailymed\.nlm\.nih\.gov|vsearch\.nlm\.nih\.gov|medlineplus\.gov)\//.test(x.url));
+    if(links.length)h+=L('Official drug information',links.map(x=>`<a class="kbl" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.label)}</a>`).join(''));
   }else if(r.type==='shielding'){
     const f=v=>v===null||v===undefined?'—':v;
     h+=`<table style="margin-top:10px"><tr><td>Density</td><td>${d.density_g_cm3?d.density_g_cm3+' g/cm³':'—'}</td></tr><tr><td>Hydrogen by mass</td><td>${d.hydrogen_mass_pct!==null&&d.hydrogen_mass_pct!==undefined?d.hydrogen_mass_pct+'%':'—'}</td></tr><tr><td>Galactic cosmic rays</td><td>${esc(f(d.vs_galactic_cosmic_rays))}</td></tr><tr><td>Solar particle events</td><td>${esc(f(d.vs_solar_particle_events))}</td></tr><tr><td>Status</td><td>${esc(f(d.status))}</td></tr></table>`+L('Notes',P(d.notes));
     h+=L('Related',[KB.byId['prot-spe'],KB.byId['cm-storm-shelter']].filter(Boolean).map(kbLink).join(''));
+  }else if(r.type==='guide'){
+    h+=P(r.summary)+L('Steps',`<ol>${(d.steps||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`)+((d.tips||[]).length?L('Good to know',`<ul>${d.tips.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`):'');
+    const pr=kbFor('protocol',p=>(p.indicators||[]).some(k=>(r.indicators||[]).includes(k))).slice(0,5);
+    h+=L('Related protocols',pr.map(kbLink).join(''));
   }else if(r.type==='condition'){
     h+=L('What happens',P(r.summary))+`<table style="margin-top:10px"><tr><td>System</td><td>${esc(d.system)}</td></tr><tr><td>Onset</td><td>${esc(d.onset)}</td></tr></table>`+L('Signs',P(d.signs))+L('Countermeasures',P(d.countermeasures));
     const pr=kbFor('protocol',p=>(p.indicators||[]).some(k=>(r.indicators||[]).includes(k))&&(p.zones||[]).some(z=>(r.zones||[]).includes(z))).slice(0,6);
@@ -981,11 +989,82 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-fault]');i
   btn.onclick=()=>set(!wrap.classList.contains('big'));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&wrap.classList.contains('big'))set(false);});})();
 window.addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue)return;try{S=sanitize(JSON.parse(e.newValue));renderAll();checkEscalation();if(S.view==='log')renderForm();toast('Updated from another tab');}catch(err){fault('sync',err);}});
+// ---------- "I feel unwell": symptom-first triage into protocols ----------
+const TRIAGE=[
+  ['Chest pain or pressure','prot-chest-pain',3,'chest pain'],['Hard to breathe','prot-low-spo2',3,'shortness of breath'],['Fainted or nearly fainted','prot-syncope',2],
+  ['Sudden severe headache','prot-stroke',3,'headache'],['Face drooping, weak arm or slurred speech','prot-stroke',3],['Sudden loss of vision','prot-vision-loss',3],
+  ['Seizure or jerking','prot-seizure',3],['Swollen lips or throat, hives','prot-anaphylaxis',3],['Heavy bleeding','prot-hemorrhage',3],
+  ['Fever or chills','prot-fever',2],['Cough with fever','prot-pneumonia',2,'sore throat'],['Vomiting or cannot keep fluids down','prot-dehydration',2,'nausea'],
+  ['Severe belly pain','prot-abdominal-pain',2],['Flank pain or blood in urine','prot-kidney-stone',2],['Burning when urinating','prot-uti',1],
+  ['Headache','prot-headache',1,'headache'],['Blurred near vision','prot-vision-change',1,'vision blur'],['Something in my eye','prot-eye-foreign-body',1],
+  ['Dizzy or spinning','prot-vertigo',1],['Back pain','prot-back-pain',1,'back pain'],['Rash or itching','prot-rash',1,'skin rash'],
+  ['Toothache','prot-dental-abscess',1],['Racing or irregular heartbeat','prot-palpitations',2],['Anxious or panicky','prot-panic',1],
+  ['Low mood for a long time','prot-low-mood',1],['Can not sleep','prot-insomnia',1],['Thoughts of harming myself','prot-behavioural-crisis',3],
+  ['Burn','prot-burn',1],['Possible broken bone','prot-fracture',2],['Hit my head','prot-head-injury',2]
+];
+const URG={3:['alert','Act now','Start this protocol now and alert your crew medical officer.'],2:['watch','Same day','Follow the protocol and contact the flight surgeon at the next contact.'],1:['ok','Self-care','Follow the protocol; mention it at your next medical conference.']};
+function renderUnwell(){
+  $('#unwellList').innerHTML=TRIAGE.map((t,i)=>`<label class="uw"><input type="checkbox" value="${i}"><span>${esc(t[0])}</span></label>`).join('');
+  $('#unwellResult').innerHTML='';
+  $('#unwellList').onchange=()=>{
+    const picked=[...document.querySelectorAll('#unwellList input:checked')].map(x=>TRIAGE[+x.value]);
+    if(!picked.length){$('#unwellResult').innerHTML='';return;}
+    const top=Math.max(...picked.map(p=>p[2])),[st,lab,msg]=URG[top];
+    const seen=new Set(),prots=picked.sort((a,b)=>b[2]-a[2]).map(p=>KB.byId[p[1]]).filter(p=>p&&!seen.has(p.id)&&seen.add(p.id));
+    $('#unwellResult').innerHTML=`<div class="banner st-${st}" style="margin-top:12px"><div><b>${lab}</b><span>${msg}${link().independent?' Earth is far away: the onboard protocol comes first.':''}</span></div></div>
+      <div class="lbl" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.8px;color:var(--muted);margin:10px 0 6px">OPEN THE PROTOCOL</div>${prots.map(kbLink).join('')}
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" id="uwLog">Add these symptoms to today</button>${top===3?'<button class="btn red" type="button" id="uwAlert">Alert crew now</button>':''}</div>`;
+    $('#uwLog').onclick=()=>{const td=today();picked.forEach(p=>{if(p[3]&&!td.symptoms.includes(p[3]))td.symptoms.push(p[3]);});save();renderAll();toast('Symptoms added to today');};
+    const a=$('#uwAlert');if(a)a.onclick=()=>{const m=sendMsg('manual',`${S.name||'Crew member'} reports: ${picked.map(p=>p[0]).join(', ')}. Needs assessment now.`);save();renderComms();$('#unwellModal').classList.add('hidden');showEsc(m);};
+  };
+}
+$('#unwellBtn').onclick=()=>{renderUnwell();$('#unwellModal').classList.remove('hidden');$('#unwellClose').focus();};
+$('#unwellClose').onclick=()=>$('#unwellModal').classList.add('hidden');
+document.addEventListener('click',e=>{if(e.target.closest('#unwellResult [data-kb]'))$('#unwellModal').classList.add('hidden');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#unwellModal').classList.add('hidden');});
+
+// ---------- Space weather (NASA DONKI via /api/spaceweather) ----------
+const SWX={data:null,error:false};
+async function loadSWX(){
+  try{const c=sessionStorage.getItem('swx');if(c){const j=JSON.parse(c);if(j&&Date.now()-j.t<30*60e3){SWX.data=j.d;renderSWX();return;}}}catch(e){}
+  try{const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),10000);const r=await fetch('api/spaceweather',{signal:ctl.signal});clearTimeout(t);
+    if(!r.ok)throw new Error('http '+r.status);const j=await r.json();if(!j||!Array.isArray(j.flares))throw new Error('bad data');
+    SWX.data=j;SWX.error=false;try{sessionStorage.setItem('swx',JSON.stringify({t:Date.now(),d:j}));}catch(e){}
+  }catch(e){SWX.error=true;}
+  renderSWX();
+}
+function renderSWX(){
+  const el=$('#swx');if(!el)return;const d=SWX.data;
+  if(!d){el.innerHTML=`<div style="font-size:12.5px;color:var(--muted)">${navigator.onLine?'Live space weather is unavailable right now.':'Offline: live space weather needs a connection.'} Check your dosimeter for sudden jumps.</div>`;return;}
+  const now=Date.now(),age=t=>(now-Date.parse(t))/36e5,within=(t,h)=>Number.isFinite(age(t))&&age(t)<=h;
+  const big=d.flares.filter(f=>/^X/i.test(f.cls)),mid=d.flares.filter(f=>/^M/i.test(f.cls));
+  const sep48=d.particles.filter(p=>within(p.time,72)),x48=big.filter(f=>within(f.peak,48)),m48=mid.filter(f=>within(f.peak,48));
+  const kp=d.storms.reduce((a,g)=>Math.max(a,g.kp||0),0),lastStorm=d.storms[d.storms.length-1];
+  const st=sep48.length||x48.length?'alert':m48.length?'watch':'ok';
+  const msg=st==='alert'?'Recent solar particle event or X-class flare. Review the storm shelter guide and limit EVA.':st==='watch'?'M-class flare in the last 48 h. Watch your dosimeter.':'No major solar activity in the last 48 h.';
+  const fmt=t=>{const x=Date.parse(t);return Number.isFinite(x)?new Date(x).toISOString().slice(0,16).replace('T',' ')+' UTC':'–';};
+  el.innerHTML=`<div class="swx-st"><i class="dot st-${st}"></i><b style="color:var(--${st})">${STXT[st]}</b><span>${esc(msg)}</span></div>
+   <div class="swx-grid"><div><b>${d.flares.length}</b><span>flares (30 days)<br>${big.length} X · ${mid.length} M</span></div><div><b>${d.particles.length}</b><span>solar particle events</span></div><div><b>${kp?kp.toFixed(0):'0'}</b><span>max Kp storm index</span></div></div>
+   ${lastStorm?`<div style="font-size:12px;color:var(--muted);margin-top:6px">Latest geomagnetic storm: ${esc(fmt(lastStorm.start))}, Kp ${esc(String(lastStorm.kp))}</div>`:''}
+   <div style="margin-top:8px">${[KB.byId['guide-storm-shelter'],KB.byId['prot-spe']].filter(Boolean).map(kbLink).join('')}</div>
+   <div style="font-size:11px;color:var(--muted);margin-top:6px">Source: ${esc(d.source)} · updated ${esc(fmt(d.fetched))}${d.feeds&&!(d.feeds.flares&&d.feeds.particles&&d.feeds.storms)?' · some feeds unavailable':''}</div>`;
+}
+
+// ---------- Backup file: download and restore ----------
+$('#backupBtn').onclick=()=>{try{const blob=new Blob([JSON.stringify({app:'sonnenblume',version:1,saved:new Date().toISOString(),state:S})],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sonnenblume-backup-'+isoDay(Date.now())+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);toast('Backup downloaded');}catch(e){fault('backup',e);}};
+$('#restoreFile').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+  if(f.size>5e6){toast('That file is too large to be a Sonnenblume backup');return;}
+  const rd=new FileReader();rd.onload=()=>{try{const j=JSON.parse(rd.result);if(!j||j.app!=='sonnenblume'||!j.state||typeof j.state!=='object')throw new Error('not a backup');
+      const next=sanitize(j.state);if(!next.days||!next.days.length)throw new Error('empty');
+      S=next;if(KB.ready)seedPharmacy();save();renderAll();renderForm();toast('Backup restored: '+S.days.length+' mission days');}
+    catch(err){toast('That file is not a valid Sonnenblume backup');}};rd.readAsText(f);};
+
 function renderAll(){renderHeader();renderBanner();renderBody();renderZone();renderVitals();renderActions();renderComms();renderRoutine();renderRad();renderGuide();if(S.view==='trends')drawTrend();if(S.view==='pharmacy')renderPharmacy();if(S.view==='library'&&KB.ready)renderLibrary();offlineTag();}
 storageNotice();
 renderAll();
 checkEscalation();save();renderComms();   // readings that arrived without a save (sync, restore) still trigger the crew alert
 const h0=location.hash.slice(1);
 setView(VIEWS.includes(h0)?h0:(S.view||'dashboard'));
-loadKB();
+loadKB().then(()=>loadSWX());
 })();
