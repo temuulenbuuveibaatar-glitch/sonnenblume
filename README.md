@@ -25,7 +25,7 @@ NASA calls the goal **Earth-Independent Medical Operations**: crews beyond the M
 |---|---|
 | **12 daily indicators** | Heart rate, blood pressure, SpO₂, temperature, blood sugar, sleep, mood, exercise, fluids, radiation dose, vision check, body mass |
 | **Status engine** | Every reading is Nominal, Watch or Act now, plus detection of sudden changes, rebounds and implausible (critical) readings |
-| **Anatomical body map** | Organs and bones light up by status; tap any system to see what it does, how spaceflight affects it and what to do |
+| **Anatomical body map** | Male and female bodies; organs and bones light up by status; tap any system to see what it does, how spaceflight affects it and what to do |
 | **Crew alerts** | Two or more indicators at Act now automatically alert the crew leader and medical officer |
 | **Earth-independent mode** | Simulated comms delay and solar-conjunction blackout; an outbox shows when each message reaches Earth |
 | **Medical library** | 119 medicines and 67 guided emergency protocols, plus radiation shielding, conditions and countermeasures |

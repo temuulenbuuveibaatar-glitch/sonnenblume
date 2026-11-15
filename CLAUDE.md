@@ -19,7 +19,7 @@ Plain HTML/CSS/JS, no build step. Vercel serverless functions in `api/` (ES modu
 | `api/spaceweather.mjs` | NASA DONKI proxy (FLR, SEP, GST), cached 1 h; env `NASA_API_KEY` optional |
 | `sw.js` | Offline cache, network-first; bump `VERSION` on every release |
 | `scripts/seed-azure.mjs` | Seeds Cosmos DB (`npm run seed`) |
-| `tests/smoke_test.py` | 49 Playwright checks; runs in GitHub Actions on every push |
+| `tests/smoke_test.py` | 60 Playwright checks; runs in GitHub Actions on every push |
 
 ## Commands
 ```bash
@@ -37,6 +37,6 @@ npx vercel deploy --prod --yes        # deploy
 - Run the tests before every push; add a test for every new feature.
 
 ## Open ideas
-- Male/female body views; more anatomical realism in `js/body.js`.
+- More anatomical realism in `js/body.js` (male and female views exist; `S.sex`, toggle `#bodySex`).
 - Crew-wide view for the medical officer.
 - Set `NASA_API_KEY` in Vercel to avoid DEMO_KEY rate limits.

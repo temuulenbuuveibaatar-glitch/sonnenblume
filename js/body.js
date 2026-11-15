@@ -1,8 +1,9 @@
 // ---------- Anatomical body: skeleton, organs, arteries, veins, nerves, lymph, muscles ----------
 // Original procedural SVG (no image assets). viewBox 0 0 880 980, figure centred on x = 440, arms out.
+// Two body types (sex = 'male' | 'female'): outline, pelvis, chest, hair and pelvic organs differ.
 // Contract with app.js: zones via data-z + zz-<zone> classes, layer groups L-sk/L-ml/L-mt/L-bp/L-ba/L-sd/L-o/L-v/L-nv/L-ly.
-function buildBody(rng){
-  const R=rng(1977), r2=n=>Math.round(n*10)/10, K=0.5523, CX=440;
+function buildBody(rng,sex){
+  const F=sex==='female', R=rng(1977), r2=n=>Math.round(n*10)/10, K=0.5523, CX=440;
   const P=(x,y)=>r2(x)+','+r2(y);
   const M=([x,y])=>[2*CX-x,y];                                   // mirror a point to the body's left side
   const MP=pts=>pts.map(M);
@@ -20,6 +21,7 @@ function buildBody(rng){
     for(let i=0;i<pts.length-1;i++){const p0=g(i-1),p1=g(i),p2=g(i+1),p3=g(i+2),len=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]),n=Math.max(1,Math.round(len/step));
       for(let k=0;k<n;k++){const t=k/n,t2=t*t,t3=t2*t,f=(a,b,c,d)=>.5*((2*b)+(-a+c)*t+(2*a-5*b+4*c-d)*t2+(-a+3*b-3*c+d)*t3);out.push([f(p0[0],p1[0],p2[0],p3[0]),f(p0[1],p1[1],p2[1],p3[1])]);}}
     out.push(pts[pts.length-1]);return out;};
+  const sq=pts=>F?pts.map(([x,y])=>[CX+(x-CX)*(y>360&&y<470?.9:1),y]):pts;             // female: pull waist-level organs in to fit the narrower waist
   const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
   const unit=(a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1;return [dx/l,dy/l];};
   const off=(p,n,s)=>[p[0]+n[0]*s,p[1]+n[1]*s];
@@ -46,17 +48,27 @@ function buildBody(rng){
   const armDir=unit(EL,WR), armN=[-armDir[1],armDir[0]];        // along forearm, and its perpendicular (towards the top edge)
 
   // ================= SKIN =================
+  const neck=F?[[426,157],[427,172],[412,184],[384,194],[356,204],[328,218]]:[[426,157],[424,172],[406,184],[376,194],[348,202],[322,216]];
+  const pit=F?[[304,276],[340,264]]:[[300,276],[336,262]];
+  const torso=F?[[350,300],[352,344],[362,384],[374,420],[373,452],[358,490],[344,528],[341,566],[346,610],[356,660],[364,704],[368,744]]
+              :[[346,300],[352,350],[362,404],[368,446],[360,486],[352,524],[352,566],[356,610],[362,660],[366,704],[368,744]];
   const half=[
-    [440,16],[416,20],[400,32],[391,52],[388,76],[390,100],[395,118],[403,134],[414,148],[426,157],[424,172],[406,184],[376,194],[348,202],
-    [322,216],[290,236],[252,256],[214,276],[176,300],[140,322],[104,341],[84,350],[62,360],[42,370],[26,386],[22,398],[34,402],[52,394],[70,388],
-    [92,382],[110,374],[146,354],[184,330],[220,312],[258,294],[300,276],[336,262],
-    [346,300],[352,350],[362,404],[368,446],[360,486],[352,524],[352,566],[356,610],[362,660],[366,704],[368,744],
+    [440,16],[416,20],[400,32],[391,52],[388,76],[390,100],[395,118],[403,134],[414,148],...neck,
+    [290,236],[252,256],[214,276],[176,300],[140,322],[104,341],[84,350],[62,360],[42,370],[26,386],[22,398],[34,402],[52,394],[70,388],
+    [92,382],[110,374],[146,354],[184,330],[220,312],[258,294],...pit,
+    ...torso,
     [362,790],[364,840],[372,890],[376,916],[364,936],[352,954],[364,962],[400,962],[408,948],[404,920],
     [408,880],[414,830],[420,780],[422,740],[426,690],[430,640],[436,612],[440,606]];
   const SKIN=smooth(half.concat(half.slice(1,-1).reverse().map(M)),true);
+  const hair=(d,op)=>add('sk',`<path class="skin" style="fill:url(#hairG);opacity:${op}" d="${d}"/>`);
+  if(F)hair(smooth([[440,6],[406,12],[384,36],[376,80],[378,128],[382,170],[392,204],[412,212],[430,196],[440,186],[450,196],[468,212],[488,204],[498,170],[502,128],[504,80],[496,36],[474,12]],true),.95);   // long hair, behind the head
   add('sk',`<path class="skin" style="fill:url(#skinG)" d="${SKIN}"/>`);
+  add('sk',`<path class="skin" style="fill:url(#skinCyl)" d="${SKIN}"/>`);
   add('sk',`<path class="skin" style="fill:url(#skinShade)" d="${SKIN}"/>`);
   add('sk',`<path class="skin" style="fill:none;stroke:#f2c9bb;stroke-opacity:.5;stroke-width:1.3" d="${SKIN}"/>`);
+  add('sk',`<path class="skin" style="fill:none;stroke:#5a2418;stroke-opacity:.35;stroke-width:3;filter:blur(1.5px)" d="${SKIN}"/>`);   // soft contact shadow at the silhouette
+  hair(F?smooth([[440,8],[410,12],[392,28],[386,52],[388,74],[394,62],[402,44],[420,36],[440,40],[456,32],[476,40],[486,56],[492,74],[494,52],[488,28],[470,12]],true)
+        :smooth([[440,8],[412,12],[394,26],[387,50],[389,68],[396,60],[400,44],[414,34],[440,30],[466,34],[480,44],[484,60],[491,68],[493,50],[486,26],[468,12]],true),.92);
   both(ell(389,86,6,13,8),d=>fl('sk',d,'#c0806c',.5));                                       // ears
 
   // ================= FACE + EYES =================
@@ -65,7 +77,17 @@ function buildBody(rng){
   ln('sd',smooth([[427,120],[434,123],[440,122],[446,123],[453,120]]),'#7b3a30',1.4,'stroke-opacity:.65');
   both(ell(421,84,9,5.6),d=>organ('eyes','sd',d,'#f1ece6',{shade:false}));
   both(ell(421,84,3.8,3.8),d=>fl('sd',d,'#3d6f8f'));both(ell(421,84,1.7,1.7),d=>fl('sd',d,'#0b0b0b'));both(ell(419.6,82.6,1,1),d=>fl('sd',d,'#fff',.9));
-  both(ell(398,300,3,2.6),d=>fl('sd',d,'#9a5547',.4));fl('sd',ell(440,470,3,4.4),'#7b3a30',.45);
+  fl('sd',ell(440,470,3,4.4),'#7b3a30',.45);                                                                              // navel
+  both(smooth([[434,206],[404,200],[372,204],[352,212]]),d=>ln('sf',d,'#fff',1.4,'stroke-opacity:.16'));                  // clavicle highlight
+  both(smooth([[432,212],[404,208],[372,212]]),d=>ln('sf',d,'#5a2418',1.2,'stroke-opacity:.18'));
+  if(F){both(ell(404,292,31,27),d=>fl('sd',d,'url(#breastG)'));
+    both(smooth([[372,284],[376,304],[392,318],[414,320],[432,310]]),d=>ln('sf',d,'#6b2e24',1.6,'stroke-opacity:.42'));   // inframammary fold
+    both(smooth([[378,270],[392,264],[410,264]]),d=>ln('sf',d,'#fff',1.2,'stroke-opacity:.14'));
+    both(ell(406,296,5.2,5),d=>fl('sf',d,'#a8645a',.5));both(ell(406,296,1.8,1.8),d=>fl('sf',d,'#8a4a3e',.6));}
+  else{both(smooth([[362,292],[384,306],[414,308],[436,300]]),d=>ln('sf',d,'#5a2418',1.6,'stroke-opacity:.3'));          // lower pectoral border
+    both(ell(398,294,3.2,3),d=>fl('sf',d,'#9a5547',.5));
+    [0,1,2].forEach(i=>both(smooth([[418,340+i*38],[438,342+i*38]]),d=>ln('sf',d,'#5a2418',1,'stroke-opacity:.16')));   // abdominal definition
+    both(smooth([[372,420],[392,470],[414,512]]),d=>ln('sf',d,'#5a2418',1.2,'stroke-opacity:.18'));}                        // iliac line
 
   // ================= MUSCLES (zone: muscles) =================
   const mus=(d,pat,c)=>organ('muscles','ml',d,c||'#b04f42',{pat:pat||'fibR',op:.9});
@@ -121,14 +143,15 @@ function buildBody(rng){
   both(smooth([[432,212],[408,204],[384,208],[362,204],[346,210]]),d=>tube('bones','bp',d,B,6.5,{nohalo:true,under:BD}));
   both(smooth([[350,212],[402,226],[396,300],[356,292],[344,240]],true),d=>fl('ba',d,B,.35));
   // ribs: 1-7 true ribs reach the sternum through cartilage, 8-10 join the cartilage above, 11-12 float
-  for(let i=0;i<12;i++){const y=212+i*17.2,wmax=[48,62,72,80,86,90,92,92,90,86,78,66][i],drop=26+i*2.4;
+  for(let i=0;i<12;i++){const y=212+i*17.2,wmax=[48,62,72,80,86,90,92,92,90,86,78,66][i]*(F&&i>=7?.9:1),drop=26+i*2.4;
     const back=[CX-10,y],lat=[CX-wmax,y+drop*.62],front=[CX-wmax*.62,y+drop+8];
     const rib=smooth([back,[CX-wmax*.62,y-6],[CX-wmax*.95,y+drop*.25],lat,i<10?front:[CX-wmax*.85,y+drop*.9]]);
     both(rib,d=>tube('bones','ba',d,B,i<2?4:3.4,{nohalo:true,under:BD,hiop:.4}));
     if(i<7){both(smooth([front,[CX-14,y+drop+2-i*1.5],[CX-9,218+i*15]]),d=>tube('bones','ba',d,CART,2.6,{nohalo:true,under:'#8aa3ad'}));}
     else if(i<10){both(smooth([front,[CX-wmax*.4,y+drop-4],[CX-30-i*2,y+drop-24]]),d=>tube('bones','ba',d,CART,2.4,{nohalo:true,under:'#8aa3ad'}));}}
   // pelvis
-  const PELV=smooth([[430,512],[404,508],[374,512],[358,528],[360,552],[376,560],[392,556],[404,570],[406,590],[420,600],[436,604],[438,592],[424,582],[414,566],[420,540],[430,530]],true);
+  const PELV=smooth([[430,512],[404,508],[374,512],[358,528],[360,552],[376,560],[392,556],[404,570],[406,590],[420,600],[436,604],[438,592],[424,582],[414,566],[420,540],[430,530]]
+    .map(([x,y])=>F?[CX-(CX-x)*1.12,y-(y-560)*.06]:[x,y]),true);                                                       // female pelvis: wider, shallower
   both(PELV,d=>bone(d));both(ell(410,588,6,8,-15),d=>fl('bp',d,'#1d1a17',.75));both(ell(396,566,10,10),d=>fl('ba',d,BD,.55));
   // arms
   both(ell(SH[0]+4,SH[1]+2,13,12),d=>bone(d));                                                                            // humeral head
@@ -206,7 +229,7 @@ function buildBody(rng){
   ln('o',smooth([[430,290],[426,320],[438,350]]),ART,1.2);ln('o',smooth([[458,300],[478,320],[484,340]]),VEN,1,'stroke-opacity:.8');
   for(let i=0;i<6;i++){const p=lerp([456,282],[448,350],i/6);ln('o',smooth([p,[p[0]+10+R()*8,p[1]+6+R()*6]]),ART,.6);}
 
-  ln('o',smooth([[358,380],[392,368],[440,376],[488,368],[522,380]]),'#7e2427',6,'stroke-opacity:.9');                   // diaphragm
+  ln('o',smooth(sq([[358,380],[392,368],[440,376],[488,368],[522,380]])),'#7e2427',6,'stroke-opacity:.9');                   // diaphragm
 
   // ================= ABDOMEN (zone: metabolism) =================
   tube('heart','o',smooth([[446,368],[446,420],[444,470],[440,518]]),ART,6,{nohalo:true,under:'#6f1418'});                // descending aorta
@@ -215,15 +238,15 @@ function buildBody(rng){
   both(ell(400,444,9,5,-20),d=>organ('metabolism','o',d,'#d9a24a'));                                                      // adrenals
   both(smooth([[412,470],[434,468]]),d=>ln('o',d,ART,2));both(smooth([[412,476],[432,476]]),d=>ln('o',d,VEN,2.2));     // renal vessels
   both(smooth([[404,490],[412,530],[420,580],[432,602]]),d=>tube('metabolism','o',d,'#e4c48c',2.2,{nohalo:true,under:'#8f6c3a'}));   // ureters
-  const LIVER=smooth([[358,386],[396,374],[446,378],[478,390],[470,404],[446,414],[414,432],[380,440],[362,424]],true);
+  const LIVER=smooth(sq([[358,386],[396,374],[446,378],[478,390],[470,404],[446,414],[414,432],[380,440],[362,424]]),true);
   organ('metabolism','o',LIVER,'#9b3b33',{pat:'lob'});
   ln('o',smooth([[446,382],[432,404],[420,430]]),'#5e1f1a',1.2,'stroke-opacity:.7');                                     // falciform ligament
   organ('metabolism','o',ell(418,430,8,6,25),'#6b8f4a');                                                                  // gallbladder
-  const STOM=smooth([[468,388],[496,380],[518,394],[520,424],[502,448],[476,456],[454,448],[446,436],[460,428],[470,410]],true);
+  const STOM=smooth(sq([[468,388],[496,380],[518,394],[520,424],[502,448],[476,456],[454,448],[446,436],[460,428],[470,410]]),true);
   organ('metabolism','o',STOM,'#d88a7c',{pat:'rug'});
   tube('metabolism','o',smooth([[448,440],[430,446],[420,460],[424,478],[440,482]]),'#d9a07c',8,{nohalo:true,under:'#7c4a30'});   // duodenum
-  organ('metabolism','o',smooth([[430,454],[464,448],[500,452],[524,446],[520,458],[496,462],[462,464],[436,470]],true),'#e2b783',{pat:'lob'});   // pancreas
-  organ('immune','o',ell(530,414,10,22,-15),'#7e3150');                                                                   // spleen
+  organ('metabolism','o',smooth(sq([[430,454],[464,448],[500,452],[524,446],[520,458],[496,462],[462,464],[436,470]]),true),'#e2b783',{pat:'lob'});   // pancreas
+  organ('immune','o',ell(F?521:530,414,10,22,-15),'#7e3150');                                                                   // spleen
   tube('heart','o',smooth([[452,470],[446,446],[436,428],[424,418]]),'#6a5bb8',4,{nohalo:true,under:'#2c2366'});         // portal vein
   // large intestine with haustra: ascending → transverse → descending → sigmoid → rectum
   const COLON=sample([[390,572],[382,540],[380,500],[386,470],[410,460],[440,466],[470,460],[496,468],[502,500],[500,540],[492,566],[470,580],[452,584],[440,600]],8.5);
@@ -235,6 +258,11 @@ function buildBody(rng){
   loops.sort((a,b)=>a[1]-b[1]).forEach(([x,y,a,l],i)=>{const c=Math.cos(a),s=Math.sin(a),p0=[x-c*l,y-s*l],p1=[x+c*l,y+s*l],mid=[x-s*l*.55,y+c*l*.55];
     tube('metabolism','o',smooth([p0,mid,p1]),'#cfa06e',8.6,{nohalo:i>0,under:'#6e4f2c',hi:'#ffe9c4',hiop:.45});});
   organ('metabolism','o',ell(440,612,17,12),'#d9a582');                                                                   // bladder
+  if(F){both(smooth([[430,580],[414,572],[400,574],[390,584],[386,596]]),d=>tube('metabolism','o',d,'#d58a8a',2.4,{nohalo:true,under:'#6e2e30'}));   // fallopian tubes
+    both(ell(392,592,6.5,4.6,-20),d=>organ('metabolism','o',d,'#e6b8a2'));                                                // ovaries
+    organ('metabolism','o',smooth([[426,574],[440,568],[454,574],[458,588],[450,600],[444,610],[436,610],[430,600],[422,588]],true),'#c76b74',{pat:'myo'});}   // uterus
+  else{organ('metabolism','o',ell(440,630,9,7),'#c58a74');                                                                 // prostate
+    both(ell(428,620,5,3,-30),d=>organ('metabolism','o',d,'#d8b08c'));}                                                    // seminal vesicles
 
   // ================= SYSTEMIC VESSELS (zone: heart): arteries red, veins blue =================
   const vtree=(pts,c,w,dark,branchEvery,blen,l)=>{const d=smooth(pts);tube('heart',l||'v',d,c,w,{nohalo:true,under:dark});
@@ -272,6 +300,9 @@ function buildBody(rng){
   // ================= Definitions =================
   const defs=`<defs>
 <linearGradient id="skinG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ad9c" stop-opacity=".6"/><stop offset=".45" stop-color="#d79483" stop-opacity=".46"/><stop offset="1" stop-color="#c47e6c" stop-opacity=".54"/></linearGradient>
+<linearGradient id="skinCyl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a0f0a" stop-opacity=".3"/><stop offset=".38" stop-color="#fff" stop-opacity=".06"/><stop offset=".5" stop-color="#fff" stop-opacity=".1"/><stop offset=".62" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#2a0f0a" stop-opacity=".3"/></linearGradient>
+<linearGradient id="hairG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3326"/><stop offset=".5" stop-color="#2e1f17"/><stop offset="1" stop-color="#1d130e"/></linearGradient>
+<radialGradient id="breastG" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#f0bba8" stop-opacity=".55"/><stop offset=".6" stop-color="#d48e7c" stop-opacity=".35"/><stop offset="1" stop-color="#7a3628" stop-opacity=".45"/></radialGradient>
 <radialGradient id="skinShade" cx=".5" cy=".42" r=".62"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#3a1a14" stop-opacity=".45"/></radialGradient>
 <radialGradient id="vol" cx=".36" cy=".3" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/><stop offset=".78" stop-color="#000" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity=".48"/></radialGradient>
 <radialGradient id="specG" cx=".32" cy=".26" r=".3"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
@@ -293,7 +324,7 @@ function buildBody(rng){
   const clip=' clip-path="url(#cpBody)"';
   return defs+
     `<ellipse class="zz-radiation aura fnA" data-z="radiation" cx="440" cy="490" rx="436" ry="486" fill="url(#aura)"/>`+
-    g('sk','L-sk',' filter="url(#rim)"')+g('ml','L L-ml',clip)+g('mt','L L-mt',clip)+g('bp','L L-bp',' filter="url(#depth)"')+g('ba','L L-ba')+g('sd','L-sd')+
+    g('sk','L-sk',' filter="url(#rim)"')+g('ml','L L-ml',clip)+g('mt','L L-mt',clip)+g('bp','L L-bp',' filter="url(#depth)"')+g('ba','L L-ba')+g('sd','L-sd')+g('sf','L-sd L-sf')+
     g('v','L L-v',clip)+g('nv','L L-nv',clip)+g('ly','L L-ly',clip)+g('o','L L-o',' filter="url(#depth)"')+
     `<rect class="scan" x="0" y="-60" width="880" height="60" fill="url(#scanG)" clip-path="url(#cpBody)"><animate attributeName="y" from="-60" to="980" dur="7s" repeatCount="indefinite"/></rect>`;
 }

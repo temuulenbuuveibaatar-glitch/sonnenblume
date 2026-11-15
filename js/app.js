@@ -132,14 +132,14 @@ function seedData(envKey){
   }
   days.push({day:31, sleep:5.6, hr:71, symptoms:[]});
   const now=Date.now();
-  return {env:envKey, name:'Cmdr. Rivera', baseMass:base, days, view:'dashboard', zone:'heart', trend:'bp', range:'week', layer:'organs', bodyMode:'anatomy',
+  return {env:envKey, name:'Cmdr. Rivera', baseMass:base, days, view:'dashboard', zone:'heart', trend:'bp', range:'week', layer:'organs', bodyMode:'anatomy', sex:'male',
     log:[{day:31,ts:now-3*3600e3,k:'sleep',v:5.6},{day:31,ts:now-3*3600e3,k:'hr',v:71}],
     comms:[], escSig:'', crew:{leader:'Cdr. Ito', cmo:'Dr. Okafor'},
     link:{delayMin:ENVS[envKey].def||12,blackout:false}, pharm:{}, missionStart:isoDay(Date.now()-30*864e5), run:null,
     formulary:JSON.parse(JSON.stringify(DEMO_FORMULARY)), doses:[]};
 }
 // ---------- Load + strict validation (stored data is untrusted) ----------
-const LISTS={view:['dashboard','log','trends','library','pharmacy','guide'],trend:['bp','hr','spo2','temp','glucose','sleep','mood','exercise','hydration','mass','dose'],range:['day','week','month'],layer:['organs','bones'],bodyMode:['anatomy','status'],kind:['alert','manual','update','protocol','report']};
+const LISTS={view:['dashboard','log','trends','library','pharmacy','guide'],trend:['bp','hr','spo2','temp','glucose','sleep','mood','exercise','hydration','mass','dose'],range:['day','week','month'],layer:['organs','bones'],bodyMode:['anatomy','status'],sex:['male','female'],kind:['alert','manual','update','protocol','report']};
 const str=(v,n)=>typeof v==='string'?v.replace(/[\u0000-\u001f\u007f]/g,' ').slice(0,n):'';
 const int=(v,lo,hi,d)=>{const n=Math.round(Number(v));return typeof v!=='boolean'&&v!==null&&v!==''&&Number.isFinite(n)&&n>=lo&&n<=hi?n:d;};
 const pick=(v,list,d)=>list.includes(v)?v:d;
@@ -169,7 +169,7 @@ function sanitize(s){
     name:str(s.name,40)||d.name,
     baseMass:(Number.isFinite(+s.baseMass)&&+s.baseMass>=20&&+s.baseMass<=300&&typeof s.baseMass==='number')?s.baseMass:d.baseMass,
     view:pick(s.view,LISTS.view,'dashboard'), zone:ZONES[s.zone]?s.zone:'heart', trend:pick(s.trend,LISTS.trend,'bp'),
-    range:pick(s.range,LISTS.range,'week'), layer:pick(s.layer,LISTS.layer,'organs'), bodyMode:pick(s.bodyMode,LISTS.bodyMode,'anatomy'),
+    range:pick(s.range,LISTS.range,'week'), layer:pick(s.layer,LISTS.layer,'organs'), bodyMode:pick(s.bodyMode,LISTS.bodyMode,'anatomy'), sex:pick(s.sex,LISTS.sex,'male'),
     escSig:typeof s.escSig==='string'&&/^[a-z,]{0,200}$/.test(s.escSig)?s.escSig:'',
     crew:{leader:str(s.crew&&s.crew.leader,40)||d.crew.leader, cmo:str(s.crew&&s.crew.cmo,40)||d.crew.cmo},
     log:(Array.isArray(s.log)?s.log:[]).slice(-1500).map(x=>{if(!x||!IND[x.k])return null;const v=cleanVal(x.k,x.v);const day=int(x.day,1,100000,null),ts=int(x.ts,0,now+864e5,null);return v===undefined||day===null||ts===null?null:{day,ts,k:x.k,v};}).filter(Boolean),
@@ -349,11 +349,12 @@ function renderBanner(){
   }
   $('#banner').innerHTML=html;
 }
-let bodyBuilt=false;
+let bodyBuilt=false, bodySex='';
 function renderBody(){
-  const svg=$('#bodySvg');
+  const svg=$('#bodySvg'), sex=S.sex||'male';
+  if(bodyBuilt&&bodySex!==sex){svg.innerHTML=buildBody(rng,sex);bodySex=sex;}
   if(!bodyBuilt){
-    svg.innerHTML=buildBody(rng);bodyBuilt=true;
+    svg.innerHTML=buildBody(rng,sex);bodyBuilt=true;bodySex=sex;
     let css='';Object.keys(ZONES).forEach(z=>{css+=`#bodySvg .zz-${z}{--zc:var(--z-${z},#4a4a50);--zh:var(--zh-${z},0);--zo:var(--zo-${z},.12)}#bodySvg.al-${z} .zz-${z}.halo{animation:pulse 1.4s ease-in-out infinite}#bodySvg[data-sel="${z}"] .zz-${z}.out{stroke:#fff;stroke-opacity:.95;stroke-width:1.1}`;});
     css+='#bodySvg.al-radiation .aura{animation:pulse 1.4s ease-in-out infinite}';
     document.head.insertAdjacentHTML('beforeend','<style>'+css+'</style>');
@@ -365,6 +366,7 @@ function renderBody(){
     svg.addEventListener('mouseleave',()=>tip.style.display='none');
     document.querySelectorAll('#bodyLayer button').forEach(b=>b.onclick=()=>{S.layer=b.dataset.l;save();renderBody();});
     document.querySelectorAll('#bodyMode button').forEach(b=>b.onclick=()=>{S.bodyMode=b.dataset.m;save();renderBody();});
+    document.querySelectorAll('#bodySex button').forEach(b=>b.onclick=()=>{S.sex=b.dataset.s;save();renderBody();});
   }
   const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   Object.keys(ZONES).forEach(z=>{const s=zoneStatus(z);
@@ -376,6 +378,8 @@ function renderBody(){
   svg.classList.toggle('mode-status',S.bodyMode==='status');
   document.querySelectorAll('#bodyLayer button').forEach(b=>b.classList.toggle('on',b.dataset.l===(S.layer||'organs')));
   document.querySelectorAll('#bodyMode button').forEach(b=>b.classList.toggle('on',b.dataset.m===(S.bodyMode||'anatomy')));
+  document.querySelectorAll('#bodySex button').forEach(b=>{const on=b.dataset.s===sex;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
+  svg.dataset.sex=sex;svg.setAttribute('aria-label','Interactive anatomical body map, '+sex);
 }
 function renderZone(){
   const z=ZONES[S.zone]||ZONES.heart, s=zoneStatus(S.zone);

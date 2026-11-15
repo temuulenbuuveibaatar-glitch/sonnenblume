@@ -177,6 +177,32 @@ with sync_playwright() as p:
     check("new features produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
     ctx.close()
 
+    print("Male and female body views")
+    ctx = b.new_context(); pg = ctx.new_page(); errs = page_errors(pg); pg.goto(BASE + "/app.html"); pg.wait_for_timeout(1500)
+    male_svg = pg.locator("#bodySvg").inner_html()
+    check("body defaults to male", pg.get_attribute("#bodySvg", "data-sex") == "male" and "fill:url(#breastG)" not in male_svg)
+    pg.click("#bodySex button[data-s=female]"); pg.wait_for_timeout(300)
+    female_svg = pg.locator("#bodySvg").inner_html()
+    check("female view rebuilds the body", pg.get_attribute("#bodySvg", "data-sex") == "female" and female_svg != male_svg)
+    check("female toggle is marked pressed", pg.get_attribute("#bodySex button[data-s=female]", "aria-pressed") == "true")
+    check("female view has breasts and a uterus, no prostate", "fill:url(#breastG)" in female_svg and "--nat:#c76b74" in female_svg and "--nat:#c58a74" not in female_svg)
+    check("male view has a prostate, no uterus", "--nat:#c58a74" in male_svg and "--nat:#c76b74" not in male_svg)
+    before = pg.locator("#zinfo h3").inner_text()
+    pg.locator("#bodySvg .zz-metabolism.fn").first.click(force=True); pg.wait_for_timeout(200)
+    check("organs stay tappable in female view", pg.evaluate(f"JSON.parse(localStorage.getItem('{KEY}')).zone") == "metabolism" and pg.locator("#zinfo h3").inner_text() != before)
+    pg.reload(); pg.wait_for_timeout(1200)
+    check("body type is remembered after reload", pg.get_attribute("#bodySvg", "data-sex") == "female")
+    pg.evaluate(f"()=>{{const s=JSON.parse(localStorage.getItem('{KEY}'));s.sex='<b>x</b>';localStorage.setItem('{KEY}',JSON.stringify(s));}}"); pg.reload(); pg.wait_for_timeout(1200)
+    check("invalid stored body type falls back to male", pg.get_attribute("#bodySvg", "data-sex") == "male")
+    check("body views produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
+    ctx.close()
+
+    print("NASA Space Apps SI disclosure")
+    for path in ["/", "/app.html", "/privacy.html", "/missing-page.html"]:
+        ctx = b.new_context(); pg = ctx.new_page(); pg.goto(BASE + path); pg.wait_for_timeout(400)
+        check(f"{path} carries ai-disclosure metadata", pg.locator('meta[name="ai-disclosure"]').count() == 1); ctx.close()
+    check("README declares SI use", "AI disclosure" in (ROOT / "README.md").read_text(encoding="utf-8"))
+
     # optional accessibility scan (runs when axe-core is installed: npm i axe-core)
     axe = ROOT / "node_modules" / "axe-core" / "axe.min.js"
     if axe.exists():
