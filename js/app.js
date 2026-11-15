@@ -900,16 +900,16 @@ document.addEventListener('click',e=>{
 // ---------- Dose check: vital-sign safety gates + weight-based calculation ----------
 const DCLS={
   opioid:['morphine','oxycodone','tramadol'],
-  sedative:['morphine','oxycodone','tramadol','ketamine','midazolam','diazepam','lorazepam','zolpidem','zaleplon','promethazine','hydroxyzine','diphenhydramine','haloperidol','trazodone','cyclobenzaprine','prochlorperazine','dimenhydrinate','meclizine','scopolamine-dex','scopolamine-patch'],
+  sedative:['morphine','oxycodone','tramadol','ketamine','midazolam','diazepam','lorazepam','zolpidem','zaleplon','promethazine','hydroxyzine','diphenhydramine','haloperidol','trazodone','cyclobenzaprine','prochlorperazine','dimenhydrinate','meclizine','scopolamine-dex','scopolamine-patch','mirtazapine','olanzapine'],
   nsaid:['ibuprofen','naproxen','ketorolac','aspirin','diclofenac-gel'],
-  lowersBP:['nitroglycerin','metoprolol','furosemide','tamsulosin','morphine','promethazine','trazodone','haloperidol'],
-  slowsHR:['metoprolol','adenosine','amiodarone'],
-  raisesBP:['midodrine','fludrocortisone','pseudoephedrine','epinephrine','modafinil'],
+  lowersBP:['nitroglycerin','metoprolol','furosemide','tamsulosin','morphine','promethazine','trazodone','haloperidol','propranolol','olanzapine','diltiazem','labetalol','bethanechol'],
+  slowsHR:['metoprolol','adenosine','amiodarone','propranolol','diltiazem','labetalol','bethanechol'],
+  raisesBP:['midodrine','fludrocortisone','pseudoephedrine','epinephrine','modafinil','sumatriptan'],
   raisesHR:['pseudoephedrine','albuterol','epinephrine','atropine','modafinil','ipratropium'],
-  raisesGlucose:['prednisone','dexamethasone','glucagon','dextrose-50','glucose-gel'],
+  raisesGlucose:['prednisone','dexamethasone','glucagon','dextrose-50','glucose-gel','olanzapine','methylprednisolone'],
   lowersGlucose:['insulin-regular'],
   antipyretic:['acetaminophen','ibuprofen','naproxen','aspirin'],
-  emergency:['epinephrine','naloxone','glucagon','dextrose-50','atropine','adenosine','amiodarone','tranexamic-acid']
+  emergency:['epinephrine','naloxone','glucagon','dextrose-50','atropine','adenosine','amiodarone','tranexamic-acid','olanzapine','diltiazem','labetalol','methylprednisolone','potassium-iodide','filgrastim']
 };
 const isC=(c,id)=>DCLS[c].includes(id.replace(/^med-/,''));
 // ---------- Label-sourced dose reference (data/kb-dosing.json) ----------

@@ -18,7 +18,7 @@ Plain HTML/CSS/JS, no build step. Vercel serverless functions in `api/` (ES modu
 | `data/kb-dosing.json`, `scripts/check-dosing.py` | Label-sourced dose reference; rebuild with `python scripts/check-dosing.py data/dosing-*.json` |
 | `js/body.js` | Procedural SVG anatomy (`buildBody(rng)`), viewBox 880x980, two modes: Organs / Bones |
 | `privacy.html`, `js/privacy.js` | Privacy Charter + delete-all-data |
-| `data/*.json` | Medical library: 119 medicines, 85 protocols, 18 guides, shielding, conditions, etc. (`data/index.json` lists files) |
+| `data/*.json` | Medical library: 139 medicines, 85 protocols, 18 guides, shielding, conditions, etc. (`data/index.json` lists files) |
 | `api/kb.mjs` | Library from Azure Cosmos DB (returns empty → app uses bundled `data/`) |
 | `api/spaceweather.mjs` | NASA DONKI proxy (FLR, SEP, GST), cached 1 h; env `NASA_API_KEY` optional |
 | `sw.js` | Offline cache, network-first; bump `VERSION` on every release |

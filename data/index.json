@@ -6,6 +6,7 @@
   "kb-medication.json",
   "kb-medication-2.json",
   "kb-medication-3.json",
+  "kb-medication-4.json",
   "kb-protocol.json",
   "kb-protocol-2.json",
   "kb-guide.json",
@@ -16,5 +17,5 @@
   "kb-countermeasure.json",
   "kb-source.json"
  ],
- "count": 302
+ "count": 322
 }

@@ -77,7 +77,7 @@ with sync_playwright() as p:
                 pg.evaluate(f"location.hash='{v}'"); pg.wait_for_timeout(400)
                 check(f"view {v} renders", pg.locator(f"#v-{v}").is_visible())
             check("no fault bar on clean run", pg.locator("#faultBar").count() == 0)
-            check("library loads 302 records", "302" in pg.locator("#kbSrc").inner_text(), pg.locator("#kbSrc").inner_text())
+            check("library loads 322 records", "322" in pg.locator("#kbSrc").inner_text(), pg.locator("#kbSrc").inner_text())
         ctx.close()
     ctx = b.new_context(); pg = ctx.new_page(); r = pg.goto(BASE + "/missing-page.html")
     check("unknown page shows 404 page", r.status == 404 and "Lost in space" in pg.content()); ctx.close()

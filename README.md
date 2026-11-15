@@ -28,7 +28,7 @@ NASA calls the goal **Earth-Independent Medical Operations**: crews beyond the M
 | **Anatomical body map** | Male and female bodies; organs and bones light up by status; tap any system to see what it does, how spaceflight affects it and what to do |
 | **Crew alerts** | Two or more indicators at Act now automatically alert the crew leader and medical officer |
 | **Earth-independent mode** | Simulated comms delay and solar-conjunction blackout; an outbox shows when each message reaches Earth |
-| **Medical library** | 119 medicines and 67 guided emergency protocols, plus radiation shielding, conditions and countermeasures |
+| **Medical library** | 139 medicines and 67 guided emergency protocols, plus radiation shielding, conditions and countermeasures |
 | **Guided protocols** | Step-by-step checklists that timestamp each step and send a log to the crew and Earth |
 | **Dose check** | Reads current vital signs and blocks or warns before a medicine is given (for example, no sedatives below 92% SpO₂). Weight-based doses, 24 h maximum and timing |
 | **Onboard pharmacy** | Stock levels and medicines that expire before the mission ends |
