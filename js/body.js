@@ -148,7 +148,7 @@ function buildBody(rng){
   const loopRows=8;
   for(let r=0;r<loopRows;r++){
     const y=478+r*11.5, pts=[]; const left=394+(r%2?6:0), right=488-(r%2?0:6);
-    for(let x=left;x<=right;x+=7.2){pts.push([x+(R()-.5)*3,y+((x/7.2|0)%2?-5.5:5.5)+(R()-.5)*2.4]);}
+    for(let x=left,i=0;x<=right;x+=6+R()*4,i++){pts.push([x+(R()-.5)*4,y+(i%2?-1:1)*(4+R()*3.5)+(R()-.5)*3]);}
     if(r%2)pts.reverse();
     tube('metabolism','o',smooth(pts),'#c39a63',7.4,{nohalo:r>0,under:'#6e5230',hi:'#f1d7a6'});
   }
@@ -204,6 +204,6 @@ function buildBody(rng){
   const g=(k,c,x)=>`<g class="${c}"${x||''}>${(lay[k]||[]).join('')}</g>`;
   return defs+
     `<ellipse class="zz-radiation aura fnA" data-z="radiation" cx="440" cy="490" rx="436" ry="486" fill="url(#aura)"/>`+
-    g('sk','L-sk',' filter="url(#rim)"')+g('ml','L L-ml')+g('mt','L L-mt')+g('bp','L L-bp')+g('ba','L L-ba')+g('sd','L-sd')+g('o','L L-o')+g('v','L L-v')+g('ly','L L-ly')+
+    g('sk','L-sk',' filter="url(#rim)"')+g('ml','L L-ml',' clip-path="url(#cpBody)"')+g('mt','L L-mt')+g('bp','L L-bp')+g('ba','L L-ba')+g('sd','L-sd')+g('o','L L-o')+g('v','L L-v',' clip-path="url(#cpBody)"')+g('ly','L L-ly',' clip-path="url(#cpBody)"')+
     `<rect class="scan" x="0" y="-60" width="880" height="60" fill="url(#scanG)" clip-path="url(#cpBody)"><animate attributeName="y" from="-60" to="980" dur="7s" repeatCount="indefinite"/></rect>`;
 }

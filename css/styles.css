@@ -67,6 +67,7 @@ nav.tabs button.on{color:var(--text);background:#232327;border-color:var(--line2
 #bodySvg[data-layer="bones"] .L-v{opacity:.12;pointer-events:none}
 #bodySvg[data-layer="bones"] .L-bp,#bodySvg[data-layer="bones"] .L-ba{opacity:1}
 #bodySvg[data-layer="bones"] .L-sk{opacity:.55}
+#bodySvg[data-layer="bones"] .L-sd{opacity:.12;pointer-events:none}
 @keyframes pulse{50%{opacity:.35}}
 @media (prefers-reduced-motion:reduce){#bodySvg .scan{display:none}}
 
@@ -255,3 +256,13 @@ textarea{width:100%;height:180px;background:var(--panel);border:1px solid var(--
 .fadd select,.fadd input{background:var(--panel2);border:1px solid var(--line2);border-radius:8px;color:var(--text);padding:7px 9px;font:inherit;font-size:13px}
 .fadd input{width:110px}.fadd select#fMed{flex:1;min-width:180px}
 #v-pharmacy .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+
+/* resilience bars */
+.faultbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:200;display:flex;flex-wrap:wrap;gap:8px;align-items:center;max-width:calc(100% - 24px);
+  background:#1c1214;border:1px solid var(--alert);border-radius:12px;padding:10px 12px;font-size:13.5px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.faultbar span{margin-right:6px}
+.faultbar .btn{padding:5px 10px;font-size:12px}
+.storebar{position:relative;z-index:60;background:#2a2108;border-bottom:1px solid #6b5310;color:#ffe3a1;font-size:13.5px;padding:9px 16px;text-align:center}
+.storebar .btn{padding:4px 10px;font-size:12px;margin-left:8px}
+.banner{background:var(--panel)}
+@supports (background:color-mix(in srgb,red 10%,blue)){.banner{background:color-mix(in srgb,var(--c) 10%,var(--panel))}}

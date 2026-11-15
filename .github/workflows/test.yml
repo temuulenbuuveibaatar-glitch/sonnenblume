@@ -1,0 +1,25 @@
+name: tests
+on:
+  push:
+  pull_request:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test tools
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+          npm install --no-save axe-core
+      - name: Check JavaScript syntax
+        run: for f in js/*.js api/*.mjs sw.js; do node --check "$f"; done
+      - name: Run regression and resilience tests
+        run: python tests/smoke_test.py

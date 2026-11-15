@@ -4,10 +4,13 @@
   "version": "1.0.0",
   "description": "Crew self-health OS for the NASA Space Apps Challenge",
   "scripts": {
-    "seed": "node scripts/seed-azure.mjs"
+    "seed": "node scripts/seed-azure.mjs",
+    "test": "python tests/smoke_test.py"
   },
   "dependencies": {
     "@azure/cosmos": "^4.2.0"
   },
-  "engines": { "node": "22.x" }
+  "engines": {
+    "node": "22.x"
+  }
 }

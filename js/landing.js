@@ -1,10 +1,12 @@
 (function(){
 'use strict';
+const hasIO='IntersectionObserver' in window;
+if(!hasIO){document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));}
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ---------- Vortex: woven strands twisting into a funnel over a spiral disk ----------
 function vortex(canvas,opts){
-  const c=canvas.getContext('2d');
+  if(!canvas||!canvas.getContext)return;const c=canvas.getContext('2d');if(!c)return;
   let W=0,H=0,running=true,raf=0;
   const N=opts.strands||170, SEG=72;
   let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
@@ -38,7 +40,7 @@ function vortex(canvas,opts){
   function loop(t){if(!running)return;draw(t);raf=requestAnimationFrame(loop);}
   resize();window.addEventListener('resize',()=>{resize();if(reduce)draw(4000);});
   if(reduce){draw(4000);return;}
-  new IntersectionObserver(es=>{es.forEach(e=>{running=e.isIntersecting;if(running){cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}});}).observe(canvas);
+  if(hasIO)new IntersectionObserver(es=>{es.forEach(e=>{running=e.isIntersecting;if(running){cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);}});}).observe(canvas);
   raf=requestAnimationFrame(loop);
 }
 vortex(document.getElementById('vortex'),{strands:190,rings:170,bot:.8});
@@ -70,11 +72,11 @@ burger.addEventListener('click',()=>{const o=links.classList.toggle('open');burg
 links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');burger.setAttribute('aria-expanded','false');}));
 
 // ---------- Reveal + counters ----------
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);const end=+e.target.dataset.count,t0=performance.now();
+const io=hasIO&&new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+if(io)document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const co=hasIO&&new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);const end=+e.target.dataset.count,t0=performance.now();
   const step=t=>{const p=Math.min(1,(t-t0)/1200);e.target.textContent=Math.round(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step);};
   if(reduce)e.target.textContent=end;else requestAnimationFrame(step);}),{threshold:.5});
-if(!reduce)document.querySelectorAll('[data-count]').forEach(el=>{el.textContent='0';co.observe(el);});
+if(!reduce&&co)document.querySelectorAll('[data-count]').forEach(el=>{el.textContent='0';co.observe(el);});
 })();
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){navigator.serviceWorker.register('sw.js').catch(()=>{});}

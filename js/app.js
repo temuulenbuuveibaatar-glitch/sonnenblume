@@ -187,11 +187,58 @@ function sanitize(s){
   const r=s.run;if(r&&typeof r==='object'&&/^prot-[a-z0-9-]{1,60}$/.test(r.id||'')&&Array.isArray(r.steps))o.run={id:r.id,start:int(r.start,0,now+864e5,now),steps:r.steps.slice(0,40).map(t=>t===null?null:int(t,0,now+864e5,null))};
   return o;
 }
+// ---------- Storage: availability check, rolling backup, corruption recovery, quota handling ----------
+const BKEY=KEY+'-backup';
+const STORE={ok:false,recovered:false,failed:false,lastBackup:0};
+try{const t='__sb_test__';localStorage.setItem(t,'1');localStorage.removeItem(t);STORE.ok=true;}catch(e){STORE.ok=false;}
+function readKey(k){try{const raw=localStorage.getItem(k);if(!raw)return null;const s=JSON.parse(raw);return s&&typeof s==='object'?s:null;}catch(e){return undefined;}}
 function load(){
-  try{const raw=localStorage.getItem(KEY);if(raw){const s=JSON.parse(raw);if(s&&typeof s==='object')return sanitize(s);}}catch(e){}
+  if(!STORE.ok)return seedData('iss');
+  const main=readKey(KEY);
+  if(main)return sanitize(main);
+  if(main===undefined){try{localStorage.setItem(KEY+'-corrupt',localStorage.getItem(KEY)||'');}catch(e){}}   // keep the damaged copy for inspection
+  const bak=readKey(BKEY);
+  if(bak){STORE.recovered=true;return sanitize(bak);}
   return seedData('iss');
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function trimState(){S.log=S.log.slice(-400);S.comms=S.comms.slice(-15);S.doses=S.doses.slice(-150);if(S.days.length>400)S.days=S.days.slice(-400);}
+function save(){
+  if(!STORE.ok)return false;
+  let json;try{json=JSON.stringify(S);}catch(e){fault('save',e);return false;}
+  for(let attempt=0;attempt<2;attempt++){
+    try{localStorage.setItem(KEY,json);
+      if(Date.now()-STORE.lastBackup>60000){localStorage.setItem(BKEY,json);STORE.lastBackup=Date.now();}
+      if(STORE.failed){STORE.failed=false;storageNotice();}
+      return true;
+    }catch(e){
+      if(attempt===0){try{localStorage.removeItem(KEY+'-corrupt');localStorage.removeItem(BKEY);}catch(_){} trimState();json=JSON.stringify(S);continue;}
+      if(!STORE.failed){STORE.failed=true;storageNotice();}
+    }
+  }
+  return false;
+}
+// ---------- Fault handling: one failing panel never takes the console down ----------
+const ERRS=[];
+function fault(where,e){
+  try{ERRS.push({where,msg:String(e&&e.message||e).slice(0,240),ts:Date.now()});if(ERRS.length>50)ERRS.shift();console.error('[Sonnenblume]',where,e);showFault();}catch(_){}
+}
+function guard(name,fn){return function(){try{return fn.apply(this,arguments);}catch(e){fault(name,e);}};}
+function showFault(){
+  let bar=document.getElementById('faultBar');
+  if(!bar){bar=document.createElement('div');bar.id='faultBar';bar.className='faultbar';bar.setAttribute('role','alert');document.body.appendChild(bar);}
+  bar.innerHTML='<span>Something went wrong in part of the console. Your data is safe.</span><button class="btn" type="button" data-fault="reload">Reload</button><button class="btn" type="button" data-fault="copy">Copy error report</button><button class="btn" type="button" data-fault="close" aria-label="Dismiss">Dismiss</button>';
+}
+function storageNotice(){
+  let n=document.getElementById('storeBar');
+  const msg=!STORE.ok?'This browser is not allowing storage (private mode or blocked). Readings will be lost when you close the page. Use Export data to keep them.'
+    :STORE.failed?'Storage is full, so new readings could not be saved. Export your data, then delete old browser data.'
+    :STORE.recovered?'Your saved data was damaged, so the console restored the most recent backup.':'';
+  if(!msg){if(n)n.remove();return;}
+  if(!n){n=document.createElement('div');n.id='storeBar';n.className='storebar';n.setAttribute('role','status');document.body.insertBefore(n,document.body.firstChild);}
+  n.textContent=msg;
+}
+window.addEventListener('error',e=>fault('window',e.error||e.message));
+window.addEventListener('unhandledrejection',e=>fault('promise',e.reason));
 S=load();
 
 const $=s=>document.querySelector(s);
@@ -573,7 +620,7 @@ $('#logForm').addEventListener('submit',e=>{e.preventDefault();doSave(false);});
 $('#nextDayBtn').onclick=e=>{e.preventDefault();doSave(true);S.days.push({day:today().day+1,symptoms:[]});save();renderAll();renderForm();toast('Mission day '+today().day+' started');};
 $('#resetBtn').onclick=e=>{e.preventDefault();const b=$('#resetBtn');if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='Tap again to confirm';setTimeout(()=>{b.dataset.c='';b.textContent='Reset demo data';},3000);return;}
   S=seedData(S.env);if(KB.ready)seedPharmacy();save();renderAll();renderForm();b.dataset.c='';b.textContent='Reset demo data';toast('Demo data restored');};
-function fullJSON(){return JSON.stringify({crew:S.name,environment:ENVS[S.env].name,baselineMassKg:S.baseMass,cumulativeDoseMsv:+cumDose().toFixed(2),days:S.days,readingLog:S.log,crewMessages:S.comms,pharmacy:S.pharm,doseTable:S.formulary,dosesGiven:S.doses},null,1);}
+function fullJSON(){return JSON.stringify({crew:S.name,environment:ENVS[S.env].name,baselineMassKg:S.baseMass,cumulativeDoseMsv:+cumDose().toFixed(2),days:S.days,readingLog:S.log,crewMessages:S.comms,pharmacy:S.pharm,doseTable:S.formulary,dosesGiven:S.doses,errorLog:ERRS},null,1);}
 function setExport(f){document.querySelectorAll('#mSeg button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));$('#mText').value=f==='json'?fullJSON():buildReport();
   $('#mHint').textContent=f==='json'?'Complete record of every reading, message and stock level, for analysis tools.':'A short, readable report for the flight surgeon ('+new Blob([buildReport()]).size+' bytes, small enough for a weak deep-space link).';}
 document.querySelectorAll('#mSeg button').forEach(b=>b.onclick=()=>setExport(b.dataset.f));
@@ -700,11 +747,11 @@ async function loadKB(){
   try{
     const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),4000);
     const r=await fetch('api/kb',{signal:ctl.signal});clearTimeout(t);
-    if(r.ok){const j=await r.json();if(j.records&&j.records.length){KB.records=j.records;KB.source='azure';}}
+    if(r.ok){const j=await r.json();if(Array.isArray(j.records)&&j.records.length){KB.records=j.records.filter(x=>x&&typeof x.id==='string'&&typeof x.type==='string'&&typeof x.title==='string'&&x.data&&typeof x.data==='object');if(KB.records.length)KB.source='azure';}}
   }catch(e){}
   if(!KB.records.length&&idx){
     const parts=await Promise.all(idx.files.map(f=>fetch('data/'+f).then(r=>r.json()).catch(()=>({records:[]}))));
-    KB.records=parts.flatMap(p=>p.records);KB.source='bundled';
+    KB.records=parts.flatMap(p=>Array.isArray(p&&p.records)?p.records:[]).filter(r=>r&&typeof r.id==='string'&&typeof r.type==='string'&&typeof r.title==='string'&&r.data&&typeof r.data==='object');KB.source='bundled';
   }
   KB.records.forEach(r=>KB.byId[r.id]=r);KB.ready=true;seedPharmacy();
   renderZone();renderActions();if(S.view==='library')renderLibrary();if(S.view==='pharmacy')renderPharmacy();
@@ -719,6 +766,7 @@ function kbMatches(r){
 }
 function renderLibrary(){
   if(!KB.ready){$('#kbList').innerHTML='<div class="libempty">Loading the library…</div>';return;}
+  if(!KB.records.length){$('#kbList').innerHTML='<div class="libempty">The library could not be loaded. Connect to the internet once so it can be saved for offline use, then reload.</div>';$('#kbDetail').innerHTML='';$('#kbSrc').textContent='LIBRARY UNAVAILABLE';return;}
   const b=$('#kbSrc');b.textContent=KB.source==='azure'?'LIVE: AZURE COSMOS DB':'BUNDLED DATA · '+KB.records.length+' RECORDS';b.classList.toggle('az',KB.source==='azure');
   const counts={};KB.records.forEach(r=>counts[r.type]=(counts[r.type]||0)+1);
   $('#kbTypes').innerHTML=Object.keys(KBT).filter(t=>counts[t]).map(t=>`<button data-t="${t}" class="${!KB.q&&KB.type===t?'on':''}">${KBT[t]}<small>${counts[t]}</small></button>`).join('');
@@ -912,10 +960,25 @@ let swapOk=false;function confirmSwap(){if(swapOk){swapOk=false;return true;}swa
 // ---------- Offline (deep space has no internet) ----------
 function offlineTag(){const t=$('#offlineTag');if(!t)return;t.textContent=!navigator.onLine?'OFFLINE · WORKING FROM DEVICE':(navigator.serviceWorker&&navigator.serviceWorker.controller?'OFFLINE READY':'');}
 window.addEventListener('online',offlineTag);window.addEventListener('offline',offlineTag);
-if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(offlineTag).catch(()=>{});}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
+  const hadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(offlineTag).catch(()=>{});
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!hadController)return;let u=document.getElementById('updBar');if(u)return;
+    u=document.createElement('div');u.id='updBar';u.className='storebar';u.innerHTML='A new version of Sonnenblume is ready. <button class="btn" type="button" id="updReload">Reload</button>';document.body.insertBefore(u,document.body.firstChild);
+    document.getElementById('updReload').onclick=()=>location.reload();});
+}
 
+renderHeader=guard('renderHeader',renderHeader);renderBanner=guard('renderBanner',renderBanner);renderBody=guard('renderBody',renderBody);renderZone=guard('renderZone',renderZone);renderVitals=guard('renderVitals',renderVitals);renderActions=guard('renderActions',renderActions);renderComms=guard('renderComms',renderComms);renderRoutine=guard('renderRoutine',renderRoutine);renderRad=guard('renderRad',renderRad);renderGuide=guard('renderGuide',renderGuide);drawTrend=guard('drawTrend',drawTrend);renderForm=guard('renderForm',renderForm);renderLibrary=guard('renderLibrary',renderLibrary);renderPharmacy=guard('renderPharmacy',renderPharmacy);renderDoseTable=guard('renderDoseTable',renderDoseTable);checkEscalation=guard('checkEscalation',checkEscalation);doSave=guard('doSave',doSave);seedPharmacy=guard('seedPharmacy',seedPharmacy);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-fault]');if(!b)return;const a=b.dataset.fault,bar=document.getElementById('faultBar');
+  if(a==='reload')location.reload();
+  else if(a==='copy'){const t=JSON.stringify({version:'sonnenblume',userAgent:navigator.userAgent,errors:ERRS},null,1);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Error report copied')).catch(()=>toast('Could not copy; use Export data'));}
+  else if(bar)bar.remove();});
+// another tab changed the data: reload it here instead of overwriting it
+window.addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue)return;try{S=sanitize(JSON.parse(e.newValue));renderAll();checkEscalation();if(S.view==='log')renderForm();toast('Updated from another tab');}catch(err){fault('sync',err);}});
 function renderAll(){renderHeader();renderBanner();renderBody();renderZone();renderVitals();renderActions();renderComms();renderRoutine();renderRad();renderGuide();if(S.view==='trends')drawTrend();if(S.view==='pharmacy')renderPharmacy();if(S.view==='library'&&KB.ready)renderLibrary();offlineTag();}
+storageNotice();
 renderAll();
+checkEscalation();save();renderComms();   // readings that arrived without a save (sync, restore) still trigger the crew alert
 const h0=location.hash.slice(1);
 setView(VIEWS.includes(h0)?h0:(S.view||'dashboard'));
 loadKB();

@@ -42,6 +42,7 @@ NASA calls the goal **Earth-Independent Medical Operations**: crews beyond the M
 - Service worker for offline use (`sw.js`).
 - Vercel serverless function (`api/kb.mjs`) that reads the medical library from **Azure Cosmos DB**, falling back to the bundled JSON in `data/`.
 - Strict Content Security Policy and security headers (`vercel.json`), self-hosted fonts, and validation of all stored data.
+- Resilience: every panel is isolated so one error cannot take the console down; rolling backup with automatic recovery of damaged data; works with storage blocked; tabs stay in sync; update notice when a new version is deployed.
 
 ## Run it locally
 
@@ -49,6 +50,16 @@ NASA calls the goal **Earth-Independent Medical Operations**: crews beyond the M
 git clone https://github.com/temuulenbuuveibaatar-glitch/sonnenblume.git
 cd sonnenblume
 npx serve .        # or any static server, then open http://localhost:3000/app.html
+```
+
+## Tests
+
+`tests/smoke_test.py` runs 40 checks in a real browser with the production security headers: every page and view, the security policy, tampered and corrupted storage, blocked storage, a failing panel, two tabs in sync, offline use, the dose safety checks and an accessibility scan. They run on every push via GitHub Actions.
+
+```bash
+pip install playwright && python -m playwright install chromium
+npm install --no-save axe-core   # optional, enables the accessibility scan
+python tests/smoke_test.py
 ```
 
 ## Connect Azure Cosmos DB (optional)
