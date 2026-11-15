@@ -330,22 +330,22 @@ function renderBanner(){
   const env=ENVS[S.env], td=today(), alerts=alertList(), crit=critList();
   let html='';
   if(crit.length){
-    html+=`<div class="banner st-alert"><div class="ico"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2h8l6 6v8l-6 6H8l-6-6V8z"/><path d="M12 7v6M12 16.5h.01"/></svg></div><div><b>Critical reading: ${crit.map(k=>IND[k].label+' '+fmtV(k,td[k])).join(', ')}</b><span>This is outside survivable or plausible range. First check the sensor is on properly and re-measure. If it's confirmed, start the onboard emergency protocol and get the crew medical officer now.</span></div></div>`;
+    html+=`<div class="banner st-alert"><div><b>Critical reading: ${crit.map(k=>IND[k].label+' '+fmtV(k,td[k])).join(', ')}</b><span>This is outside survivable or plausible range. First check the sensor is on properly and re-measure. If it's confirmed, start the onboard emergency protocol and get the crew medical officer now.</span></div></div>`;
   }
   if(has(td,'dose')&&td.dose>env.dose*5){
-    html+=`<div class="banner st-alert"><div class="ico"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M12 10 9 4.8A8 8 0 0 0 4.1 13.5H10M14 12h6a8 8 0 0 0-5-8.7L12 10M11 14l-3 5.2a8 8 0 0 0 8 0L13 14"/></svg></div><div><b>Possible solar particle event</b><span>Today's dose is ${(td.dose/env.dose).toFixed(1)}× your normal rate. Go to the storm shelter, stop EVA, and confirm with mission control.</span></div></div>`;
+    html+=`<div class="banner st-alert"><div><b>Possible solar particle event</b><span>Today's dose is ${(td.dose/env.dose).toFixed(1)}× your normal rate. Go to the storm shelter, stop EVA, and confirm with mission control.</span></div></div>`;
   }
   if(alerts.length){
     const L0=link(), who = L0.independent ? `Earth replies take a long time here (${L0.black?'no contact during blackout':'at least '+fmtDur(L0.sec*2)+' round trip'}). <b style="display:inline">Start the onboard protocol with your crew medical officer now</b>, then send the data to the flight surgeon.` : `Notify the flight surgeon at the next contact and follow the steps below.`;
-    html+=`<div class="banner st-alert"><div class="ico"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg></div><div><b>Needs action: ${alerts.map(k=>IND[k].label).join(', ')}</b><span>${who}${alerts.length>=2?' <b style="display:inline">Crew leader alerted.</b>':''}</span></div></div>`;
+    html+=`<div class="banner st-alert"><div><b>Needs action: ${alerts.map(k=>IND[k].label).join(', ')}</b><span>${who}${alerts.length>=2?' <b style="display:inline">Crew leader alerted.</b>':''}</span></div></div>`;
   }
   const shifts=CORE.map(k=>({k,s:shiftInfo(k)})).filter(x=>x.s&&curStatus(x.k)!=='alert');
   if(shifts.length&&!alerts.length){
-    html+=`<div class="banner st-watch"><div class="ico"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.5-5 5-5 7.5 0s5 5 7.5 0 3.5-3 5-1"/></svg></div><div><b>Sudden change: ${shifts.map(x=>IND[x.k].label).join(', ')}</b><span>Values swung sharply. Even if they look normal now, status stays on Watch until a steady re-check.</span></div></div>`;
+    html+=`<div class="banner st-watch"><div><b>Sudden change: ${shifts.map(x=>IND[x.k].label).join(', ')}</b><span>Values swung sharply. Even if they look normal now, status stays on Watch until a steady re-check.</span></div></div>`;
   }
   const L1=link();
   if(L1.independent&&!alerts.length&&!crit.length){
-    html+=`<div class="banner" style="--c:#7fb8ff"><div class="ico"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></div><div><b>Earth-independent mode</b><span>${L1.black?'Solar conjunction blackout: no contact with Earth. Messages are queued and sent when the link returns.':'The earliest possible reply from Earth is '+fmtDur(L1.sec*2)+' away.'} The crew medical officer and onboard protocols lead. <a href="#library" data-goto="library">Open protocols</a></span></div></div>`;
+    html+=`<div class="banner" style="--c:#7fb8ff"><div><b>Earth-independent mode</b><span>${L1.black?'Solar conjunction blackout: no contact with Earth. Messages are queued and sent when the link returns.':'The earliest possible reply from Earth is '+fmtDur(L1.sec*2)+' away.'} The crew medical officer and onboard protocols lead. <a href="#library" data-goto="library">Open protocols</a></span></div></div>`;
   }
   $('#banner').innerHTML=html;
 }
@@ -385,7 +385,7 @@ function renderZone(){
   const acts=z.ind.filter(k=>['watch','alert'].includes(curStatus(k))).flatMap(k=>IND[k].act.slice(0,2));
   $('#zinfo').innerHTML=`<h3><i class="dot st-${s}"></i>${z.name}</h3>
     <div class="mini">${chips}${sy.map(x=>`<span class="chip"><i class="dot st-${x==='chest pain'?'alert':'watch'}"></i>Symptom: ${esc(x)}</span>`).join('')}</div>
-    ${shifts.map(x=>`<p style="color:var(--watch);font-size:12.5px"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.5-5 5-5 7.5 0s5 5 7.5 0 3.5-3 5-1"/></svg> ${esc(x.text)}</p>`).join('')}
+    ${shifts.map(x=>`<p style="color:var(--watch);font-size:12.5px">${esc(x.text)}</p>`).join('')}
     <div class="lbl">What it does</div><p>${z.fn}</p>
     <div class="lbl">How spaceflight affects it</div><p>${z.space}</p>
     ${KB.ready?(()=>{const pr=kbFor('protocol',p=>(p.zones||[]).includes(S.zone)).slice(0,5);return pr.length?`<div class="lbl">Protocols</div><div>${pr.map(kbLink).join('')}</div>`:'';})():''}
@@ -409,7 +409,7 @@ function renderVitals(){
     let val=l?esc(IND[k].fmt(l.v)):'—';
     if(k==='mass'&&l){const p=((l.v-S.baseMass)/S.baseMass*100);val+=` <small>${p>=0?'+':''}${p.toFixed(1)}%</small>`;}
     const crit=l&&l.today&&isCrit(k,l.v);
-    d.innerHTML=`<div class="t"><span>${IND[k].label}</span><span>${ago}</span></div><div class="v">${val} <small>${l?IND[k].unit:''}</small></div><div class="s">${crit?'Critical':STXT[s]}${s==='none'&&l?' · stale':''}</div>${sh?`<div class="shift"><svg class="i" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.5-5 5-5 7.5 0s5 5 7.5 0 3.5-3 5-1"/></svg> sudden change</div>`:''}${k==='vision'?'':'<canvas></canvas>'}`;
+    d.innerHTML=`<div class="t"><span>${IND[k].label}</span><span>${ago}</span></div><div class="v">${val} <small>${l?IND[k].unit:''}</small></div><div class="s">${crit?'Critical':STXT[s]}${s==='none'&&l?' · stale':''}</div>${sh?`<div class="shift">sudden change</div>`:''}${k==='vision'?'':'<canvas></canvas>'}`;
     d.onclick=()=>{S.trend=k==='vision'?'bp':k;setView('trends');};
     g.appendChild(d);
     const cv=d.querySelector('canvas'); if(cv)requestAnimationFrame(()=>spark(cv,k));
@@ -422,8 +422,8 @@ function renderActions(){
   let h='';
   if(!items.length)h+=`<p style="margin:0;color:#c8c8cc">Everything logged is within range. ${missing.length?'Finish today\'s measurements to complete the picture.':''}</p>`;
   items.forEach(({k,s})=>{const sh=shiftInfo(k);
-    h+=`<div style="padding:10px 0;border-bottom:1px dashed var(--line)"><div style="display:flex;gap:8px;align-items:center;font-weight:600"><i class="dot st-${s}"></i>${IND[k].label} · <span style="color:var(--${s})">${STXT[s]}</span></div>${sh?`<div style="font-size:12.5px;color:var(--watch);margin-top:4px"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.5-5 5-5 7.5 0s5 5 7.5 0 3.5-3 5-1"/></svg> ${esc(sh.text)}</div>`:''}<ul style="margin:6px 0 0;padding-left:20px;color:#c8c8cc;font-size:13.5px;line-height:1.5">${(sh&&s==='watch'&&statusOf(k,today()[k])==='ok'?['Re-measure in 15 min, then again in a few hours','Keep logging every save, since the system compares readings']:IND[k].act).map(a=>`<li>${a}</li>`).join('')}</ul>${KB.ready?(()=>{const SV={critical:0,high:1,moderate:2,low:3},want=s==='alert'?1:2.5,PRI={vision:'prot-vision-change',sleep:'prot-sleep-loss',spo2:'prot-low-spo2',temp:'prot-fever',glucose:s==='alert'?'prot-hypoglycemia':'prot-hyperglycemia',dose:'prot-spe',bp:'prot-hypertension',hydration:'prot-dehydration',mood:s==='alert'?'prot-behavioural-crisis':'prot-panic'},pr=kbFor('protocol',p=>(p.indicators||[]).includes(k)).sort((a,b)=>((b.id===PRI[k])-(a.id===PRI[k]))||(a.indicators.indexOf(k)-b.indicators.indexOf(k))||(Math.abs(SV[a.data.severity]-want)-Math.abs(SV[b.data.severity]-want))).slice(0,2);return pr.length?`<div style="margin-top:6px">${pr.map(kbLink).join('')}</div>`:'';})():''}</div>`;});
-  h+=`<p style="margin:12px 0 0;font-size:12.5px;color:var(--muted)"><svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> ${env.name}: ${env.note}</p>`;
+    h+=`<div style="padding:10px 0;border-bottom:1px dashed var(--line)"><div style="display:flex;gap:8px;align-items:center;font-weight:600"><i class="dot st-${s}"></i>${IND[k].label} · <span style="color:var(--${s})">${STXT[s]}</span></div>${sh?`<div style="font-size:12.5px;color:var(--watch);margin-top:4px">${esc(sh.text)}</div>`:''}<ul style="margin:6px 0 0;padding-left:20px;color:#c8c8cc;font-size:13.5px;line-height:1.5">${(sh&&s==='watch'&&statusOf(k,today()[k])==='ok'?['Re-measure in 15 min, then again in a few hours','Keep logging every save, since the system compares readings']:IND[k].act).map(a=>`<li>${a}</li>`).join('')}</ul>${KB.ready?(()=>{const SV={critical:0,high:1,moderate:2,low:3},want=s==='alert'?1:2.5,PRI={vision:'prot-vision-change',sleep:'prot-sleep-loss',spo2:'prot-low-spo2',temp:'prot-fever',glucose:s==='alert'?'prot-hypoglycemia':'prot-hyperglycemia',dose:'prot-spe',bp:'prot-hypertension',hydration:'prot-dehydration',mood:s==='alert'?'prot-behavioural-crisis':'prot-panic'},pr=kbFor('protocol',p=>(p.indicators||[]).includes(k)).sort((a,b)=>((b.id===PRI[k])-(a.id===PRI[k]))||(a.indicators.indexOf(k)-b.indicators.indexOf(k))||(Math.abs(SV[a.data.severity]-want)-Math.abs(SV[b.data.severity]-want))).slice(0,2);return pr.length?`<div style="margin-top:6px">${pr.map(kbLink).join('')}</div>`:'';})():''}</div>`;});
+  h+=`<p style="margin:12px 0 0;font-size:12.5px;color:var(--muted)">${env.name}: ${env.note}</p>`;
   $('#actions').innerHTML=h;
 }
 
@@ -487,7 +487,7 @@ function checkEscalation(){
 }
 function showEsc(m){
   $('#escBody').innerHTML=`<p style="margin:0 0 10px">${esc(m.text)}</p>
-   <div style="font-size:13px;color:#c8c8cc"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg> Delivered on crew net to <b>${esc(m.to.join(', '))}</b><br><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><path d="M12 13v8"/></svg> Copy to flight surgeon on Earth: ${esc(earthStatus(m).t)}</div>
+   <div style="font-size:13px;color:#c8c8cc">Delivered on crew net to <b>${esc(m.to.join(', '))}</b><br>Copy to flight surgeon on Earth: ${esc(earthStatus(m).t)}</div>
    <p style="font-size:12px;color:var(--muted);margin:10px 0 0">Simulation. In a mission this would go over the habitat's crew comms network.</p>`;
   $('#escModal').classList.remove('hidden');
 }
@@ -524,14 +524,14 @@ function renderRoutine(){
   $('#lvl').textContent='Level '+lvl;
   $('#xpfill').style.width=(into/400*100)+'%';
   $('#xptxt').textContent=`${xp} XP · ${400-into} to level ${lvl+1}`;
-  const st=streak(); $('#streak').innerHTML=`<svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s5 4.5 5 9.5A5 5 0 0 1 7 12.5C7 10 9 8.5 9 8.5s.5 2.5 2 3c0-3 1-6 1-8.5z"/></svg> ${st}-day streak`;
+  const st=streak(); $('#streak').innerHTML=`${st}-day streak`;
   const hr=new Date().getHours(), phase=hr<11?'morning':hr<17?'midday':'evening';
   const next=TASKS.find(t=>!t.done(e)&&(t.when===phase||t.when==='all day'))||TASKS.find(t=>!t.done(e));
-  $('#prompt').innerHTML=next?`<div class="prompt"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> <b>Up next (${phase}):</b> ${next.nm}. <a href="#log" data-goto="log">Log it →</a></div>`:`<div class="prompt"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg> <b>All done for today.</b> Perfect-day bonus +25 XP.</div>`;
+  $('#prompt').innerHTML=next?`<div class="prompt"><b>Up next (${phase}):</b> ${next.nm}. <a href="#log" data-goto="log">Log it →</a></div>`:`<div class="prompt"><b>All done for today.</b> Perfect-day bonus +25 XP.</div>`;
   $('#tasks').innerHTML=TASKS.map(t=>`<div class="task ${t.done(e)?'done':''}"><span class="box">${t.done(e)?'<svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>':''}</span><span><span class="nm">${t.nm}</span><br><span class="when">${t.when}</span></span><span class="xp">+${t.xp}</span></div>`).join('');
   const perfect=S.days.filter(d=>TASKS.every(t=>t.done(d))).length, exDays=S.days.filter(d=>d.exercise>=90).length;
   const B=[['First log',xp>0],['7-day streak',st>=7],['21-day streak',st>=21],['Perfect day',perfect>=1],['10 perfect days',perfect>=10],['Iron crew (25 workout days)',exDays>=25],['Level 5',lvl>=5]];
-  $('#badges').innerHTML=B.map(([n,g])=>`<span class="badge ${g?'got':''}">${g?'<svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="15" r="5"/><path d="M8.5 11 6 3h4l2 5 2-5h4l-2.5 8"/></svg>':'<svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'} ${n}</span>`).join('');
+  $('#badges').innerHTML=B.map(([n,g])=>`<span class="badge ${g?'got':''}">${g?'':''} ${n}</span>`).join('');
 }
 function renderRad(){
   const env=ENVS[S.env], cum=cumDose(), p=cum/CAREER_LIMIT, s=radStatus();
@@ -705,7 +705,7 @@ function drawTrend(){
     k==='dose'?['Cumulative',cumDose().toFixed(1)+' mSv']:['Readings',sv.length]
   ].map(([a,b])=>`<div class="stat"><div class="k">${a}</div><div class="n" style="${a==='Window'?'font-size:14px':''}">${b}</div></div>`).join('');
   const sh=shiftInfo(k);
-  $('#tnote').innerHTML=`${range==='day'?'<b>Day view</b> shows every reading you saved today, so you can see swings within the day. ':''}${sh?`<span style="color:var(--watch)"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.5-5 5-5 7.5 0s5 5 7.5 0 3.5-3 5-1"/></svg> ${esc(sh.text)}</span><br>`:''}<b>Why it moves in space:</b> ${I.why}${k==='bp'?' Solid = systolic, dashed = diastolic.':''}${I.band||k==='mass'?' The green band is the nominal range; dot colours show each reading\'s status.':''}`;
+  $('#tnote').innerHTML=`${range==='day'?'<b>Day view</b> shows every reading you saved today, so you can see swings within the day. ':''}${sh?`<span style="color:var(--watch)">${esc(sh.text)}</span><br>`:''}<b>Why it moves in space:</b> ${I.why}${k==='bp'?' Solid = systolic, dashed = diastolic.':''}${I.band||k==='mass'?' The green band is the nominal range; dot colours show each reading\'s status.':''}`;
 }
 $('#trend').addEventListener('mousemove',ev=>{const r=ev.target.getBoundingClientRect(),x=ev.clientX-r.left,y=ev.clientY-r.top;let b=null,bd=400;pts.forEach(p=>{const d=(p.x-x)**2+(p.y-y)**2;if(d<bd){bd=d;b=p;}});const t=$('#tip');if(b){t.style.display='block';t.style.left=Math.min(b.x+10,r.width-170)+'px';t.style.top=(b.y-34)+'px';t.innerHTML=`${esc(b.lab)}: ${esc(b.t)} <i class="dot st-${b.s}"></i>`;}else t.style.display='none';});
 $('#trend').addEventListener('mouseleave',()=>$('#tip').style.display='none');
@@ -974,6 +974,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-fault]');i
   else if(a==='copy'){const t=JSON.stringify({version:'sonnenblume',userAgent:navigator.userAgent,errors:ERRS},null,1);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Error report copied')).catch(()=>toast('Could not copy; use Export data'));}
   else if(bar)bar.remove();});
 // another tab changed the data: reload it here instead of overwriting it
+(function(){const btn=$('#bodyBig'),wrap=document.querySelector('.bodywrap');if(!btn||!wrap)return;
+  const home=document.createComment('bodywrap');wrap.parentNode.insertBefore(home,wrap);
+  const set=on=>{if(on)document.body.appendChild(wrap);else home.parentNode.insertBefore(wrap,home.nextSibling);wrap.classList.toggle('big',on);document.body.classList.toggle('noscroll',on);btn.setAttribute('aria-pressed',on);btn.textContent=on?'Close':'Enlarge';
+    if(on){const c=document.createElement('button');c.className='btn bigclose';c.type='button';c.textContent='Close';c.onclick=()=>set(false);wrap.appendChild(c);c.focus();}else{const c=wrap.querySelector('.bigclose');if(c)c.remove();btn.focus();}};
+  btn.onclick=()=>set(!wrap.classList.contains('big'));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&wrap.classList.contains('big'))set(false);});})();
 window.addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue)return;try{S=sanitize(JSON.parse(e.newValue));renderAll();checkEscalation();if(S.view==='log')renderForm();toast('Updated from another tab');}catch(err){fault('sync',err);}});
 function renderAll(){renderHeader();renderBanner();renderBody();renderZone();renderVitals();renderActions();renderComms();renderRoutine();renderRad();renderGuide();if(S.view==='trends')drawTrend();if(S.view==='pharmacy')renderPharmacy();if(S.view==='library'&&KB.ready)renderLibrary();offlineTag();}
 storageNotice();

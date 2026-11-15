@@ -117,3 +117,5 @@ em.g{color:var(--ok)} em.a{color:var(--watch)} em.r{color:var(--alert)}
 @media (max-width:560px){.cards.four,.hz{grid-template-columns:1fr}.nav .pill.sm{display:none}.burger{margin-left:auto}.steps li{grid-template-columns:52px 1fr;gap:12px}.sec{padding:90px 20px 30px}.track span{font-size:17px}}
 @media (prefers-reduced-motion:reduce){.track{animation:none}.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 .foot a{color:#c8c8cc}
+
+.track .sep{color:rgba(255,255,255,.25);font-weight:300}

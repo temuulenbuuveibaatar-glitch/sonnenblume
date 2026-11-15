@@ -52,6 +52,7 @@ nav.tabs button.on{color:var(--text);background:#232327;border-color:var(--line2
 #bodySvg.mode-status .fn{fill:var(--zc)}
 #bodySvg.mode-status .sn{stroke:var(--zc)}
 #bodySvg .shd{fill:url(#vol);pointer-events:none}
+#bodySvg .spec{fill:url(#specG);pointer-events:none;mix-blend-mode:screen}
 #bodySvg .pat,#bodySvg .deco,#bodySvg .decof{pointer-events:none}
 #bodySvg .deco{fill:none;stroke-linecap:round;stroke-linejoin:round}
 #bodySvg .out{fill:none;stroke:var(--zc);stroke-opacity:var(--zo);stroke-width:.8;pointer-events:none}
@@ -62,12 +63,13 @@ nav.tabs button.on{color:var(--text);background:#232327;border-color:var(--line2
 #bodySvg .scan{pointer-events:none}
 #bodySvg .L{transition:opacity .35s}
 #bodySvg[data-layer="organs"] .L-mt,#bodySvg[data-layer="organs"] .L-bp,#bodySvg[data-layer="organs"] .L-ba{opacity:0;pointer-events:none}
-#bodySvg[data-layer="organs"] .L-ml{opacity:.38}
+#bodySvg[data-layer="organs"] .L-ml{opacity:.32}
+#bodySvg[data-layer="organs"] .L-nv{opacity:.7}
 #bodySvg[data-layer="bones"] .L-o,#bodySvg[data-layer="bones"] .L-ml,#bodySvg[data-layer="bones"] .L-mt,#bodySvg[data-layer="bones"] .L-ly{opacity:.06;pointer-events:none}
-#bodySvg[data-layer="bones"] .L-v{opacity:.12;pointer-events:none}
+#bodySvg[data-layer="bones"] .L-v,#bodySvg[data-layer="bones"] .L-nv{opacity:.1;pointer-events:none}
 #bodySvg[data-layer="bones"] .L-bp,#bodySvg[data-layer="bones"] .L-ba{opacity:1}
 #bodySvg[data-layer="bones"] .L-sk{opacity:.55}
-#bodySvg[data-layer="bones"] .L-sd{opacity:.12;pointer-events:none}
+#bodySvg[data-layer="bones"] .L-sd{opacity:0;pointer-events:none}
 @keyframes pulse{50%{opacity:.35}}
 @media (prefers-reduced-motion:reduce){#bodySvg .scan{display:none}}
 
@@ -266,3 +268,13 @@ textarea{width:100%;height:180px;background:var(--panel);border:1px solid var(--
 .storebar .btn{padding:4px 10px;font-size:12px;margin-left:8px}
 .banner{background:var(--panel)}
 @supports (background:color-mix(in srgb,red 10%,blue)){.banner{background:color-mix(in srgb,var(--c) 10%,var(--panel))}}
+
+/* no decorative icons: banners carry a coloured edge instead */
+.banner{border-left-width:4px}
+.badge.got{color:var(--sun);border-color:#6b5310}
+
+/* full-screen body viewer */
+.bodywrap.big{position:fixed;inset:14px;z-index:150;background:#070708;border:1px solid var(--line2);border-radius:18px;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.bodywrap.big #bodySvg{height:100%;width:auto;max-width:100%}
+.bodywrap .bigclose{position:absolute;top:14px;right:14px;z-index:2}
+body.noscroll{overflow:hidden}

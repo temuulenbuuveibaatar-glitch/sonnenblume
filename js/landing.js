@@ -58,7 +58,7 @@ const items=[
   ['Comms-delay aware','<path d="M4 18a12 12 0 0 1 16 0M7 15a8 8 0 0 1 10 0M10 12a4 4 0 0 1 4 0"/><circle cx="12" cy="19" r="1"/>'],
   ['Works offline','<path d="M5 12a7 7 0 0 1 14 0M3 3l18 18"/><circle cx="12" cy="17" r="1"/>']
 ];
-const html=items.map(([t,p])=>`<span><svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>${t}</span>`).join('');
+const html=items.map(([t])=>`<span>${t}</span>`).join('<span class="sep" aria-hidden="true">/</span>');
 document.getElementById('track').innerHTML=html+html;
 
 // ---------- Live console preview (scaled iframe) ----------
