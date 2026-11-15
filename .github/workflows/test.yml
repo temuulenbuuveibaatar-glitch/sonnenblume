@@ -23,3 +23,16 @@ jobs:
         run: for f in js/*.js api/*.mjs sw.js; do node --check "$f"; done
       - name: Run regression and resilience tests
         run: python tests/smoke_test.py
+  rust:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rust toolchain with WebAssembly target
+        run: rustup target add wasm32-unknown-unknown
+      - name: Rust unit tests
+        run: cargo test --manifest-path rust/core/Cargo.toml --lib
+      - name: Build the WebAssembly engine and check its exports
+        run: |
+          cargo build --manifest-path rust/core/Cargo.toml --release --target wasm32-unknown-unknown
+          node -e "const b=require('fs').readFileSync('rust/core/target/wasm32-unknown-unknown/release/sonnenblume_core.wasm');WebAssembly.instantiate(b,{}).then(({instance:i})=>{const x=i.exports;if(x.sb_status(0,72,0)!==1||x.sb_status(1,162,90)!==3||x.sb_radiation(320,600)!==2)process.exit(1);console.log('wasm ok')})"

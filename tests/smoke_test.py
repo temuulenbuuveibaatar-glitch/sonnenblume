@@ -197,6 +197,49 @@ with sync_playwright() as p:
     check("body views produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
     ctx.close()
 
+    print("Routine ticks and landing page")
+    ctx = b.new_context(); pg = ctx.new_page(); errs = page_errors(pg); pg.goto(BASE + "/app.html"); pg.wait_for_timeout(1500)
+    tasks = pg.locator("#tasks button.task")
+    check("routine tasks are buttons", tasks.count() == 8)
+    pg.locator('#tasks button[data-task="glucose"]').click(); pg.wait_for_timeout(500)
+    check("tapping a task opens the log", pg.locator("#v-log").is_visible())
+    check("tapping a task focuses its field", pg.evaluate("document.activeElement && document.activeElement.id") == "f-glucose")
+    pg.fill("#f-glucose", "92"); pg.click("#saveBtn"); pg.wait_for_timeout(400)
+    pg.evaluate("location.hash='dashboard'"); pg.wait_for_timeout(400)
+    check("saved value ticks the task", "done" in (pg.locator('#tasks button[data-task="glucose"]').get_attribute("class") or ""))
+    check("vitals task opens the first missing vital", pg.locator('#tasks button.task').nth(1).get_attribute("data-task") in ("bp", "spo2", "temp"))
+    pg.locator('#tasks button[data-task="mood"]').focus(); pg.keyboard.press("Enter"); pg.wait_for_timeout(400)
+    check("tasks work from the keyboard", pg.evaluate("document.activeElement && document.activeElement.id") == "f-mood")
+    check("routine produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
+    ctx.close()
+    ctx = b.new_context(); pg = ctx.new_page(); errs = page_errors(pg); pg.goto(BASE + "/"); pg.wait_for_timeout(1200)
+    check("console preview is not loaded until scrolled to", not pg.locator("#frameview iframe").get_attribute("src"))
+    pg.locator("#frameview").scroll_into_view_if_needed(); pg.wait_for_timeout(1200)
+    check("console preview loads when scrolled to", pg.locator("#frameview iframe").get_attribute("src") == "app.html")
+    check("landing produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
+    ctx.close()
+
+    print("Rust status engine (WebAssembly)")
+    ctx = b.new_context(); pg = ctx.new_page(); errs = page_errors(pg); pg.goto(BASE + "/app.html"); pg.wait_for_timeout(1800)
+    check("Rust engine loads under the strict CSP", pg.evaluate("sbEngine.name()") == "Rust (WebAssembly)", pg.evaluate("sbEngine.name()"))
+    check("footer names the status engine", "Rust (WebAssembly)" in pg.locator("#engineTag").inner_text())
+    mism = pg.evaluate("""()=>{const out=[];const R=(a,b,s)=>{const r=[];for(let x=a;x<=b+1e-9;x+=s)r.push(Math.round(x*100)/100);return r;};
+      const sweep={hr:R(20,220,1),spo2:R(70,100,1),temp:R(33,42,0.1),glucose:R(20,450,1),sleep:R(0,12,0.25),mood:R(1,5,1),
+        exercise:R(0,200,5),hydration:R(0,5,0.1),mass:R(50,90,0.1),dose:R(0,5,0.01)};
+      for(const k in sweep)for(const v of sweep[k]){const j=sbEngine.js(k,v),r=sbEngine.rust(k,v);if(j!==r)out.push([k,v,j,r]);
+        if(['hr','spo2','temp','glucose'].includes(k)&&sbEngine.jsCrit(k,v)!==sbEngine.rustCrit(k,v))out.push(['crit',k,v]);}
+      for(let s=60;s<=240;s+=2)for(let d=40;d<=140;d+=2){const v={sys:s,dia:d};if(sbEngine.js('bp',v)!==sbEngine.rust('bp',v)||sbEngine.jsCrit('bp',v)!==sbEngine.rustCrit('bp',v))out.push(['bp',s,d]);}
+      for(const v of [true,false])if(sbEngine.js('vision',v)!==sbEngine.rust('vision',v))out.push(['vision',v]);
+      return out.slice(0,5);}""")
+    check("Rust and JavaScript give identical status for every value swept", not mism, mism)
+    check("Rust engine produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
+    ctx.close()
+    ctx = b.new_context(); pg = ctx.new_page(); errs = page_errors(pg)
+    pg.route("**/*.wasm", lambda r: r.abort()); pg.goto(BASE + "/app.html"); pg.wait_for_timeout(1500)
+    check("app falls back to JavaScript when WebAssembly is unavailable", pg.evaluate("sbEngine.name()") == "JavaScript" and pg.locator("#vgrid .vcard").count() >= 10)
+    check("fallback produced no JS errors", not [e for e in errs if e.startswith("JS")], errs)
+    ctx.close()
+
     print("NASA Space Apps SI disclosure")
     for path in ["/", "/app.html", "/privacy.html", "/missing-page.html"]:
         ctx = b.new_context(); pg = ctx.new_page(); pg.goto(BASE + path); pg.wait_for_timeout(400)

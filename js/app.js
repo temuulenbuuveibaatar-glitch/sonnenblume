@@ -248,8 +248,33 @@ const ctx=()=>({env:ENVS[S.env],baseMass:S.baseMass});
 const hhmm=ts=>{const d=new Date(ts);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
 function has(e,k){return !!e&&e[k]!==undefined&&e[k]!==null&&e[k]!=='';}
 function latest(k){for(let i=S.days.length-1;i>=0;i--){if(has(S.days[i],k))return {v:S.days[i][k],day:S.days[i].day,today:i===S.days.length-1};}return null;}
-function statusOf(k,v){if(v===undefined||v===null)return 'none';try{return IND[k].status(v,ctx());}catch(e){return 'none';}}
-const isCrit=(k,v)=>!!(IND[k].crit&&v!==undefined&&v!==null&&IND[k].crit(v));
+// ---------- Status engine: Rust compiled to WebAssembly (rust/core), JavaScript as fallback ----------
+// The Rust core holds the same thresholds as IND above; tests check both give identical answers.
+const RUST_KIND={hr:0,bp:1,spo2:2,temp:3,glucose:4,sleep:5,mood:6,exercise:7,hydration:8,mass:9,dose:10,vision:11};
+const CODE=['none','ok','watch','alert'];
+let RX=null; const ENGINE={name:'JavaScript'};
+function rustArgs(k,v){
+  if(k==='bp')return v&&typeof v==='object'?[+v.sys,+v.dia]:null;
+  if(k==='vision')return typeof v==='boolean'?[v?1:0,0]:null;
+  if(typeof v!=='number'&&typeof v!=='string')return null;
+  return [+v,k==='mass'?+S.baseMass:k==='dose'?+ENVS[S.env].dose:0];}
+function rustStatus(k,v){const a=rustArgs(k,v);return a?CODE[RX.sb_status(RUST_KIND[k],a[0],a[1])]||'none':'none';}
+function jsStatus(k,v){try{return IND[k].status(v,ctx());}catch(e){return 'none';}}
+function statusOf(k,v){if(v===undefined||v===null)return 'none';if(RX&&RUST_KIND[k]!==undefined){try{return rustStatus(k,v);}catch(e){}}return jsStatus(k,v);}
+const isCrit=(k,v)=>{if(!IND[k].crit||v===undefined||v===null)return false;
+  if(RX){try{const a=rustArgs(k,v);if(a)return RX.sb_critical(RUST_KIND[k],a[0],a[1])===1;}catch(e){}}
+  return !!IND[k].crit(v);};
+function rustMedian(a){const n=Math.min(a.length,RX.sb_buf_len());new Float64Array(RX.memory.buffer,RX.sb_buf_ptr(),n).set(a.slice(-n));return RX.sb_median(n);}
+function loadRust(){
+  if(typeof WebAssembly!=='object'||typeof fetch!=='function')return Promise.resolve(false);
+  return fetch('wasm/sonnenblume_core.wasm').then(r=>{if(!r.ok)throw new Error('wasm '+r.status);return r.arrayBuffer();})
+    .then(b=>WebAssembly.instantiate(b,{})).then(({instance})=>{const x=instance.exports;
+      if(typeof x.sb_status!=='function'||x.sb_status(0,72,0)!==1||x.sb_status(1,162,90)!==3)throw new Error('engine self-test failed');
+      RX=x;ENGINE.name='Rust (WebAssembly)';return true;})
+    .catch(()=>false);}
+// read-only hook for the parity tests
+window.sbEngine=Object.freeze({name:()=>ENGINE.name,js:(k,v)=>jsStatus(k,v),rust:(k,v)=>RX&&RUST_KIND[k]!==undefined?rustStatus(k,v):null,
+  jsCrit:(k,v)=>!!(IND[k]&&IND[k].crit&&IND[k].crit(v)),rustCrit:(k,v)=>{if(!RX)return null;const a=rustArgs(k,v);return a?RX.sb_critical(RUST_KIND[k],a[0],a[1])===1:null;}});
 const fmtV=(k,v)=>IND[k].fmt(v)+(IND[k].unit?' '+IND[k].unit:'');
 const RANK={none:0,ok:1,watch:2,alert:3};
 const worst=a=>a.reduce((w,s)=>RANK[s]>RANK[w]?s:w,'none');
@@ -258,7 +283,7 @@ const fmtDur=sec=>sec<60?(sec<10?sec.toFixed(1):Math.round(sec))+' s':sec<3600?M
 function link(){const e=ENVS[S.env],adj=e.sec===null,sec=adj?S.link.delayMin*60:e.sec,black=adj&&S.link.blackout;
   return {sec,adj,black,label:black?'Blackout · solar conjunction':fmtDur(sec)+' one-way',independent:black||sec>=300};}
 function cumDose(){return S.days.reduce((a,e)=>a+(has(e,'dose')?+e.dose:0),0);}
-function radStatus(){const p=cumDose()/CAREER_LIMIT;return p>0.8?'alert':p>0.5?'watch':'ok';}
+function radStatus(){if(RX){try{return CODE[RX.sb_radiation(cumDose(),CAREER_LIMIT)]||'ok';}catch(e){}}const p=cumDose()/CAREER_LIMIT;return p>0.8?'alert':p>0.5?'watch':'ok';}
 const num=(k,v)=>k==='bp'?v.sys:+v;
 
 // ---------- Sudden-shift detection ----------
@@ -278,7 +303,7 @@ function shiftInfo(k){
     if(d>I.jump||d2>20)return {kind:'jump',text:`Jumped from ${fmtV(k,a)} to ${fmtV(k,b)} within the day. Check the sensor and re-measure.`};}
   // 3) far from personal baseline (median of previous 7 days)
   const prev=S.days.slice(0,-1).filter(e=>has(e,k)).slice(-7).map(e=>num(k,e[k]));
-  if(prev.length>=3){const m=median(prev);
+  if(prev.length>=3){let m=median(prev);if(RX){try{m=rustMedian(prev);}catch(e){}}
     if(Math.abs(num(k,cur)-m)>I.jump)return {kind:'baseline',text:`${fmtV(k,cur)} is far from your usual (~${k==='bp'?Math.round(m)+' sys':IND[k].fmt(Math.round(m*10)/10)+' '+I.unit}). Sudden change: re-measure.`};}
   return null;
 }
@@ -316,6 +341,12 @@ const VIEWS=['dashboard','log','trends','library','pharmacy','guide'];
 function setView(v){if(!VIEWS.includes(v))v='dashboard';S.view=v;save();document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));if(v==='trends')drawTrend();if(v==='log')renderForm();if(v==='library')renderLibrary();if(v==='pharmacy')renderPharmacy();try{if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v);}catch(e){}}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.v));
 document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]');if(g){e.preventDefault();setView(g.dataset.goto);}});
+function logField(k){setView('log');const f=$('#f-'+k);if(!f)return;const box=f.closest('.field');
+  const calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try{box.scrollIntoView({block:'center',behavior:calm?'auto':'smooth'});}catch(err){box.scrollIntoView();}
+  f.focus({preventScroll:true});box.classList.remove('flash');void box.offsetWidth;box.classList.add('flash');
+  clearTimeout(logField.t);logField.t=setTimeout(()=>box.classList.remove('flash'),1800);}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-task]');if(t&&IND[t.dataset.task]){e.preventDefault();logField(t.dataset.task);}});
 window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(VIEWS.includes(h)&&h!==S.view)setView(h);});
 
 // ---------- Render ----------
@@ -512,14 +543,14 @@ $('#reportBtn').onclick=()=>{const t=buildReport();const m=sendMsg('report',t);s
 
 // ---------- Routine & gamification ----------
 const TASKS=[
-  {nm:'Log sleep',xp:10,when:'morning',done:e=>has(e,'sleep')},
-  {nm:'Morning vitals (HR, BP, SpO₂, temp)',xp:25,when:'morning',done:e=>['hr','bp','spo2','temp'].every(k=>has(e,k))},
-  {nm:'Fasting blood sugar',xp:10,when:'morning',done:e=>has(e,'glucose')},
-  {nm:'Exercise ≥ 90 min',xp:30,when:'midday',done:e=>has(e,'exercise')&&e.exercise>=90},
-  {nm:'Drink ≥ 2 L',xp:10,when:'all day',done:e=>has(e,'hydration')&&e.hydration>=2},
-  {nm:'Vision card + Amsler grid',xp:10,when:'evening',done:e=>has(e,'vision')},
-  {nm:'Mood check-in',xp:10,when:'evening',done:e=>has(e,'mood')},
-  {nm:'Read dosimeter',xp:10,when:'evening',done:e=>has(e,'dose')}
+  {nm:'Log sleep',k:'sleep',xp:10,when:'morning',done:e=>has(e,'sleep')},
+  {nm:'Morning vitals (HR, BP, SpO₂, temp)',k:'hr',ks:['hr','bp','spo2','temp'],xp:25,when:'morning',done:e=>['hr','bp','spo2','temp'].every(k=>has(e,k))},
+  {nm:'Fasting blood sugar',k:'glucose',xp:10,when:'morning',done:e=>has(e,'glucose')},
+  {nm:'Exercise ≥ 90 min',k:'exercise',xp:30,when:'midday',done:e=>has(e,'exercise')&&e.exercise>=90},
+  {nm:'Drink ≥ 2 L',k:'hydration',xp:10,when:'all day',done:e=>has(e,'hydration')&&e.hydration>=2},
+  {nm:'Vision card + Amsler grid',k:'vision',xp:10,when:'evening',done:e=>has(e,'vision')},
+  {nm:'Mood check-in',k:'mood',xp:10,when:'evening',done:e=>has(e,'mood')},
+  {nm:'Read dosimeter',k:'dose',xp:10,when:'evening',done:e=>has(e,'dose')}
 ];
 function dayXP(e){return TASKS.reduce((a,t)=>a+(t.done(e)?t.xp:0),0)+(TASKS.every(t=>t.done(e))?25:0);}
 function streak(){let n=0;for(let i=S.days.length-1;i>=0;i--){const ok=TASKS.filter(t=>t.done(S.days[i])).length>=6;if(i===S.days.length-1&&!ok)continue;if(ok)n++;else break;}return n;}
@@ -532,7 +563,8 @@ function renderRoutine(){
   const hr=new Date().getHours(), phase=hr<11?'morning':hr<17?'midday':'evening';
   const next=TASKS.find(t=>!t.done(e)&&(t.when===phase||t.when==='all day'))||TASKS.find(t=>!t.done(e));
   $('#prompt').innerHTML=next?`<div class="prompt"><b>Up next (${phase}):</b> ${next.nm}. <a href="#log" data-goto="log">Log it →</a></div>`:`<div class="prompt"><b>All done for today.</b> Perfect-day bonus +25 XP.</div>`;
-  $('#tasks').innerHTML=TASKS.map(t=>`<div class="task ${t.done(e)?'done':''}"><span class="box">${t.done(e)?'<svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>':''}</span><span><span class="nm">${t.nm}</span><br><span class="when">${t.when}</span></span><span class="xp">+${t.xp}</span></div>`).join('');
+  // each task is a button: tapping it opens the log with that measurement focused (ticks fill in once the value is saved)
+  $('#tasks').innerHTML=TASKS.map(t=>{const d=t.done(e),k=t.ks?(t.ks.find(x=>!has(e,x))||t.k):t.k;return `<button type="button" class="task ${d?'done':''}" data-task="${k}" aria-label="${t.nm}: ${d?'done, tap to edit':'not done, tap to log'}"><span class="box" aria-hidden="true">${d?'<svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>':''}</span><span><span class="nm">${t.nm}</span><br><span class="when">${t.when}</span></span><span class="xp">+${t.xp}</span></button>`;}).join('');
   const perfect=S.days.filter(d=>TASKS.every(t=>t.done(d))).length, exDays=S.days.filter(d=>d.exercise>=90).length;
   const B=[['First log',xp>0],['7-day streak',st>=7],['21-day streak',st>=21],['Perfect day',perfect>=1],['10 perfect days',perfect>=10],['Iron crew (25 workout days)',exDays>=25],['Level 5',lvl>=5]];
   $('#badges').innerHTML=B.map(([n,g])=>`<span class="badge ${g?'got':''}">${g?'':''} ${n}</span>`).join('');
@@ -970,7 +1002,7 @@ document.addEventListener('click',e=>{
 let swapOk=false;function confirmSwap(){if(swapOk){swapOk=false;return true;}swapOk=true;toast('Another protocol is running. Tap Start again to replace it.');setTimeout(()=>swapOk=false,4000);return false;}
 
 // ---------- Offline (deep space has no internet) ----------
-function offlineTag(){const t=$('#offlineTag');if(!t)return;t.textContent=!navigator.onLine?'OFFLINE · WORKING FROM DEVICE':(navigator.serviceWorker&&navigator.serviceWorker.controller?'OFFLINE READY':'');}
+function offlineTag(){const et=$('#engineTag');if(et)et.textContent='Status engine: '+ENGINE.name;const t=$('#offlineTag');if(!t)return;t.textContent=!navigator.onLine?'OFFLINE · WORKING FROM DEVICE':(navigator.serviceWorker&&navigator.serviceWorker.controller?'OFFLINE READY':'');}
 window.addEventListener('online',offlineTag);window.addEventListener('offline',offlineTag);
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
   const hadController=!!navigator.serviceWorker.controller;
@@ -1071,4 +1103,5 @@ checkEscalation();save();renderComms();   // readings that arrived without a sav
 const h0=location.hash.slice(1);
 setView(VIEWS.includes(h0)?h0:(S.view||'dashboard'));
 loadKB().then(()=>loadSWX());
+loadRust().then(ok=>{if(ok)renderAll();else offlineTag();});
 })();

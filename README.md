@@ -38,6 +38,7 @@ NASA calls the goal **Earth-Independent Medical Operations**: crews beyond the M
 ## Tech
 
 - Vanilla HTML, CSS and JavaScript with no build step, so it runs anywhere.
+- **Rust status engine** (`rust/core`): vital-sign thresholds, critical values, personal-baseline shift detection and the radiation budget, written in Rust and compiled to a 2 KB WebAssembly file (`wasm/sonnenblume_core.wasm`). The console uses it when the browser supports WebAssembly and falls back to the identical JavaScript rules otherwise; a test sweeps thousands of values to prove both agree. Rebuild with `npm run build:wasm` (needs Rust with the `wasm32-unknown-unknown` target).
 - Procedural SVG anatomy (`js/body.js`).
 - Service worker for offline use (`sw.js`).
 - Vercel serverless function (`api/kb.mjs`) that reads the medical library from **Azure Cosmos DB**, falling back to the bundled JSON in `data/`.
@@ -86,7 +87,7 @@ The full list is in the app's Library → Sources.
 
 This project was built with AI assistance, as required by the NASA Space Apps rules on Super Intelligence (SI):
 
-- **Code:** the web app, serverless API, service worker, tests and CI were written and debugged with Claude (Anthropic), directed and reviewed by the team.
+- **Code:** the web app, Rust status engine, serverless API, service worker, tests and CI were written and debugged with Claude (Anthropic), directed and reviewed by the team.
 - **Data:** the medical library text (medicines, protocols, shielding, conditions) was drafted with Claude from the public sources listed above. It is educational demo content, not medical guidance.
 - **Visuals:** the anatomical body map and landing animations are code-generated with Claude. The project image is AI-generated and carries a visible AI watermark.
 - No personal or health data is sent to any AI service; the app runs entirely in the browser.

@@ -1,0 +1,23 @@
+[package]
+name = "sonnenblume-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Sonnenblume health-status engine: vital-sign thresholds, critical values, personal-baseline shift detection and radiation budget. Compiled to WebAssembly for the web console."
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+doctest = false
+
+# No dependencies on purpose: the WebAssembly file stays tiny and builds without a C linker.
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

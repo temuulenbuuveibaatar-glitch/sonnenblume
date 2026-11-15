@@ -5,7 +5,9 @@
   "description": "Crew self-health OS for the NASA Space Apps Challenge",
   "scripts": {
     "seed": "node scripts/seed-azure.mjs",
-    "test": "python tests/smoke_test.py"
+    "test": "python tests/smoke_test.py",
+    "build:wasm": "cargo build --manifest-path rust/core/Cargo.toml --release --target wasm32-unknown-unknown && node -e \"require('fs').copyFileSync('rust/core/target/wasm32-unknown-unknown/release/sonnenblume_core.wasm','wasm/sonnenblume_core.wasm')\"",
+    "test:rust": "cargo test --manifest-path rust/core/Cargo.toml --lib"
   },
   "dependencies": {
     "@azure/cosmos": "^4.2.0"
