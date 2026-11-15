@@ -82,6 +82,15 @@ Then add `COSMOS_ENDPOINT` and the **read-only** `COSMOS_KEY` to the Vercel proj
 
 The full list is in the app's Library → Sources.
 
+## AI disclosure
+
+This project was built with AI assistance, as required by the NASA Space Apps rules on Super Intelligence (SI):
+
+- **Code:** the web app, serverless API, service worker, tests and CI were written and debugged with Claude (Anthropic), directed and reviewed by the team.
+- **Data:** the medical library text (medicines, protocols, shielding, conditions) was drafted with Claude from the public sources listed above. It is educational demo content, not medical guidance.
+- **Visuals:** the anatomical body map and landing animations are code-generated with Claude. The project image is AI-generated and carries a visible AI watermark.
+- No personal or health data is sent to any AI service; the app runs entirely in the browser.
+
 ## License
 
 [MIT](LICENSE) © 2026 Team Sonnenblume
