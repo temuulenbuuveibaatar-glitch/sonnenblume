@@ -10,6 +10,8 @@
 <meta name="theme-color" content="#0a0a0b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/mind.css">
+<link rel="stylesheet" href="css/ops.css">
 </head>
 <body>
 <noscript><div style="background:#2a2108;color:#ffe3a1;padding:14px 18px;text-align:center;font:15px system-ui">Sonnenblume needs JavaScript to run. Please enable it in your browser settings.</div></noscript>
@@ -55,6 +57,8 @@
   <button data-v="trends">Trends</button>
   <button data-v="library">Library</button>
   <button data-v="pharmacy">Pharmacy</button>
+  <button data-v="mind">Mind</button>
+  <button data-v="ops">Crew ops</button>
   <button data-v="guide">Guide</button>
 </nav>
 
@@ -174,6 +178,12 @@
   </div>
 </section>
 
+<!-- MIND: mental health (js/mind.js) -->
+<section id="v-mind" class="hidden"><div id="mindRoot"></div></section>
+
+<!-- CREW OPS: medical officer view, EVA readiness, countermeasures, handover (js/ops.js) -->
+<section id="v-ops" class="hidden"><div id="opsRoot"></div></section>
+
 <section id="v-guide" class="hidden">
   <div class="card">
     <h2>Guide &amp; protocols</h2>
@@ -199,5 +209,7 @@
 
 <script src="js/body.js"></script>
 <script src="js/app.js"></script>
+<script src="js/mind.js"></script>
+<script src="js/ops.js"></script>
 </body>
 </html>

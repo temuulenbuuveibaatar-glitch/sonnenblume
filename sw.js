@@ -2,7 +2,7 @@
 // must run from the device. Health data never passes through here: it stays in localStorage.
 const VERSION='sonnenblume-v12';
 const CORE=['./','index.html','app.html','privacy.html','404.html','css/fonts.css','css/styles.css','css/landing.css',
-  'js/app.js','js/body.js','js/landing.js','wasm/sonnenblume_core.wasm','data/index.json',
+  'js/app.js','js/body.js','js/landing.js','js/mind.js','js/ops.js','css/mind.css','css/ops.css','wasm/sonnenblume_core.wasm','data/index.json',
   'fonts/space-grotesk-latin-400-normal.woff2','fonts/space-grotesk-latin-500-normal.woff2','fonts/space-grotesk-latin-600-normal.woff2','fonts/space-grotesk-latin-700-normal.woff2',
   'fonts/jetbrains-mono-latin-400-normal.woff2','fonts/jetbrains-mono-latin-600-normal.woff2',
   'fonts/inter-latin-400-normal.woff2','fonts/inter-latin-500-normal.woff2','fonts/inter-latin-600-normal.woff2','fonts/inter-latin-700-normal.woff2'];

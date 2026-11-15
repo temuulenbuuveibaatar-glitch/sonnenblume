@@ -139,7 +139,7 @@ function seedData(envKey){
     formulary:JSON.parse(JSON.stringify(DEMO_FORMULARY)), doses:[]};
 }
 // ---------- Load + strict validation (stored data is untrusted) ----------
-const LISTS={view:['dashboard','log','trends','library','pharmacy','guide'],trend:['bp','hr','spo2','temp','glucose','sleep','mood','exercise','hydration','mass','dose'],range:['day','week','month'],layer:['organs','bones'],bodyMode:['anatomy','status'],sex:['male','female'],kind:['alert','manual','update','protocol','report']};
+const LISTS={view:['dashboard','log','trends','library','pharmacy','mind','ops','guide'],trend:['bp','hr','spo2','temp','glucose','sleep','mood','exercise','hydration','mass','dose'],range:['day','week','month'],layer:['organs','bones'],bodyMode:['anatomy','status'],sex:['male','female'],kind:['alert','manual','update','protocol','report']};
 const str=(v,n)=>typeof v==='string'?v.replace(/[\u0000-\u001f\u007f]/g,' ').slice(0,n):'';
 const int=(v,lo,hi,d)=>{const n=Math.round(Number(v));return typeof v!=='boolean'&&v!==null&&v!==''&&Number.isFinite(n)&&n>=lo&&n<=hi?n:d;};
 const pick=(v,list,d)=>list.includes(v)?v:d;
@@ -337,8 +337,9 @@ $('#cCmo').oninput=e=>{S.crew.cmo=e.target.value.slice(0,40);save();};
 
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2600);}
 
-const VIEWS=['dashboard','log','trends','library','pharmacy','guide'];
-function setView(v){if(!VIEWS.includes(v))v='dashboard';S.view=v;save();document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));if(v==='trends')drawTrend();if(v==='log')renderForm();if(v==='library')renderLibrary();if(v==='pharmacy')renderPharmacy();try{if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v);}catch(e){}}
+const VIEWS=['dashboard','log','trends','library','pharmacy','mind','ops','guide'];
+const VIEW_HOOKS={};   // add-on modules (js/mind.js, js/ops.js) register a render function per view
+function setView(v){if(!VIEWS.includes(v))v='dashboard';S.view=v;save();document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));if(v==='trends')drawTrend();if(v==='log')renderForm();if(v==='library')renderLibrary();if(v==='pharmacy')renderPharmacy();(VIEW_HOOKS[v]||[]).forEach(f=>{try{f();}catch(e){console.warn('module view',v,e);}});try{if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v);}catch(e){}}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.v));
 document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]');if(g){e.preventDefault();setView(g.dataset.goto);}});
 function logField(k){setView('log');const f=$('#f-'+k);if(!f)return;const box=f.closest('.field');
@@ -1077,6 +1078,7 @@ function renderSWX(){
   const sep48=d.particles.filter(p=>within(p.time,72)),x48=big.filter(f=>within(f.peak,48)),m48=mid.filter(f=>within(f.peak,48));
   const kp=d.storms.reduce((a,g)=>Math.max(a,g.kp||0),0),lastStorm=d.storms[d.storms.length-1];
   const st=sep48.length||x48.length?'alert':m48.length?'watch':'ok';
+  SWX.status=st;
   const msg=st==='alert'?'Recent solar particle event or X-class flare. Review the storm shelter guide and limit EVA.':st==='watch'?'M-class flare in the last 48 h. Watch your dosimeter.':'No major solar activity in the last 48 h.';
   const fmt=t=>{const x=Date.parse(t);return Number.isFinite(x)?new Date(x).toISOString().slice(0,16).replace('T',' ')+' UTC':'–';};
   el.innerHTML=`<div class="swx-st"><i class="dot st-${st}"></i><b style="color:var(--${st})">${STXT[st]}</b><span>${esc(msg)}</span></div>
@@ -1104,4 +1106,16 @@ const h0=location.hash.slice(1);
 setView(VIEWS.includes(h0)?h0:(S.view||'dashboard'));
 loadKB().then(()=>loadSWX());
 loadRust().then(ok=>{if(ok)renderAll();else offlineTag();});
+
+// ---------- Module API for add-ons (read-mostly; modules keep their own validated storage) ----------
+window.SB=Object.freeze({
+  onView:(v,f)=>{if(VIEWS.includes(v)&&typeof f==='function'){(VIEW_HOOKS[v]=VIEW_HOOKS[v]||[]).push(f);if(S.view===v)try{f();}catch(e){}}},
+  state:()=>S, today:()=>today(), latest:k=>latest(k), status:k=>curStatus(k), statusOf:(k,v)=>statusOf(k,v), zoneStatus:z=>zoneStatus(z),
+  IND, CORE:CORE.slice(), ZONES, ENVS, STXT, CAREER_LIMIT, cumDose:()=>cumDose(), link:()=>link(), radStatus:()=>radStatus(),
+  esc, toast:t=>toast(t), fmtV:(k,v)=>fmtV(k,v), fmtDur:x=>fmtDur(x), setView:v=>setView(v),
+  sendMsg:(kind,text)=>{const m=sendMsg(LISTS.kind.includes(kind)?kind:'manual',String(text));save();renderComms();return m;},
+  report:()=>buildReport(), kb:()=>KB, engine:()=>ENGINE.name, refresh:()=>renderAll(),
+  swx:()=>({status:SWX.status||'none',data:SWX.data}), doses:()=>S.doses.slice(), medClass:(c,id)=>!!(DCLS[c]&&isC(c,id))
+});
+document.dispatchEvent(new Event('sb:ready'));
 })();
