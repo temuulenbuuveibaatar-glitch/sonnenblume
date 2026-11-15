@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sonnenblume — Crew health, guarded beyond Earth</title>
+<meta name="description" content="Sonnenblume is a self-health system for astronauts on long-duration missions: daily measurements become clear status, guidance and crew alerts, even when Earth is minutes away.">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%230a0a0b%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%227%22 fill=%22%23f5b301%22/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a0a0b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+<div class="frame" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+
+<header class="nav" id="nav">
+  <a class="logo" href="#top" aria-label="Sonnenblume home">
+    <svg viewBox="-92 -104 184 208" aria-hidden="true"><g font-family="Space Grotesk, Arial, sans-serif">
+      <g transform="matrix(0.866,0.5,-0.866,0.5,0,-100)" fill="#ffffff" font-weight="700"><text x="4" y="44" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">SONNEN</text><text x="4" y="92" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">BLUME</text></g>
+      <g transform="matrix(0.866,0.5,0,1,-86.6,-50)" fill="#8d8d93" font-weight="400"><text x="4" y="44" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">SONNEN</text><text x="4" y="92" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">BLUME</text></g>
+      <g transform="matrix(0.866,-0.5,0,1,0,0)" fill="#f5b301" font-weight="700"><text x="4" y="44" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">SONNEN</text><text x="4" y="92" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">BLUME</text></g>
+    </g></svg>
+    <span>SONNENBLUME</span>
+  </a>
+  <nav class="links" id="links">
+    <a href="#about">About</a><a href="#who">Who it's for</a><a href="#how">How it works</a><a href="#science">Science</a><a href="#deep">Deep space</a><a href="#guide">Guide</a><a href="privacy.html">Privacy</a>
+  </nav>
+  <a class="pill ghost sm" href="app.html">LAUNCH CONSOLE <b>»</b></a>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <canvas id="vortex" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <p class="eyebrow">2026 NASA Space Apps Challenge · Astronaut health</p>
+    <h1><span>Crew health, guarded</span><span class="fade">when Earth is out of reach</span></h1>
+    <p class="sub">Sonnenblume turns daily measurements into clear status, step-by-step guidance and crew alerts, built for astronauts on long-duration missions to the Moon and Mars.</p>
+    <div class="ctas">
+      <a class="pill ghost" href="app.html">LAUNCH CONSOLE <b>»</b></a>
+      <a class="pill solid" href="#guide">READ THE GUIDE</a>
+    </div>
+  </div>
+  <div class="marquee" aria-label="Capabilities">
+    <div class="track" id="track"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="kicker">01 · Who we are</div>
+  <div class="two">
+    <div>
+      <h2>A sunflower tracks the sun <span class="dim">and shields its seeds at the core.</span></h2>
+    </div>
+    <div class="prose">
+      <p>We are <b>Team Sonnenblume</b>, a NASA Space Apps team building the self-health system we think long missions need. <i>Sonnenblume</i> is German for sunflower: a flower that keeps turning toward the sun while protecting what matters most at its centre.</p>
+      <p>Our software works the same way. It keeps watching the hostile environment around the crew, from radiation and isolation to a closed habitat and distance from Earth. It also protects the real core of a mission: <b>the physical and mental health of the people on board</b>.</p>
+      <p>On the station, a flight surgeon is a call away. On Mars, a message takes <b>3 to 22 minutes</b> each way. So we designed for the moment when the crew is its own first responder.</p>
+    </div>
+  </div>
+  <div class="stats">
+    <div><b data-count="12">12</b><span>health indicators tracked</span></div>
+    <div><b data-count="9">9</b><span>body systems on the map</span></div>
+    <div><b data-count="5">5</b><span>mission environments</span></div>
+    <div><b>3–22<small>min</small></b><span>one-way delay to Mars</span></div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="sec" id="who">
+  <div class="kicker">02 · Who it's for</div>
+  <h2>Built for the people <span class="dim">who can't wait for Earth.</span></h2>
+  <div class="cards four">
+    <article class="card reveal"><div class="ic"><svg class="i" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><h3>Astronauts</h3><p>Crew members on long-duration missions who carry most of the job of spotting changes in their own health. Takes about two minutes a day.</p></article>
+    <article class="card reveal"><div class="ic"><svg class="i" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a5 5 0 0 0 10 0v-2"/><circle cx="21" cy="12" r="1.5"/></svg></div><h3>Crew medical officers</h3><p>The crewmate trained to respond first. They get automatic alerts when two or more indicators reach Act now, plus the full picture to act on.</p></article>
+    <article class="card reveal"><div class="ic"><svg class="i" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><path d="M12 13v8"/></svg></div><h3>Flight surgeons on Earth</h3><p>The ground team receives the same data after the comms delay, plus a clean export of every reading for review.</p></article>
+    <article class="card reveal"><div class="ic"><svg class="i" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 20 6-10 4 6 3-4 5 8z"/></svg></div><h3>Analog &amp; training crews</h3><p>Antarctic stations, analog habitats and classrooms can use the same routine to practise self-assessment before anyone flies.</p></article>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sec" id="how">
+  <div class="kicker">03 · How it works</div>
+  <h2>Measure. Understand. Act. <span class="dim">Escalate when it matters.</span></h2>
+  <ol class="steps">
+    <li class="reveal"><span class="n">1</span><div><h3>Measure</h3><p>Each day the astronaut logs 12 indicators: heart rate, blood pressure, blood oxygen, temperature, fasting blood sugar, sleep, mood, exercise, fluid intake, radiation dose, a vision check and weekly body mass. Each field shows its normal range as you type.</p></div></li>
+    <li class="reveal"><span class="n">2</span><div><h3>Understand</h3><p>Every reading is colour-coded <em class="g">Nominal</em>, <em class="a">Watch</em> or <em class="r">Act now</em>. Three extra checks catch what a single number misses: <b>sudden changes</b> from your personal baseline, a <b>rebound</b> from a dangerous value within 24 h, and <b>critical readings</b> that may be a faulty sensor or an emergency.</p></div></li>
+    <li class="reveal"><span class="n">3</span><div><h3>See it on the body</h3><p>An anatomical body map lights up the affected system: brain, eyes, heart and vessels, lungs, digestion and kidneys, muscles, bones, immune system, and a radiation aura around the body. Tap any organ to learn what it does, how space affects it and what to do now.</p></div></li>
+    <li class="reveal"><span class="n">4</span><div><h3>Act</h3><p>"What to do now" lists clear, plain-language steps for each flagged indicator. The guidance changes with the mission: near Earth it says call the flight surgeon; on Mars it says start the onboard protocol first.</p></div></li>
+    <li class="reveal"><span class="n">5</span><div><h3>Escalate</h3><p>When two or more indicators hit Act now, Sonnenblume automatically alerts the crew leader and medical officer. The flight surgeon on Earth gets a copy after the comms delay, and a follow-up goes out when values recover.</p></div></li>
+  </ol>
+  <figure class="shot reveal"><a class="live" href="app.html" aria-label="Open the live console"><div class="frameview" id="frameview"><iframe src="app.html" title="Live Sonnenblume console preview" loading="lazy" tabindex="-1"></iframe></div><span class="open">OPEN THE CONSOLE <b>»</b></span></a><figcaption>Live preview of the console, with demo data from a 31-day station mission.</figcaption></figure>
+</section>
+
+<!-- SCIENCE -->
+<section class="sec" id="science">
+  <div class="kicker">04 · The science</div>
+  <h2>Five hazards of spaceflight, <span class="dim">one routine that watches them all.</span></h2>
+  <p class="lead">NASA's Human Research Program groups the risks of spaceflight into five hazards. Each one maps to something the crew can measure every day.</p>
+  <div class="hz">
+    <article class="reveal"><h3><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M12 10 9 4.8A8 8 0 0 0 4.1 13.5H10M14 12h6a8 8 0 0 0-5-8.7L12 10M11 14l-3 5.2a8 8 0 0 0 8 0L13 14"/></svg> Space radiation</h3><p>Galactic cosmic rays and solar storms. Tracked as a <b>daily dosimeter reading</b> against a 600 mSv career budget, with a solar-storm warning when the dose spikes.</p></article>
+    <article class="reveal"><h3><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A9.7 9.7 0 0 1 12 6c5 0 9 6 9 6a16 16 0 0 1-3 3.5M6.5 7.5C4.2 9.1 3 12 3 12s4 6 9 6c1.4 0 2.7-.4 3.8-1"/></svg> Isolation &amp; confinement</h3><p>Small crews, monotony, distance from family. Tracked through <b>sleep and mood</b>, with an extra flag when several bad nights or low days come in a row.</p></article>
+    <article class="reveal"><h3><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg> Distance from Earth</h3><p>No quick return and slow comms. Every environment carries its <b>real one-way delay</b>, and the advice and alerts change to match it.</p></article>
+    <article class="reveal"><h3><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-20 12 12)"/></svg> Gravity fields</h3><p>Fluid shifts, bone and muscle loss, eye changes (SANS). Tracked with <b>blood pressure, exercise, body mass</b> and a daily <b>vision check</b>.</p></article>
+    <article class="reveal"><h3><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.5 15h9"/></svg> Hostile closed environment</h3><p>Cabin air, CO₂, dust and germs. Tracked through <b>blood oxygen, temperature and symptoms</b>, linked to cabin checks and isolation advice.</p></article>
+  </div>
+  <p class="note">Thresholds are general adult reference ranges for demonstration. Radiation rates are approximate published figures for the ISS, Mars cruise and surface (MSL-RAD) and the lunar surface (Chang'e-4). Sonnenblume is a prototype, not a medical device.</p>
+</section>
+
+<!-- DEEP SPACE -->
+<section class="sec" id="deep">
+  <div class="kicker">05 · Built for deep space</div>
+  <h2>What deep-space medicine still lacks, <span class="dim">and what Sonnenblume does about it.</span></h2>
+  <p class="lead">NASA calls the goal Earth-Independent Medical Operations: crews beyond the Moon must handle medical care with no real-time help, no resupply and no evacuation. Today's station medicine was built for the opposite.</p>
+  <div class="hz">
+    <article class="reveal"><h3>No real-time doctor</h3><p>Mars is 3 to 22 minutes away by radio, and a solar conjunction cuts the link for about two weeks every 26 months. <b>Sonnenblume:</b> an Earth-independent mode, live delay and blackout simulation, and an outbox that shows when each message reaches Earth and the earliest possible reply.</p></article>
+    <article class="reveal"><h3>No resupply</h3><p>A 2024 study found 54 of the 91 ISS medicines have a shelf life of 3 years or less, so most would expire before a Mars mission ends. <b>Sonnenblume:</b> an onboard pharmacy that tracks stock and flags every medicine that expires before the mission does.</p></article>
+    <article class="reveal"><h3>No evacuation</h3><p>The crew medical officer must act first, alone. <b>Sonnenblume:</b> 67 guided protocols and 119 medicines. Each protocol timestamps every step, sends a log to the crew and Earth, and links to the reading that triggered it.</p></article>
+    <article class="reveal"><h3>No internet, little bandwidth</h3><p><b>Sonnenblume:</b> works fully offline once loaded, with no outside fonts or scripts, and status reports about 1 KB in size for weak deep-space links.</p></article>
+    <article class="reveal"><h3>Private by design</h3><p>Health data never leaves the device unless the crew member exports it. <a href="privacy.html">Read the Privacy Charter</a>.</p></article>
+  </div>
+  <p class="note">Sources: NASA Human Research Program, Earth-Independent Medical Operations ConOps (NTRS 20240001402); Diaz et al., npj Microgravity 2024, doi 10.1038/s41526-024-00414-3; NASA/JPL Mars solar conjunction notices.</p>
+</section>
+
+<!-- GUIDE -->
+<section class="sec" id="guide">
+  <div class="kicker">06 · Guide</div>
+  <h2>Your first mission day <span class="dim">in seven steps.</span></h2>
+  <div class="guide">
+    <ol class="gsteps">
+      <li class="reveal"><b>Choose your mission.</b> At the top of the console, pick where you are: space station, deep-space transit, lunar base, lunar rover or Mars base. This sets your normal radiation rate and how long Earth takes to reply.</li>
+      <li class="reveal"><b>Do your morning check.</b> Open <i>Log measurements</i>. After waking, before coffee or exercise, record sleep, resting heart rate, blood pressure, blood oxygen, temperature and fasting blood sugar. Each field shows its normal range as you type.</li>
+      <li class="reveal"><b>Read your body map.</b> Back on the <i>Dashboard</i>, green means nominal, amber means watch and red means act now. Tap any organ for its status and advice. Switch layers (organs, skeleton, muscles, vessels) to explore.</li>
+      <li class="reveal"><b>Follow "What to do now".</b> Every flagged indicator comes with plain steps. A banner at the top tells you whether to start the onboard protocol or contact the flight surgeon.</li>
+      <li class="reveal"><b>Log the rest of your day.</b> Add exercise, fluids, mood, your vision check and the dosimeter reading in the evening. Completing your routine earns XP, streaks and badges.</li>
+      <li class="reveal"><b>Watch your trends.</b> In <i>Trends</i>, switch between Day, Week and Month. Day shows every reading you saved today, so sudden swings stand out.</li>
+      <li class="reveal"><b>Trust the alert.</b> If two or more indicators hit Act now, your crew leader and medical officer are alerted automatically. You can also press <i>Alert now</i> at any time. Use <i>Export data</i> to send the full record.</li>
+    </ol>
+    <aside class="faq">
+      <h3>Good to know</h3>
+      <details class="reveal" open><summary>Where is my data stored?</summary><p>Only in this browser on this device. Nothing is uploaded. Use <i>Export data</i> to share it.</p></details>
+      <details class="reveal"><summary>Why does it say Watch when my values look normal?</summary><p>A sudden swing is a warning sign too. If a reading was at Act now within the last 24 h, or jumped far from your usual, it stays on Watch until a steady re-check.</p></details>
+      <details class="reveal"><summary>What does "Critical, check sensor" mean?</summary><p>The value is outside a survivable or plausible range. Re-seat the sensor and measure again. If it's confirmed, treat it as an emergency.</p></details>
+      <details class="reveal"><summary>Is this a medical device?</summary><p>No. It's a prototype that shows how self-assessment could work in space. Thresholds are general reference ranges, not personal medical limits.</p></details>
+      <details class="reveal"><summary>Can I try it without real measurements?</summary><p>Yes. The console opens with 31 days of demo data. Try entering extreme values, then normal ones, to see the alerts and sudden-change detection. <i>Reset demo data</i> restores it.</p></details>
+      <a class="pill solid wide" href="app.html#guide">FULL PROTOCOLS IN THE CONSOLE <b>»</b></a>
+    </aside>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <canvas id="mini" aria-hidden="true"></canvas>
+  <h2>When help is minutes away,<br><span class="fade">the crew is its own first responder.</span></h2>
+  <div class="ctas"><a class="pill ghost" href="app.html">LAUNCH CONSOLE <b>»</b></a><a class="pill solid" href="#about">OUR STORY</a></div>
+</section>
+</main>
+
+<footer class="foot">
+  <div>© 2026 Team Sonnenblume · NASA Space Apps Challenge prototype · <a href="privacy.html">Privacy Charter</a></div>
+  <div class="small">Not a medical device. NASA does not endorse any non-U.S. Government entity and is not responsible for information on non-U.S. Government websites.</div>
+</footer>
+<script src="js/landing.js"></script>
+</body>
+</html>

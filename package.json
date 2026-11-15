@@ -1,0 +1,13 @@
+{
+  "name": "sonnenblume",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Crew self-health OS for the NASA Space Apps Challenge",
+  "scripts": {
+    "seed": "node scripts/seed-azure.mjs"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^4.2.0"
+  },
+  "engines": { "node": "22.x" }
+}

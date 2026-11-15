@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sonnenblume — Crew Self-Health OS</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%230a0a0b%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%227%22 fill=%22%23f5b301%22/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a0a0b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+<header>
+  <a class="brand" href="index.html" title="Back to Sonnenblume home" style="color:inherit;text-decoration:none">
+    <svg viewBox="-92 -104 184 208" aria-label="Sonnenblume logo" role="img">
+      <g font-family="Space Grotesk, Arial, sans-serif">
+        <g transform="matrix(0.866,0.5,-0.866,0.5,0,-100)" fill="#ffcf33" font-weight="700">
+          <text x="4" y="44" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">SONNEN</text>
+          <text x="4" y="92" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">BLUME</text>
+        </g>
+        <g transform="matrix(0.866,0.5,0,1,-86.6,-50)" fill="#c08a10" font-weight="400">
+          <text x="4" y="44" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">SONNEN</text>
+          <text x="4" y="92" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">BLUME</text>
+        </g>
+        <g transform="matrix(0.866,-0.5,0,1,0,0)" fill="#f5b301" font-weight="700">
+          <text x="4" y="44" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">SONNEN</text>
+          <text x="4" y="92" font-size="44" textLength="92" lengthAdjust="spacingAndGlyphs">BLUME</text>
+        </g>
+      </g>
+    </svg>
+    <div>
+      <h1>Sonnenblume</h1>
+      <p>Crew self-health OS · track the sun, shield the core</p>
+    </div>
+  </a>
+  <div class="hud">
+    <div class="chip"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg> <input id="crewName" style="background:transparent;border:0;outline:0;width:110px;font-weight:600" value="Cmdr. Rivera" aria-label="Crew member name"></div>
+    <div class="chip">Mission day <b id="mday">—</b></div>
+    <div class="chip"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> <select id="envSel" aria-label="Mission environment"></select></div>
+    <div class="chip"><svg class="i" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><path d="M12 13v8"/></svg> <span id="delayTxt">—</span></div>
+    <div class="chip"><span class="dot" id="overallDot"></span><b id="overallTxt">—</b></div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <a href="index.html" style="color:var(--muted);text-decoration:none;padding:8px 12px;font-size:14px">← Home</a>
+  <button data-v="dashboard" class="on">Dashboard</button>
+  <button data-v="log">Log measurements</button>
+  <button data-v="trends">Trends</button>
+  <button data-v="library">Library</button>
+  <button data-v="pharmacy">Pharmacy</button>
+  <button data-v="guide">Guide</button>
+</nav>
+
+<main id="main">
+<div id="banner"></div>
+
+<!-- DASHBOARD -->
+<section id="v-dashboard">
+<div class="grid">
+  <div class="stack">
+    <div class="card">
+      <h2>Body status <span class="seg sm" id="bodyMode"><button data-m="anatomy">Anatomy</button><button data-m="status">Status</button></span></h2>
+      <div class="bodywrap"><svg id="bodySvg" viewBox="0 0 880 980" data-layer="organs" role="img" aria-label="Interactive anatomical body map"></svg><div class="btip" id="btip"></div></div>
+      <div class="layerbar"><span class="seg sm" id="bodyLayer" role="group" aria-label="Body view"><button data-l="organs">Organs</button><button data-l="bones">Bones</button></span></div>
+      <div class="legend"><span><i class="dot st-ok"></i>Nominal</span><span><i class="dot st-watch"></i>Watch</span><span><i class="dot st-alert"></i>Act</span><span><i class="dot st-none"></i>No data</span></div>
+      <div style="text-align:center;font-size:11.5px;color:var(--muted);margin-top:4px">Tap an organ, bone or vessel. Glow = status · tap the aura for radiation.</div>
+    </div>
+    <div class="card zinfo" id="zinfo"></div>
+  </div>
+
+  <div class="stack">
+    <div class="card">
+      <h2>Today's indicators <button class="btn" style="padding:5px 10px;font-size:12px" data-goto="log">+ Log</button></h2>
+      <div class="vgrid" id="vgrid"></div>
+    </div>
+    <div class="card">
+      <h2>What to do now</h2>
+      <div id="actions"></div>
+    </div>
+  </div>
+
+  <div class="stack col-r">
+    <div class="card">
+      <h2>Crew alert &amp; comms <button class="btn red" id="alertNowBtn" style="padding:5px 10px;font-size:12px">Alert now</button></h2>
+      <div class="contact">
+        <span>Crew leader</span><input id="cLeader" aria-label="Crew leader">
+        <span>Medical officer</span><input id="cCmo" aria-label="Crew medical officer">
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.45">Sends automatically when <b style="color:var(--text)">2 or more</b> indicators are <span style="color:var(--alert)">Act now</span>. The flight surgeon on Earth gets a copy after the comms delay.</div>
+      <div id="linkCtl"></div>
+      <div style="display:flex;gap:6px;margin-top:10px"><button class="btn" id="reportBtn" style="font-size:12px;padding:6px 10px">Send status report to Earth</button></div>
+      <div id="comms"></div>
+    </div>
+    <div class="card">
+      <h2>Mission routine <span id="lvl" style="text-transform:none;letter-spacing:0"></span></h2>
+      <div id="prompt"></div>
+      <div id="tasks"></div>
+      <div class="xpbar"><i id="xpfill"></i></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span id="xptxt"></span><span id="streak"></span></div>
+      <div class="badges" id="badges"></div>
+    </div>
+    <div class="card">
+      <h2>Radiation budget</h2>
+      <div id="radbox"></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- LOG -->
+<section id="v-log" class="hidden">
+  <div class="card">
+    <h2>Log today's measurements <span id="logDay" style="text-transform:none;letter-spacing:0"></span></h2>
+    <p style="color:var(--muted);margin:0 0 14px;font-size:13.5px">Fill in what you measured and leave the rest blank. The status updates as you type. Every save is kept, so the system can spot sudden swings, not just bad values.</p>
+    <form id="logForm" class="form" autocomplete="off" novalidate></form>
+    <div style="margin-top:16px">
+      <div class="field"><label>Symptoms right now (tick any)</label></div>
+      <div class="sym" id="symBox"></div>
+    </div>
+    <div class="btns">
+      <button class="btn pri" id="saveBtn">Save to today</button>
+      <button class="btn" id="nextDayBtn" title="Simulation: close out today and start the next mission day">End day → next mission day</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="exportBtn">Export data</button>
+      <button class="btn warn" id="resetBtn">Reset demo data</button>
+    </div>
+  </div>
+</section>
+
+<!-- TRENDS -->
+<section id="v-trends" class="hidden">
+  <div class="card">
+    <h2>Trends <span class="seg" id="seg"><button data-r="day">Day</button><button data-r="week">Week</button><button data-r="month">Month</button></span></h2>
+    <div class="tsel" id="tsel"></div>
+    <div class="chartbox"><canvas id="trend"></canvas><div class="tip" id="tip"></div></div>
+    <div class="statsrow" id="tstats"></div>
+    <p id="tnote" style="color:#c8c8cc;font-size:13.5px;line-height:1.5;margin:12px 0 0"></p>
+  </div>
+</section>
+
+<!-- GUIDE -->
+<section id="v-library" class="hidden">
+  <div class="card">
+    <div class="libhead"><div><h2 style="margin:0">Medical library</h2><p class="libsub">Medications, emergency protocols, radiation shielding, conditions and countermeasures, linked to the indicators you track.</p></div><span class="srcbadge" id="kbSrc">Loading…</span></div>
+    <div class="libbar"><input id="kbQ" type="search" placeholder="Search: oxygen, kidney stone, polyethylene, promethazine…" aria-label="Search the library"><div class="libtypes" id="kbTypes"></div></div>
+    <div class="libgrid"><div class="liblist" id="kbList"></div><article class="libdetail" id="kbDetail"></article></div>
+    <p class="libnote" id="kbNote"></p>
+  </div>
+</section>
+
+<section id="v-pharmacy" class="hidden">
+  <div class="card">
+    <div class="libhead"><div><h2 style="margin:0">Onboard pharmacy</h2><p class="libsub">No resupply beyond low Earth orbit. Track what is left, and which medicines expire before the mission ends.</p></div><span class="srcbadge" id="phMission"></span></div>
+    <div class="phstats" id="phStats"></div>
+    <div class="libtypes" id="phFilter" style="margin:12px 0"></div>
+    <div class="phtable" id="phTable"></div>
+    <div class="lbl" style="margin-top:22px">Dose table (flight surgeon)</div>
+    <p class="libsub" style="margin-bottom:10px">Doses the dose check is allowed to calculate. Only two over-the-counter painkillers come pre-filled, from standard adult labels; every other dose must be set by the flight surgeon.</p>
+    <div class="phtable" id="doseTable"></div>
+    <p class="libnote">Shelf lives here are illustrative for the demo. A 2024 study of the ISS formulary found most medicines would expire before a roughly three-year Mars mission ends, and their stability in space is not well known. Real kits follow the flight surgeon's inventory.</p>
+  </div>
+</section>
+
+<section id="v-guide" class="hidden">
+  <div class="card">
+    <h2>Guide &amp; protocols</h2>
+    <p style="color:var(--muted);margin:0 0 12px;font-size:13.5px">How to take each measurement, why spaceflight changes it, what the colours mean, and when to call for help.</p>
+    <div id="guideList"></div>
+  </div>
+</section>
+
+<p class="foot">Sonnenblume · prototype for the 2026 NASA Space Apps Challenge. Thresholds are general adult reference ranges for demonstration, not individual medical limits, and this is not a medical device. Radiation rates are approximate published figures (ISS, MSL-RAD cruise &amp; Mars surface, Chang'e-4 lunar surface). Crew alerts are simulated. Data stays in this browser only.</p>
+</div>
+
+</main>
+<footer class="appfoot"><a href="privacy.html">Privacy</a><span>·</span><a href="index.html#guide">How to use</a><span>·</span><span>Prototype, not a medical device</span><span id="offlineTag" class="offtag"></span></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-label="Export"><div class="card"><h2>Export <button class="btn" id="mClose" style="padding:4px 10px">Close</button></h2><p style="font-size:13px;color:var(--muted);margin-top:0" id="mHint">A short, readable report for the flight surgeon. Switch to JSON for the full record.</p><div class="seg sm" id="mSeg" style="margin-bottom:8px"><button data-f="report" class="on">Report</button><button data-f="json">Full JSON</button></div><textarea id="mText" readonly aria-label="Export content"></textarea><div class="btns"><button class="btn pri" id="mCopy">Copy</button></div></div></div>
+<div class="modal esc hidden" id="escModal" role="alertdialog" aria-modal="true" aria-label="Crew alert sent"><div class="card"><h2 style="color:var(--alert)"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18v-6a5 5 0 0 1 10 0v6M4 21h16M12 3v2M4.2 6.2l1.4 1.4M19.8 6.2l-1.4 1.4"/></svg> Crew alert sent</h2><div id="escBody" style="font-size:14px;line-height:1.5"></div><div class="btns"><button class="btn pri" id="escOk">Acknowledge</button></div></div></div>
+
+<script src="js/body.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

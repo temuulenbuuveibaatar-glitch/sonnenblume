@@ -1,0 +1,19 @@
+{
+ "version": 2,
+ "generated": "2026-11-15",
+ "disclaimer": "Educational prototype content for the NASA Space Apps Challenge. Not medical advice; real crews follow their own flight medical checklists.",
+ "files": [
+  "kb-medication.json",
+  "kb-medication-2.json",
+  "kb-medication-3.json",
+  "kb-protocol.json",
+  "kb-protocol-2.json",
+  "kb-shielding.json",
+  "kb-condition.json",
+  "kb-radiation_event.json",
+  "kb-dose_rate.json",
+  "kb-countermeasure.json",
+  "kb-source.json"
+ ],
+ "count": 266
+}
