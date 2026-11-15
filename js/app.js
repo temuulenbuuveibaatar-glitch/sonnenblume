@@ -917,8 +917,6 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
 function renderAll(){renderHeader();renderBanner();renderBody();renderZone();renderVitals();renderActions();renderComms();renderRoutine();renderRad();renderGuide();if(S.view==='trends')drawTrend();if(S.view==='pharmacy')renderPharmacy();if(S.view==='library'&&KB.ready)renderLibrary();offlineTag();}
 renderAll();
 const h0=location.hash.slice(1);
-const q0=(new URLSearchParams(location.search).get('q')||'').trim().slice(0,80);
-if(q0){KB.q=q0;$('#kbQ').value=q0;setView('library');try{history.replaceState(null,'',location.pathname+'#library');}catch(e){}}
-else setView(VIEWS.includes(h0)?h0:(S.view||'dashboard'));
+setView(VIEWS.includes(h0)?h0:(S.view||'dashboard'));
 loadKB();
 })();
