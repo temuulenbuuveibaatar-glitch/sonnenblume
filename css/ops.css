@@ -1,0 +1,48 @@
+/* Crew ops (js/ops.js): reuses the console's tokens from styles.css */
+#opsRoot{display:flex;flex-direction:column;gap:14px}
+.ops-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ops-bar .seg{flex-wrap:wrap}
+.ops-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.5px;text-transform:none;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.ops-intro{color:#c8c8cc;font-size:13.5px;line-height:1.45;margin:0 0 8px}
+.ops-demo{font-size:12px;color:var(--watch);margin:0 0 10px;line-height:1.4}
+.ops-note{font-size:12.5px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+.ops-src{font-size:11.5px;color:var(--muted);line-height:1.5;margin:14px 0 0;border-top:1px solid var(--line);padding-top:8px}
+.ops-src a{color:var(--muted)}.ops-src a:hover{color:var(--sun)}
+.ops-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:10px}
+.ops-ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:#c8c8cc;line-height:1.5}
+/* crew grid */
+.ops-grid{display:flex;flex-direction:column;gap:8px}
+.ops-row{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c,var(--none));border-radius:12px;overflow:hidden}
+.ops-rh{display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(170px,1.4fr) repeat(5,minmax(62px,.6fr));gap:10px;align-items:center;width:100%;background:transparent;border:0;color:inherit;text-align:left;padding:10px 12px;font:inherit}
+.ops-rh:hover{background:rgba(255,255,255,.03)}
+.ops-nm b{display:block;font-size:14px}
+.ops-nm small{font-size:11.5px;color:var(--muted)}
+.ops-dots{display:flex;flex-wrap:wrap;gap:5px}
+.ops-dots .dot{width:11px;height:11px}
+.ops-c{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
+.ops-c b{font-family:var(--mono);font-size:14px;font-weight:600}
+.ops-c small{font-size:10.5px;color:var(--muted);letter-spacing:.3px}
+.ops-c.hot b{color:var(--alert)}
+.ops-c.st-watch b.tr{color:var(--watch)}
+.ops-c.st-alert b{color:var(--alert)}
+.ops-c.st-watch b{color:var(--watch)}
+.ops-c b.tr{font-size:16px}
+.ops-d{padding:0 12px 12px;border-top:1px dashed var(--line)}
+@media (max-width:860px){
+  .ops-rh{grid-template-columns:1fr 1fr 1fr;row-gap:8px}
+  .ops-nm{grid-column:1/-1}
+  .ops-dots{grid-column:1/-1}
+}
+/* readiness */
+.ops-verdict{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;border:1px solid var(--c);border-left-width:4px;border-radius:12px;padding:12px 14px;margin:12px 0 10px;background:var(--panel)}
+@supports (background:color-mix(in srgb,red 10%,blue)){.ops-verdict{background:color-mix(in srgb,var(--c) 10%,var(--panel))}}
+.ops-verdict b{font-family:var(--mono);font-size:24px;color:var(--c);letter-spacing:.5px}
+.ops-verdict span{font-size:13.5px;color:#d0d0d4}
+.ops-why{font-size:12.5px;color:#b5b5ba;line-height:1.45}
+/* plan */
+.ops-item{border:1px solid var(--line);border-left:3px solid var(--c,var(--none));border-radius:10px;padding:9px 12px;margin-top:8px;background:var(--panel)}
+.ops-it{display:flex;gap:8px;align-items:center;font-size:14px}
+.ops-item .ops-why{margin-top:4px;color:#c8c8cc}
+.ops-rat{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+/* handover */
+#hoText{height:300px;resize:vertical;line-height:1.45}

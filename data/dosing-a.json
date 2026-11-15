@@ -1,0 +1,1816 @@
+{
+ "med-promethazine": {
+  "route": "oral",
+  "indication": "motion sickness",
+  "unit": "mg",
+  "mg": 25,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": 25,
+  "maxDaily": 50,
+  "dose_text": "25 mg 30-60 min before travel; repeat 8-12 h later if needed (25 mg twice daily).",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: PROMETHAZINE HYDROCHLORIDE TABLET [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=12400c65-f93b-47a5-8167-1fb14337130b",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "NHS medicines: promethazine",
+    "url": "https://www.nhs.uk/medicines/promethazine/how-and-when-to-take-promethazine/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label (25 mg twice daily) and NHS (25 mg, then 25 mg same evening) agree on 25 mg and 50 mg/day. Label repeat interval 8-12 h not stated numerically by NHS, so interval left null. Causes drowsiness."
+ },
+ "med-scopolamine-dex": {
+  "route": "oral",
+  "indication": "space motion sickness",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "No FDA label for oral scopolamine + dextroamphetamine (ScopeDex). Use the flight surgeon's protocol.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: TRANSDERM SCOP (SCOPOLAMINE) PATCH, EXTENDED RELEASE [BAXTER HEALTHCARE CORPORATION]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b877a694-a1d0-4280-937a-a06820b12a88",
+    "section": "(transdermal scopolamine label; different product)"
+   },
+   {
+    "name": "NHS medicines: hyoscine-hydrobromide",
+    "url": "https://www.nhs.uk/medicines/hyoscine-hydrobromide/how-and-when-to-take-hyoscine-hydrobromide/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Not dosed: ScopeDex is a compounded NASA combination with no DailyMed label; DailyMed has only transdermal scopolamine (Transderm Scop), and NHS hyoscine hydrobromide is a different oral product (300 mcg tablets). Numbers withheld."
+ },
+ "med-meclizine": {
+  "route": "oral",
+  "indication": "motion sickness",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (25 mg tabs): 1-2 tablets once daily; first dose 1 h before activity.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: MOTION SICKNESS RELIEF (MECLIZINE HCL) TABLET [UNITED NATURAL FOODS, INC. DBA UNFI]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=108bb943-529f-4510-b770-b54eca493ae0",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Meclizine",
+    "url": "https://medlineplus.gov/druginfo/meds/a682548.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Interval 24 h agrees with MedlinePlus (doses every 24 h; take 1 h before travel). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-ondansetron": {
+  "route": "oral",
+  "indication": "nausea / vomiting",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (ODT): e.g. 8 mg before moderately emetogenic chemo, repeat 8 h later, then 8 mg every 12 h; no general nausea dose in label.",
+  "renal": null,
+  "hepatic": "label: severe impairment, max 8 mg per day",
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: ONDANSETRON TABLET, ORALLY DISINTEGRATING [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9c3ad9c1-474e-4331-a017-09cec46702d8",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Ondansetron",
+    "url": "https://medlineplus.gov/druginfo/meds/a601209.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus gives no numbers; NHS page not found. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-zolpidem": {
+  "route": "oral",
+  "indication": "insomnia / sleep shifting",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 5 mg (women) or 5-10 mg (men) once nightly right before bed with 7-8 h left to sleep; never more than 10 mg/day.",
+  "renal": null,
+  "hepatic": "label: mild-moderate impairment 5 mg",
+  "elderly": "label: 5 mg",
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: ZOLPIDEM TARTRATE TABLET, FILM COATED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=38c838a4-9943-445a-8e80-e823d56eeaa5",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Zolpidem",
+    "url": "https://medlineplus.gov/druginfo/meds/a693025.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: zolpidem",
+    "url": "https://www.nhs.uk/medicines/zolpidem/how-and-when-to-take-zolpidem/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Once nightly agrees with NHS and MedlinePlus (stay in bed 7-8 h). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-zaleplon": {
+  "route": "oral",
+  "indication": "insomnia",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 10 mg at bedtime for most adults; 20 mg for occasional patients; doses above 20 mg not recommended.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: ZALEPLON CAPSULE [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9c83b71e-8344-4c77-b7f6-a9c862f9e7dd",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Zaleplon",
+    "url": "https://medlineplus.gov/druginfo/meds/a601251.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus confirms only taking it right before 7-8 h in bed. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-melatonin": {
+  "route": "oral",
+  "indication": "sleep timing",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "No FDA-approved label (dietary supplement). Follow the flight surgeon's guidance.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "NHS medicines: melatonin",
+    "url": "https://www.nhs.uk/medicines/melatonin/how-and-when-to-take-melatonin/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "DailyMed search returned only homeopathic/supplement products, not an FDA drug label; NHS page read gave no dose numbers. All dose fields null."
+ },
+ "med-modafinil": {
+  "route": "oral",
+  "indication": "alertness (shift work sleep disorder)",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 200 mg once daily, about 1 h before the work shift (or in the morning).",
+  "renal": null,
+  "hepatic": "label: severe impairment, half dose",
+  "elderly": "label: consider lower dose",
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: PROVIGIL (MODAFINIL) TABLET [APOTEX CORP]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0391f182-1958-9fef-a944-53b229ce99e7",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Modafinil",
+    "url": "https://medlineplus.gov/druginfo/meds/a602016.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Once daily, 1 h before shift agrees with MedlinePlus. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-ibuprofen": {
+  "route": "oral",
+  "indication": "minor pain or fever",
+  "unit": "mg",
+  "mg": 200,
+  "perKg": false,
+  "amount": null,
+  "interval": 4,
+  "maxSingle": 400,
+  "maxDaily": 1200,
+  "dose_text": "200 mg every 4-6 h; may take 400 mg if 200 mg does not help. Max 1200 mg in 24 h. Take with food.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: ADVIL (IBUPROFEN) TABLET, COATED [HALEON US HOLDINGS LLC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1a665e64-9f30-be37-4a83-38789f1f1e89",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Ibuprofen",
+    "url": "https://medlineplus.gov/druginfo/meds/a682159.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: ibuprofen-for-adults",
+    "url": "https://www.nhs.uk/medicines/ibuprofen-for-adults/how-and-when-to-take-ibuprofen/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label (Advil 200 mg OTC) and NHS agree: 1-2 x 200 mg, at least 4 h apart, max 6 tablets (1200 mg)/24 h. Prescription strengths (400-800 mg) not used here."
+ },
+ "med-acetaminophen": {
+  "route": "oral",
+  "indication": "minor pain or fever",
+  "unit": "mg",
+  "mg": 1000,
+  "perKg": false,
+  "amount": null,
+  "interval": 6,
+  "maxSingle": 1000,
+  "maxDaily": 3000,
+  "dose_text": "1000 mg (2 x 500 mg) every 6 h as needed. Max 3000 mg in 24 h. Max 10 days without a doctor.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: PAIN RELIEF (ACETAMINOPHEN) TABLET, COATED [DISCOUNT DRUG MART]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=146c735b-5081-4de4-9025-d939d560bbba",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "NHS medicines: paracetamol-for-adults",
+    "url": "https://www.nhs.uk/medicines/paracetamol-for-adults/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Conservative values applied: FDA OTC label 2 x 500 mg every 6 h, max 6 caplets (3000 mg)/24 h; NHS allows every 4 h and max 4000 mg/24 h. Used 6 h and 3000 mg."
+ },
+ "med-aspirin": {
+  "route": "oral",
+  "indication": "minor pain or fever (pain-relief dosing of 81 mg chewable)",
+  "unit": "mg",
+  "mg": 324,
+  "perKg": false,
+  "amount": null,
+  "interval": 4,
+  "maxSingle": 648,
+  "maxDaily": 3600,
+  "dose_text": "Chew 4-8 x 81 mg (324-648 mg) every 4 h with water. Max 3600 mg in 24 h.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: ASPIRIN LOW DOSE (ASPIRIN) TABLET, CHEWABLE [L.N.K. INTERNATIONAL, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=39e142a7-8590-4e1e-8319-6904fb57cc8a",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Aspirin",
+    "url": "https://medlineplus.gov/druginfo/meds/a682878.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: low-dose-aspirin",
+    "url": "https://www.nhs.uk/medicines/low-dose-aspirin/how-and-when-to-take-low-dose-aspirin/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "FDA OTC label (81 mg chewable): 4-8 tablets every 4 h, max 48 tablets (3888 mg)/24 h. NHS pain dose 300-900 mg, at least 4 h apart, max 4 doses/day (3600 mg); lower max used. Label for this product gives no heart-attack dose; NHS low-dose (cardiac) is 75 mg once daily."
+ },
+ "med-naproxen": {
+  "route": "oral",
+  "indication": "pain / inflammation",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 8,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (Rx naproxen): 250-500 mg twice daily for arthritis; gout 750 mg then 250 mg every 8 h. Lowest effective dose, shortest time.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: NAPROXEN TABLET [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6573681e-e9be-440f-a818-a533b744648e",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Naproxen",
+    "url": "https://medlineplus.gov/druginfo/meds/a681029.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: naproxen",
+    "url": "https://www.nhs.uk/medicines/naproxen/how-and-when-to-take-naproxen/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Interval 8 h: NHS says up to 3 times a day, MedlinePlus every 6-8 h for pain; longer value used. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-pseudoephedrine": {
+  "route": "oral",
+  "indication": "nasal / sinus congestion",
+  "unit": "mg",
+  "mg": 60,
+  "perKg": false,
+  "amount": null,
+  "interval": 4,
+  "maxSingle": 60,
+  "maxDaily": 240,
+  "dose_text": "60 mg (2 x 30 mg) every 4-6 h. Max 4 doses (240 mg) in 24 h. Stop if no better in 7 days.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: SUDOGEST (PSEUDOEPHEDRINE HYDROCHLORIDE) TABLET [MAJOR PHARMACEUTICALS]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=78faa497-6743-b85b-e053-2a91aa0ae822",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Pseudoephedrine",
+    "url": "https://medlineplus.gov/druginfo/meds/a682619.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: pseudoephedrine",
+    "url": "https://www.nhs.uk/medicines/pseudoephedrine/how-and-when-to-take-pseudoephedrine/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label (30 mg tabs: 2 tablets every 4-6 h, max 4 doses/24 h) and NHS (60 mg, at least 4 h apart, max 4 doses/24 h) agree. Label: ask a doctor first if high blood pressure or heart disease (no numeric threshold given, so no gate)."
+ },
+ "med-oxymetazoline": {
+  "route": "nasal",
+  "indication": "nasal congestion",
+  "unit": "spray",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 10,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (0.05%): 2-3 sprays in each nostril not more often than every 10-12 h; max 2 doses per 24 h; max 3 days.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: FGPER NASAL DECONGESTANT (OXYMETAZOLINE HYDROCHLORIDE) SPRAY [GUANGZHOU CHUANMA INTERNATIONAL TRADING CO.,LTD.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5f1d9ad2-fc66-0107-e063-6294a90a952d",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Oxymetazoline Nasal Spray",
+    "url": "https://medlineplus.gov/druginfo/meds/a608026.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Interval 10 h and 2 doses/24 h agree with MedlinePlus (every 10-12 h, not more than twice in 24 h, not longer than 3 days). Spray count per dose only in the label, so amount is null."
+ },
+ "med-loratadine": {
+  "route": "oral",
+  "indication": "allergy symptoms",
+  "unit": "mg",
+  "mg": 10,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": 10,
+  "maxDaily": 10,
+  "dose_text": "10 mg once daily. Do not take more than 10 mg in 24 h.",
+  "renal": "label: ask a doctor if kidney disease",
+  "hepatic": "label: ask a doctor if liver disease",
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: LORATADINE TABLET [BI-MART]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1dd299e7-dfdd-459b-bb2b-83e37dd2e63d",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Loratadine",
+    "url": "https://medlineplus.gov/druginfo/meds/a697038.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: loratadine",
+    "url": "https://www.nhs.uk/medicines/loratadine/how-and-when-to-take-loratadine/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label and NHS agree (10 mg once a day)."
+ },
+ "med-fexofenadine": {
+  "route": "oral",
+  "indication": "allergy symptoms (hay fever)",
+  "unit": "mg",
+  "mg": 120,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": 120,
+  "maxDaily": 120,
+  "dose_text": "120 mg once daily (conservative). FDA label allows one 180 mg tablet once daily; max 180 mg/24 h.",
+  "renal": "label: ask a doctor if kidney disease",
+  "hepatic": null,
+  "elderly": "label: age 65+ ask a doctor",
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: EQUATE (FEXOFENADINE HYDROCHLORIDE TABLETS) TABLET [WALMART INC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4dafd9e4-4258-0528-e063-6394a90ab1a4",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Fexofenadine",
+    "url": "https://medlineplus.gov/druginfo/meds/a697035.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: fexofenadine",
+    "url": "https://www.nhs.uk/medicines/fexofenadine/how-and-when-to-take-fexofenadine/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Disagreement: FDA OTC label 180 mg once daily; NHS hay fever dose 120 mg once daily (180 mg once daily only for hives). Lower values used for hay fever; a 180 mg dose is within the US label."
+ },
+ "med-diphenhydramine": {
+  "route": "oral",
+  "indication": "allergy symptoms",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 4,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (25 mg tabs): 1-2 tablets every 4-6 h; max 6 doses in 24 h. Causes drowsiness.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: CVS DIPHENHYDRAMINE HYDROCHLORIDE (DIPHENHYDRAMINE HYDROCHLORIDE) TABLET [CVS PHARMACY]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3d71d306-893a-e73a-e063-6394a90a0a3b",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Diphenhydramine",
+    "url": "https://medlineplus.gov/druginfo/meds/a682539.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Interval 4 h agrees with MedlinePlus (every 4-6 h). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-epinephrine": {
+  "route": "IM",
+  "indication": "anaphylaxis",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 0.3-0.5 mg IM into anterolateral thigh, max 0.5 mg per dose; auto-injector delivers its fixed dose.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: EPINEPHRINE INJECTION [GLENMARK PHARMACEUTICALS INC., USA]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cc4ebb51-6020-4339-a36a-ec2380b7d28e",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Epinephrine Injection",
+    "url": "https://medlineplus.gov/druginfo/meds/a603002.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Label read is the 1 mg/mL vial label, not an auto-injector. MedlinePlus confirms keeping 2 auto-injectors and that only a provider should give more than 2 injections, but not the mg. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-prednisone": {
+  "route": "oral",
+  "indication": "inflammation / severe allergy",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: initial dose 5-60 mg per day depending on condition; adjust to response.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: PREDNISONE TABLET [BRYANT RANCH PREPACK]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=55aedced-d945-4bd2-9aa8-0f18b89a0e7f",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Prednisone",
+    "url": "https://medlineplus.gov/druginfo/meds/a601102.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus gives no numbers; NHS covers prednisolone (different drug). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-dexamethasone": {
+  "route": "oral",
+  "indication": "inflammation / altitude-type swelling",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: initial oral dose 0.75-9 mg per day depending on condition.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: DEXAMETHASONE TABLET [APOTEX CORP.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=bfaa71cb-e517-8d94-f64b-8cdbf7b8fbf2",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Dexamethasone",
+    "url": "https://medlineplus.gov/druginfo/meds/a682792.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-albuterol": {
+  "route": "inhaled",
+  "indication": "bronchospasm / wheeze",
+  "unit": "puff",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 2 inhalations every 4-6 h; more frequent use not recommended. Before exercise: 2 inhalations 15-30 min prior.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: VENTOLIN HFA (ALBUTEROL SULFATE) AEROSOL, METERED [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=adb8d669-b91c-46f1-8a86-19f504840eff",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Albuterol",
+    "url": "https://medlineplus.gov/druginfo/meds/a607004.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus text extracted covered tablets; NHS inhaler page gave no numbers in the text read. Amount and interval left null."
+ },
+ "med-ciprofloxacin": {
+  "route": "oral",
+  "indication": "bacterial infection (e.g. infectious diarrhea)",
+  "unit": "mg",
+  "mg": 500,
+  "perKg": false,
+  "amount": null,
+  "interval": 12,
+  "maxSingle": 750,
+  "maxDaily": 1500,
+  "dose_text": "Usually 500 mg every 12 h (infectious diarrhea 5-7 days); some infections 750 mg every 12 h.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: CIPROFLOXACIN (CIPROFLOXACIN HYDROCHLORIDE) TABLET, FILM COATED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3c611c8c-deed-4904-93f7-f75a2147fbf7",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Ciprofloxacin",
+    "url": "https://medlineplus.gov/druginfo/meds/a688016.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: ciprofloxacin",
+    "url": "https://www.nhs.uk/medicines/ciprofloxacin/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label adult table (500-750 mg every 12 h) and NHS (250-750 mg twice a day) agree. Keep 2 h from dairy/calcium (NHS). Label has a boxed warning (tendon rupture, neuropathy, CNS effects). Renal adjustment exists in label (not extracted)."
+ },
+ "med-amoxicillin-clav": {
+  "route": "oral",
+  "indication": "bacterial infection",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "See label: dosing by tablet strength (500/125 mg every 12 h or every 8 h; 875/125 mg every 12 h).",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: AMOXICILLIN AND CLAVULANATE POTASSIUM TABLET, FILM COATED [NORTHWIND HEALTH COMPANY, LLC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=26e1d503-ab8b-ca85-e063-6394a90aaae3",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "NHS medicines: co-amoxiclav",
+    "url": "https://www.nhs.uk/medicines/co-amoxiclav/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label dosing section not parsed cleanly in time; NHS gives no mg (3 times a day, at least 4 h apart). All numeric fields null."
+ },
+ "med-azithromycin": {
+  "route": "oral",
+  "indication": "bacterial infection",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "NHS: usual adult dose 500 mg once a day for 3-10 days. Check the FDA label for the indication-specific regimen.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: AZITHROMYCIN TABLET, FILM COATED [A-S MEDICATION SOLUTIONS]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=58308e8b-57bd-4e82-a2e8-24aac63194cd",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "NHS medicines: azithromycin",
+    "url": "https://www.nhs.uk/medicines/azithromycin/how-and-when-to-take-azithromycin/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Adult regimen rows of the FDA label were not confirmed in the text extracted, so numbers are not cross-checked; fields null."
+ },
+ "med-doxycycline": {
+  "route": "oral",
+  "indication": "bacterial infection",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "See label (doxycycline hyclate).",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: DOXYCYCLINE HYCLATE TABLET, FILM COATED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=294c6fc3-e7ca-46ea-b062-a27dd7b0bc97",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Doxycycline",
+    "url": "https://medlineplus.gov/druginfo/meds/a682063.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: doxycycline",
+    "url": "https://www.nhs.uk/medicines/doxycycline/how-and-when-to-take-doxycycline/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Dose lines not extracted from label or NHS in time; all fields null rather than guessed."
+ },
+ "med-tmp-smx": {
+  "route": "oral",
+  "indication": "urinary tract infection",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 1 double-strength tablet (800/160 mg) every 12 h for 10-14 days for UTI.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: SULFAMETHOXAZOLE AND TRIMETHOPRIM TABLET [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3ef62512-0dc3-4821-9b60-6b375841c4c0",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Co-trimoxazole",
+    "url": "https://medlineplus.gov/druginfo/meds/a684026.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus (co-trimoxazole) gave no dose numbers; NHS page not found. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-nitrofurantoin": {
+  "route": "oral",
+  "indication": "uncomplicated urinary tract infection",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 6,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (macrocrystals): 50-100 mg four times a day; lower dose for uncomplicated UTI.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: NITROFURANTOIN MACROCRYSTALS CAPSULE [AMERICAN HEALTH PACKAGING]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce4afef1-22c1-4a1c-a102-a32fb6a2e045",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Nitrofurantoin",
+    "url": "https://medlineplus.gov/druginfo/meds/a682291.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: nitrofurantoin",
+    "url": "https://www.nhs.uk/medicines/nitrofurantoin/how-and-when-to-take-nitrofurantoin/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "6 h interval: label four times a day; MedlinePlus two or four times a day (depends on product). NHS: usually 3-7 days. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-valacyclovir": {
+  "route": "oral",
+  "indication": "cold sores / shingles",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: cold sores 2 g every 12 h for 1 day; shingles 1 g three times daily for 7 days.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: VALACYCLOVIR HYDROCHLORIDE TABLET, FILM COATED [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=495f22cc-18d4-4264-9313-7ab20e7b5bc9",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Valacyclovir",
+    "url": "https://medlineplus.gov/druginfo/meds/a695010.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus: 1 to 3 times a day depending on condition (no mg); NHS page not found. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-fluconazole": {
+  "route": "oral",
+  "indication": "vaginal yeast infection",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 150 mg as a single oral dose for vaginal candidiasis.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: FLUCONAZOLE TABLET [ANI PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8f90f169-6a72-4c33-a2af-0bc943602bc2",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "NHS medicines: fluconazole",
+    "url": "https://www.nhs.uk/medicines/fluconazole/how-and-when-to-take-fluconazole/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "NHS confirms a single one-off dose for thrush but not the mg on the page read. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-clotrimazole": {
+  "route": "topical",
+  "indication": "fungal skin infection",
+  "unit": "application",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 12,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Rub a thin layer into affected skin twice daily (morning and evening); see a doctor if no better in 4 weeks.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: CLOTRIMAZOLE CREAM [REDPHARM DRUG]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=53cafc9f-7761-83a9-e063-6294a90a3437",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "NHS medicines: clotrimazole",
+    "url": "https://www.nhs.uk/medicines/clotrimazole/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label twice daily; NHS 2-3 times a day for 2-4 weeks. Longer interval (12 h) used."
+ },
+ "med-hydrocortisone-cream": {
+  "route": "topical",
+  "indication": "itch / skin inflammation",
+  "unit": "application",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (1% OTC): apply to affected area not more than 3-4 times daily.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: DG HEALTH HYDROCORTISONE (HYDROCORTISONE) CREAM [DOLGENCORP INC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3d298bd8-1433-46fc-baff-9b104b067f5d",
+    "section": "Drug Facts: Directions"
+   }
+  ],
+  "note": "No second source found (NHS page not found, MedlinePlus Connect no match). Interval left null."
+ },
+ "med-mupirocin": {
+  "route": "topical",
+  "indication": "minor skin infection (impetigo)",
+  "unit": "application",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 8,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Apply a small amount 3 times daily for up to 10 days; recheck if no response in 3-5 days.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: MUPIROCIN OINTMENT [A-S MEDICATION SOLUTIONS]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1692855a-c6c1-4c30-aaa8-a761d635d931",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Mupirocin topical",
+    "url": "https://medlineplus.gov/druginfo/meds/a688004.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Label and MedlinePlus agree on 3 times a day. Duration: label up to 10 days, MedlinePlus 1-2 weeks; shorter label limit kept."
+ },
+ "med-loperamide": {
+  "route": "oral",
+  "indication": "acute diarrhea",
+  "unit": "mg",
+  "mg": 4,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": 4,
+  "maxDaily": 12,
+  "dose_text": "4 mg first, then 2 mg after each loose stool. Max 12 mg in 24 h (16 mg only if a doctor directs). Stop after 48 h if no better.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: LOPERAMIDE HYDROCHLORIDE CAPSULE [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=580e6cd4-3f05-4996-9dc3-c50d757ae210",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Loperamide",
+    "url": "https://medlineplus.gov/druginfo/meds/a682280.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: loperamide",
+    "url": "https://www.nhs.uk/medicines/loperamide/how-and-when-to-take-loperamide/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Rx label: 4 mg then 2 mg after each unformed stool, max 16 mg/day. NHS: same start, max 6 capsules (12 mg) when bought OTC, 8 (16 mg) on prescription. Conservative 12 mg max used. No fixed interval (dose follows each loose stool). Label warns doses above recommended can cause serious heart rhythm problems."
+ },
+ "med-bisacodyl": {
+  "route": "oral",
+  "indication": "constipation",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (5 mg tabs): 1-3 tablets in a single daily dose with water.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: UP AND UP GENTLE LAXATIVE (BISACODYL) TABLET, COATED [TARGET CORPORATION]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4a29dc2b-b68f-471b-a84e-4a5096aa3748",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Bisacodyl",
+    "url": "https://medlineplus.gov/druginfo/meds/a601027.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Once-daily limit agrees with MedlinePlus (not more than once a day, not more than 1 week). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-docusate": {
+  "route": "oral",
+  "indication": "constipation (stool softener)",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (250 mg softgel): 1 softgel, preferably at bedtime, for 2-3 days or until normal.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: DOCUSATE SODIUM CAPSULE, LIQUID FILLED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6a7e4193-22d2-491e-9842-5c43f571fc65",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Stool Softeners",
+    "url": "https://medlineplus.gov/druginfo/meds/a601113.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: docusate",
+    "url": "https://www.nhs.uk/medicines/docusate/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Disagreement: FDA label 250 mg once daily; NHS 1 capsule 3 times a day (UK capsule strength not stated on page read). Mg left null; once-daily (longer) interval used. MedlinePlus: no more than 1 week without a doctor."
+ },
+ "med-omeprazole": {
+  "route": "oral",
+  "indication": "heartburn / GERD",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: GERD 20 mg once daily up to 4 weeks; ulcer 20-40 mg once daily. Take before a meal.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: OMEPRAZOLE CAPSULE, DELAYED RELEASE [COUPLER LLC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5fecd5fd-fac7-8fc7-e063-6394a90a09a0",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Omeprazole",
+    "url": "https://medlineplus.gov/druginfo/meds/a693050.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: omeprazole",
+    "url": "https://www.nhs.uk/medicines/omeprazole/how-and-when-to-take-omeprazole/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Once daily agrees with MedlinePlus (once a day before a meal). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-famotidine": {
+  "route": "oral",
+  "indication": "heartburn / GERD / ulcer",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 12,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: GERD 20 mg twice daily; active ulcer 40 mg once daily.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: FAMOTIDINE TABLET, FILM COATED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5798d282-ce83-49aa-bc33-13203f2b5285",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Famotidine",
+    "url": "https://medlineplus.gov/druginfo/meds/a687011.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "12 h interval from label (twice daily) is within MedlinePlus (once daily at bedtime or 2-4 times a day). Label gives renal dose changes (not extracted). Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-calcium-carbonate": {
+  "route": "oral",
+  "indication": "heartburn / acid indigestion",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label (1000 mg chewable): chew 2-3 tablets as symptoms occur; not for more than 2 weeks without a doctor.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: TOPCARE ANTACID CALCIUM (CALCIUM CARBONATE) TABLET, CHEWABLE [TOPCO ASSOCIATES LLC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=04b3d397-df99-44e2-a191-6e9199b08398",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Calcium Carbonate",
+    "url": "https://medlineplus.gov/druginfo/meds/a601032.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus confirms only the 2-week limit. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-potassium-citrate": {
+  "route": "oral",
+  "indication": "kidney stone prevention (hypocitraturia)",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: dosed in mEq; mild-moderate 30 mEq/day (15 mEq twice or 10 mEq three times daily) with meals; severe 60 mEq/day.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: POTASSIUM CITRATE TABLET, EXTENDED RELEASE [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=08c769d4-1dc0-4130-8f9c-cddace13a79b",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Potassium",
+    "url": "https://medlineplus.gov/druginfo/meds/a601099.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Label doses in mEq, not mg; MedlinePlus page found is the general potassium page with no dose numbers. Left null."
+ },
+ "med-alendronate": {
+  "route": "oral",
+  "indication": "bone loss (osteoporosis) prevention/treatment",
+  "unit": "mg",
+  "mg": 70,
+  "perKg": false,
+  "amount": null,
+  "interval": 168,
+  "maxSingle": 70,
+  "maxDaily": 70,
+  "dose_text": "70 mg once weekly (or 10 mg daily), first thing in the morning with plain water; stay upright 30 min.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: ALENDRONATE (ALENDRONATE SODIUM TABLET) TABLET [MARLEX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b63421af-ec03-1de7-e053-2a95a90abec6",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Alendronate",
+    "url": "https://medlineplus.gov/druginfo/meds/a601011.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: alendronic-acid",
+    "url": "https://www.nhs.uk/medicines/alendronic-acid/how-and-when-to-take-alendronic-acid/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label and NHS agree (70 mg once a week or 10 mg once a day). MedlinePlus: upright and nothing by mouth for 30 min."
+ },
+ "med-vitamin-d": {
+  "route": "oral",
+  "indication": "vitamin D supplementation",
+  "unit": "unit",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Dietary supplement; follow flight surgeon's plan.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: VITAMIN D3 DIETARY SUPPLEMENT (CHOLECALCIFEROL, .ALPHA.-TOCOPHEROL) CAPSULE, GELATIN COATED [NNODUM PHARMACEUTICALS]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ad799f34-81df-460c-a760-2204ad776817",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "No FDA drug label (supplement facts only, 10,000 IU weekly product); MedlinePlus Connect redirected to NIH ODS which is not on the allowed source list. Left null."
+ },
+ "med-tamsulosin": {
+  "route": "oral",
+  "indication": "urinary retention / BPH symptoms",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 0.4 mg once daily, about 30 min after the same meal; may increase to 0.8 mg after 2-4 weeks.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: TAMSULOSIN HYDROCHLORIDE CAPSULE [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a608ddc8-fe42-484e-b61f-307c60151138",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Tamsulosin",
+    "url": "https://medlineplus.gov/druginfo/meds/a698012.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: tamsulosin",
+    "url": "https://www.nhs.uk/medicines/tamsulosin/how-and-when-to-take-tamsulosin/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Once daily 30 min after a meal agrees with MedlinePlus. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-lidocaine": {
+  "route": "SC",
+  "indication": "local anesthesia (infiltration)",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: without epinephrine max 4.5 mg/kg and not over 300 mg total; with epinephrine max 7 mg/kg, not over 500 mg.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: LIDOCAINE HYDROCHLORIDE (LIDOCAINE) INJECTION, SOLUTION [HENRY SCHEIN, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0c0790ec-effd-4d8a-9874-8ca0b31e54d0",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "MedlinePlus Connect returned the antiarrhythmic page and NHS the skin cream, so local-anesthetic maximum not confirmed. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-tetracaine-eye": {
+  "route": "ophthalmic",
+  "indication": "eye anesthesia for examination / foreign body removal",
+  "unit": "drop",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: one drop in the eye as needed; single-use.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: TETRACAINE HYDROCHLORIDE SOLUTION [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=01fba5f8-a60a-444c-9abd-299540b8815a",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "No allowed second source located; amount left null."
+ },
+ "med-fluorescein": {
+  "route": "ophthalmic",
+  "indication": "corneal staining (abrasion check)",
+  "unit": "application",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Moisten strip tip with 1-2 drops sterile saline, touch conjunctiva or fornix, have patient blink.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: C20H10NA2O5 FLUORESCEIN SODIUM OPHTHALMIC STRIPS (FLUORESCEIN SODIUM) STRIP [VISTAMERICA USA]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=292abb69-84ad-4f61-e063-6394a90a1447",
+    "section": "Directions for use"
+   }
+  ],
+  "note": "Diagnostic strip; no dose. No second source needed for a non-dose procedure, but none was read."
+ },
+ "med-artificial-tears": {
+  "route": "ophthalmic",
+  "indication": "dry eye",
+  "unit": "drop",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 1-2 drops in affected eye(s) as needed.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: REFRESH TEARS (CARBOXYMETHYLCELLULOSE SODIUM) SOLUTION/ DROPS REFRESH TEARS (CARBOXYMETHYLCELLULOSE SODIUM) KIT [ALLERGAN, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=329d1fe0-4432-4565-b7b1-65666bd86526",
+    "section": "Drug Facts: Directions"
+   }
+  ],
+  "note": "No allowed second source located; amount left null."
+ },
+ "med-morphine": {
+  "route": "IV",
+  "indication": "severe pain",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: adults start 0.1-0.2 mg/kg IV every 4 h as needed; inject slowly (rapid IV can cause chest wall rigidity).",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: MORPHINE SULFATE INJECTION, SOLUTION [HOSPIRA, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=be420e8b-bcb0-49b5-bb4d-1df8b9959809",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Morphine",
+    "url": "https://medlineplus.gov/druginfo/meds/a682133.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus covers oral forms (every 4 h) only. Label boxed warning: life-threatening respiratory depression; no numeric vital-sign threshold, so no gate. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-naloxone": {
+  "route": "nasal",
+  "indication": "opioid overdose",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 1 spray (4 mg) in one nostril; repeat with a new spray every 2-3 minutes if no response or relapse.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: REXTOVY (NALOXONE HYDROCHLORIDE) SPRAY [INTERNATIONAL MEDICATION SYSTEMS, LTD.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fe9735db-c57e-44a8-bffb-b87a84c2a6f3",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Naloxone Injection",
+    "url": "https://medlineplus.gov/druginfo/meds/a612022.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus (injection page) confirms repeat every 2-3 minutes but not the nasal mg. Interval of 2-3 minutes cannot be expressed usefully in hours, so left null. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-ketamine": {
+  "route": "IV",
+  "indication": "procedural sedation / anesthesia",
+  "unit": "mg",
+  "mg": null,
+  "perKg": true,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: IV induction 1-4.5 mg/kg (average 2 mg/kg), give slowly over 60 s.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: KETALAR (KETAMINE HYDROCHLORIDE) INJECTION [HENRY SCHEIN, INC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46dab560-8ecd-4d92-8c92-6baa2310b09b",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Ketamine Injection",
+    "url": "https://medlineplus.gov/druginfo/meds/a626003.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus ketamine injection page has no dose numbers. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-haloperidol": {
+  "route": "IM",
+  "indication": "acute agitation",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 2-5 mg IM for prompt control of acute agitation.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: HALOPERIDOL (HALOPERIDOL LACTATE) INJECTION, SOLUTION [FRESENIUS KABI USA, LLC]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1ad2abd-a9d6-44e3-957b-36a73260f4f5",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Haloperidol",
+    "url": "https://medlineplus.gov/druginfo/meds/a682180.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-lorazepam": {
+  "route": "oral",
+  "indication": "anxiety",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 8,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: anxiety 2-3 mg/day split 2-3 times daily (range 1-10 mg/day); insomnia from anxiety 2-4 mg at bedtime.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": "label: start 1-2 mg/day in divided doses",
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: LORAZEPAM TABLET [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f79a5a1-0c40-45cf-8994-51f5ba3a5938",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "NHS medicines: lorazepam",
+    "url": "https://www.nhs.uk/medicines/lorazepam/how-and-when-to-take-lorazepam/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "8 h interval: label and NHS both say 2 or 3 times a day. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-sertraline": {
+  "route": "oral",
+  "indication": "depression / anxiety disorders",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 50 mg once daily (25 mg start for panic/PTSD/social anxiety); max 200 mg/day.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: SERTRALINE HYDROCHLORIDE TABLET [REMEDYREPACK INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=687ebdc4-6946-454e-8d46-3207488ccf32",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Sertraline",
+    "url": "https://medlineplus.gov/druginfo/meds/a697048.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-amiodarone": {
+  "route": "IV",
+  "indication": "VF / unstable VT",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: 150 mg in 100 mL D5W over 10 min, then 1 mg/min for 6 h, then maintenance; about 1000 mg in first 24 h.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: AMIODARONE HYDROCHLORIDE INJECTION, SOLUTION [HENRY SCHEIN, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0c9ee15a-5741-4aaa-8d80-c7bd2e45822e",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Amiodarone",
+    "url": "https://medlineplus.gov/druginfo/meds/a687009.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus covers oral tablets only. Label: infuse load slowly to limit hypotension. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ },
+ "med-atropine": {
+  "route": "IV",
+  "indication": "symptomatic bradycardia",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "See label.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: ATROPINE SULFATE INJECTION, SOLUTION [HENRY SCHEIN, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6acb3f07-9e32-4ad0-8336-e2f33d55b127",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "Dose lines not extracted from label; MedlinePlus Connect returned the eye-drop page only. All fields null."
+ },
+ "med-nitroglycerin": {
+  "route": "sublingual",
+  "indication": "angina / chest pain",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": 0.083,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "1 tablet under the tongue at onset; may repeat every 5 min; no more than 3 tablets in 15 min. Get help if pain persists.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: NITROSTAT (NITROGLYCERIN TABLET) TABLET [HENRY SCHEIN, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5265648f-3062-48a2-a4e3-fea1207807a8",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "Interval 5 min (0.083 h) and 3-dose limit agree between label and MedlinePlus. Tablet strength not stated in the dose text read, so mg null. Label also warns of hypotension (no numeric threshold given)."
+ },
+ "med-oral-rehydration": {
+  "route": "oral",
+  "indication": "dehydration from diarrhea/vomiting",
+  "unit": "mL",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Mix per package instructions.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [],
+  "note": "No DailyMed (FDA) label found for oral rehydration salts. Left null."
+ },
+ "med-glucose-gel": {
+  "route": "oral",
+  "indication": "low blood sugar",
+  "unit": "g",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Follow package directions.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: GLUCOSE TABLET, CHEWABLE [TARGET CORPORATION]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4293a62f-6fe9-4a3c-b17b-ef33e1fd122c",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "No FDA label for glucose gel found on DailyMed (only chewable glucose tablets and unrelated products). Left null."
+ },
+ "med-normal-saline": {
+  "route": "IV",
+  "indication": "fluid replacement",
+  "unit": "mL",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Volume individualized by the medical officer.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "medical officer",
+  "sources": [
+   {
+    "name": "DailyMed: SODIUM CHLORIDE INJECTION, SOLUTION [HENRY SCHEIN, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b8d796-bfba-42af-a859-99d776871558",
+    "section": "Dosage and Administration / Directions"
+   }
+  ],
+  "note": "The DailyMed record found was a small-volume diluent, not an IV bag; no fixed dose. Left null."
+ },
+ "med-cetirizine": {
+  "route": "oral",
+  "indication": "allergy symptoms",
+  "unit": "mg",
+  "mg": 10,
+  "perKg": false,
+  "amount": null,
+  "interval": 24,
+  "maxSingle": 10,
+  "maxDaily": 10,
+  "dose_text": "10 mg once daily. Do not take more than 10 mg in 24 h; 5 mg may be enough for milder symptoms.",
+  "renal": "label: ask a doctor if kidney disease",
+  "hepatic": "label: ask a doctor if liver disease",
+  "elderly": "label: age 65+ ask a doctor",
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: CETIRIZINE HYDROCHLORIDE TABLET, FILM COATED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03c0a599-072a-10ef-e063-6394a90a9698",
+    "section": "Drug Facts: Directions"
+   },
+   {
+    "name": "MedlinePlus: Cetirizine",
+    "url": "https://medlineplus.gov/druginfo/meds/a623043.html",
+    "section": "How should this medicine be used?"
+   },
+   {
+    "name": "NHS medicines: cetirizine",
+    "url": "https://www.nhs.uk/medicines/cetirizine/how-and-when-to-take-cetirizine/",
+    "section": "How and when to take / dose"
+   }
+  ],
+  "note": "Label and NHS agree (10 mg once a day)."
+ },
+ "med-hydroxyzine": {
+  "route": "oral",
+  "indication": "anxiety or itching",
+  "unit": "mg",
+  "mg": null,
+  "perKg": false,
+  "amount": null,
+  "interval": null,
+  "maxSingle": null,
+  "maxDaily": null,
+  "dose_text": "Label: anxiety 50-100 mg four times daily; itching 25 mg three to four times daily.",
+  "renal": null,
+  "hepatic": null,
+  "elderly": null,
+  "gates": [],
+  "who": "crew",
+  "sources": [
+   {
+    "name": "DailyMed: HYDROXYZINE HYDROCHLORIDE TABLET, FILM COATED [PD-RX PHARMACEUTICALS, INC.]",
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=263d3f22-a105-4abb-8152-be2081eefcde",
+    "section": "Dosage and Administration / Directions"
+   },
+   {
+    "name": "MedlinePlus: Hydroxyzine",
+    "url": "https://medlineplus.gov/druginfo/meds/a682866.html",
+    "section": "How should this medicine be used?"
+   }
+  ],
+  "note": "MedlinePlus page has no dose numbers; NHS page not found. Label dose not stated numerically in the second source read (MedlinePlus/NHS), so numeric dose fields are null per the two-source rule; dose_text quotes the FDA label."
+ }
+}

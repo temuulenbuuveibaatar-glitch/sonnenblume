@@ -790,6 +790,7 @@ async function loadKB(){
     const parts=await Promise.all(idx.files.map(f=>fetch('data/'+f).then(r=>r.json()).catch(()=>({records:[]}))));
     KB.records=parts.flatMap(p=>Array.isArray(p&&p.records)?p.records:[]).filter(r=>r&&typeof r.id==='string'&&typeof r.type==='string'&&typeof r.title==='string'&&r.data&&typeof r.data==='object');KB.source='bundled';
   }
+  await loadDosing();
   KB.records.forEach(r=>KB.byId[r.id]=r);KB.ready=true;seedPharmacy();
   renderZone();renderActions();if(S.view==='library')renderLibrary();if(S.view==='pharmacy')renderPharmacy();
 }
@@ -911,6 +912,26 @@ const DCLS={
   emergency:['epinephrine','naloxone','glucagon','dextrose-50','atropine','adenosine','amiodarone','tranexamic-acid']
 };
 const isC=(c,id)=>DCLS[c].includes(id.replace(/^med-/,''));
+// ---------- Label-sourced dose reference (data/kb-dosing.json) ----------
+// Adult doses traced to the official label (DailyMed) plus a second source. Used only when the flight surgeon
+// has not entered a dose in the Pharmacy dose table; shown as a reference for the crew medical officer, not an order.
+const DOSING={};
+const pos=v=>typeof v==='number'&&Number.isFinite(v)&&v>0&&v<1e6;
+const GATE_K=['hr','bp_sys','bp_dia','spo2','temp','glucose','mass','hydration'],GATE_OP=['<','<=','>','>='];
+async function loadDosing(){
+  const j=await fetch('data/kb-dosing.json').then(r=>r.ok?r.json():null).catch(()=>null);
+  if(!j||typeof j!=='object')return;
+  Object.keys(j).slice(0,400).forEach(id=>{const d=j[id];if(!/^med-[a-z0-9-]{1,60}$/.test(id)||!d||typeof d!=='object')return;
+    const src=(Array.isArray(d.sources)?d.sources:[]).filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).slice(0,4).map(x=>({name:str(x.name,140),url:x.url.slice(0,400),section:str(x.section,80)}));
+    if(!src.length)return;
+    DOSING[id]={route:str(d.route,20),unit:str(d.unit,12),mg:pos(d.mg)?d.mg:null,perKg:d.perKg===true,amount:pos(d.amount)?d.amount:null,
+      interval:pos(d.interval)?d.interval:null,maxSingle:pos(d.maxSingle)?d.maxSingle:null,maxDaily:pos(d.maxDaily)?d.maxDaily:null,
+      text:str(d.dose_text,300),renal:str(d.renal,240),hepatic:str(d.hepatic,240),elderly:str(d.elderly,240),who:d.who==='medical officer'?'medical officer':'crew',
+      note:str(d.note,400),indication:str(d.indication,120),sources:src,
+      gates:(Array.isArray(d.gates)?d.gates:[]).filter(g=>g&&GATE_K.includes(g.k)&&GATE_OP.includes(g.op)&&typeof g.v==='number'&&Number.isFinite(g.v)&&(g.act==='block'||g.act==='warn')).slice(0,8).map(g=>({k:g.k,op:g.op,v:g.v,act:g.act,why:str(g.why,200)}))};});
+}
+function labelRef(id){const d=DOSING[id];if(!d||d.mg===null||d.interval===null||d.maxDaily===null||!['mg','mcg','g'].includes(d.unit))return null;
+  return {mg:d.mg,perKg:d.perKg,interval:d.interval,maxDaily:d.maxDaily,maxSingle:d.maxSingle,src:'label reference ('+d.sources[0].name+')',ref:true};}
 function vit(k){const l=latest(k);if(!l||today().day-l.day>(k==='mass'?8:1))return null;return {v:l.v,day:l.day,today:l.today};}
 function doseCheck(id){
   const out={block:[],warn:[],ok:[]},m=id.replace(/^med-/,''),hr=vit('hr'),bp=vit('bp'),sp=vit('spo2'),gl=vit('glucose'),tp=vit('temp'),hy=vit('hydration'),ms=latest('mass');
@@ -933,12 +954,19 @@ function doseCheck(id){
   if(['glucose-gel','glucagon','dextrose-50'].includes(m)){if(gl&&gl.v>=70)W(`Blood sugar ${gl.v} mg/dL is not low: re-check before giving sugar.`);else if(gl)O(`Blood sugar ${gl.v} mg/dL is low: treatment indicated.`);}
   if(isC('antipyretic',id)&&tp)O(`Temperature ${(+tp.v).toFixed(1)} °C ${tp.v>38?'(fever)':''}.`);
   if(m==='acetaminophen'){const other=S.doses.filter(x=>Date.now()-x.ts<864e5&&x.id==='med-acetaminophen');if(other.length)O('Earlier acetaminophen doses are counted in the 24 h total below.');}
+  const D=DOSING[id];
+  if(D){const gv={hr:hr&&+hr.v,bp_sys:sys,bp_dia:bp?+bp.v.dia:null,spo2:sp&&+sp.v,temp:tp&&+tp.v,glucose:gl&&+gl.v,mass:ms&&+ms.v,hydration:hy&&+hy.v};
+    const NM={hr:'Heart rate',bp_sys:'Systolic BP',bp_dia:'Diastolic BP',spo2:'SpO₂',temp:'Temperature',glucose:'Blood sugar',mass:'Body mass',hydration:'Fluid intake'};
+    D.gates.forEach(g=>{const x=gv[g.k];if(x===null||x===undefined||!Number.isFinite(x)){if(g.act==='block')W(`${NM[g.k]} unknown: the label sets a limit (${g.op} ${g.v}). Measure it first.`);return;}
+      const hit=g.op==='<'?x<g.v:g.op==='<='?x<=g.v:g.op==='>'?x>g.v:x>=g.v;
+      if(hit)(g.act==='block'?B:W)(`${NM[g.k]} ${Math.round(x*10)/10} is ${g.op} ${g.v}: ${g.why||'label limit'} (label).`);});
+    if(D.who==='medical officer')W('Medical officer only: give under the crew medical officer and the onboard protocol.');}
   if(isC('emergency',id)){out.block=out.block.filter(()=>false);W('Emergency medicine: do not delay it for missing vitals when the protocol calls for it.');}
   // pharmacy
   const ps=pharmStatus(id);
   if(ps){if(ps.qty===0)B('Out of stock.');else if(ps.t==='Expired')W('This stock is past its expiry date: see the "Using an expired medicine" protocol.');}
   // formulary + timing
-  const f=S.formulary[id];let dose=null;
+  const f=S.formulary[id]||labelRef(id);let dose=null;
   if(f){
     if(f.perKg){if(!ms)B('Body mass unknown: weigh the crew member for a weight-based dose.');else{dose=f.mg*ms.v;O(`Weight-based: ${f.mg} mg/kg × ${(+ms.v).toFixed(1)} kg.`);}}
     else dose=f.mg;
@@ -959,6 +987,12 @@ function doseHTML(r){
   const head={ok:'Clear to give',watch:'Caution: check the notes',alert:'Do not give now'}[c.status];
   let h=`<div class="dosebox st-${c.status}"><div class="dh"><b style="color:var(--${c.status})">${head}</b>${c.status!=='alert'&&c.dose!==null&&c.dose>0?`<span class="dv">${c.dose} mg</span>`:''}</div>`;
   h+=c.f?`<div class="ds">${c.f.perKg?esc(c.f.mg)+' mg/kg':esc(c.f.mg)+' mg'} · every ${esc(c.f.interval)} h · max ${esc(c.f.maxDaily)} mg/24 h · source: ${esc(c.f.src||'flight surgeon')}</div>`:`<div class="ds">No dose on file. The flight surgeon enters it in Pharmacy → Dose table; the safety checks below still apply.</div>`;
+  const D=DOSING[r.id];
+  if(D){h+=`<div class="ds">${c.f&&c.f.ref?'<b>Label reference, not an order:</b> confirm with the crew medical officer. ':''}${esc(D.text)}${D.indication?' ('+esc(D.indication)+')':''}</div>`;
+    const adj=[['Kidneys',D.renal],['Liver',D.hepatic],['Older adults',D.elderly]].filter(x=>x[1]);
+    if(adj.length)h+=`<div class="ds">${adj.map(x=>`<b>${x[0]}:</b> ${esc(x[1])}`).join(' · ')}</div>`;
+    if(D.note)h+=`<div class="ds">${!c.f?'<b>No calculated dose:</b> ':''}${esc(D.note.length>220?D.note.slice(0,217)+'…':D.note)}</div>`;
+    h+=`<div class="ds">Sources: ${D.sources.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.name)}</a>${x.section?' ('+esc(x.section)+')':''}`).join(' · ')}</div>`;}
   h+=[['alert',c.block],['watch',c.warn],['ok',c.ok]].map(([s,a])=>a.map(t=>`<div class="dr"><i class="dot st-${s}"></i><span>${esc(t)}</span></div>`).join('')).join('');
   h+=`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn${c.status==='alert'?'':' pri'}" data-give="${esc(r.id)}" ${c.status==='alert'||!c.f||!c.dose?'disabled':''}>Record dose given${c.dose?' ('+c.dose+' mg)':''}</button><button class="btn" data-goto="pharmacy">Dose table</button></div>`;
   return L('Dose check (from current vital signs)',h+'</div>');
