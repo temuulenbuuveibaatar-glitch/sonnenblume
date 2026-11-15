@@ -1,9 +1,8 @@
-// Mind: behavioural health module (check-in, PHQ-9/GAD-7, connection, coping tools, journal, on-device AI companion).
+// Mind: behavioural health module (check-in, PHQ-9/GAD-7, connection, coping tools, journal).
 // Everything stays in this browser under its own key. Stored data is untrusted: validated on load, escaped on render.
 (function(){'use strict';
 if(!window.SB)return;
 const SB=window.SB, esc=SB.esc, KEY='sonnenblume-mind-v1';
-const MODEL_ID='Qwen2.5-1.5B-Instruct-q4f16_1-MLC', AI_LABEL='AI-generated (Qwen2.5-1.5B, runs on this device)';
 
 // ---------- Content ----------
 const CHECK=[
@@ -56,9 +55,8 @@ const GROUND=[
   [2,'things you can smell','Food packaging, soap, the cabin air. Pick a favourite scent if you have one.'],
   [1,'thing you can taste','A sip of water or tea. Notice its temperature.']
 ];
-const SYSTEM_PROMPT='You are a supportive companion inside a crew self-health app, talking with an astronaut on a long-duration space mission. Be brief, warm and practical: at most about 120 words, plain sentences, no lists longer than three items. You are not a therapist and not a doctor. Never diagnose, never name a mental disorder as something the person has, and never give advice about medication, drugs or doses. Suggest simple, practical coping steps that work in a spacecraft or habitat (breathing, sleep routine, exercise, talking to a crewmate, a private call home). For anything serious, persistent, or about safety, encourage them to talk to the crew medical officer and the support team on Earth. If they mention harming themselves or others, tell them to speak to the crew medical officer or the nearest crew member right now.';
 
-// Deterministic red-flag check. Runs on every companion message (and on notes and journal text) before any AI.
+// Deterministic red-flag check on check-in notes and journal text.
 const RED_FLAGS=[
   /\bsuicid\w*/, /\bkill(ing)?\s+(my\s*self|myself)\b/, /\bend(ing)?\s+(my|it)\s+(own\s+)?(life|all)\b/, /\bend\s+it\s+all\b/, /\btake\s+my\s+(own\s+)?life\b/,
   /\b(want|wanna|wanted|wish|going|ready)\s+(to\s+)?die\b/, /\bbetter\s+off\s+dead\b/, /\b(don'?t|do\s+not)\s+want\s+to\s+(live|be\s+alive|be\s+here|wake\s+up)\b/,
@@ -126,7 +124,7 @@ function showSafety(reason){
       <li>If you feel you might act on thoughts of harming yourself or someone else, go to the nearest crew member now and stay with them.</li>
     </ul>
     <div class="btns"><button class="btn red" type="button" id="mAlertBtn">Alert crew medical officer now</button><button class="btn" type="button" id="mSafeClose">I am safe for now</button></div>
-    <p class="msmall" id="mAlertNote">The alert only says that you asked for support. Your answers, notes and chat stay on this device.</p>`;
+    <p class="msmall" id="mAlertNote">The alert only says that you asked for support. Your answers and notes stay on this device.</p>`;
   el.classList.remove('hidden');
   $('mAlertBtn').onclick=()=>{const cc=crew();
     let m=null;try{m=SB.sendMsg('alert',`${cc.name} asked for behavioural health support from the Mind module. Please check in with them in person now. Their answers and notes stay private on their device.`);}catch(e){}
@@ -148,11 +146,10 @@ function render(){
       <section class="card mwide" id="mScreens" aria-labelledby="mScreensH"></section>
       <section class="card" id="mTools" aria-labelledby="mToolsH"></section>
       <section class="card" id="mJournal" aria-labelledby="mJournalH"></section>
-      <section class="card mwide" id="mAI" aria-labelledby="mAIH"></section>
     </div>
     <p class="msrc">Sources: NASA Human Research Program, Risk of Adverse Cognitive or Behavioral Conditions and Psychiatric Disorders (evidence report and Human Research Roadmap). PHQ-9 and GAD-7 by Drs. Spitzer, Williams, Kroenke and colleagues, developed with an educational grant from Pfizer Inc., public domain (<a href="https://www.phqscreeners.com/" rel="noopener noreferrer" target="_blank">phqscreeners.com</a>). Screens are not a diagnosis. This module does not replace the crew medical officer or flight surgeon.</p>
   </div>`;
-  renderToday();renderCheck();renderConn();renderScreens();renderTools();renderJournal();renderAI();
+  renderToday();renderCheck();renderConn();renderScreens();renderTools();renderJournal();
 }
 
 function renderToday(){
@@ -289,7 +286,7 @@ function renderJournal(){
   const el=$('mJournal');if(!el)return;
   const list=M.journal.slice().reverse().slice(0,30);
   el.innerHTML=`<h2 id="mJournalH">Private journal <span class="mtag">${M.journal.length} entr${M.journal.length===1?'y':'ies'}</span></h2>
-    <label class="msmall" for="mJText">Only stored on this device. Not sent to the crew, Earth, or the AI.</label>
+    <label class="msmall" for="mJText">Only stored on this device. Not sent to the crew or Earth.</label>
     <textarea id="mJText" class="mjtext" maxlength="4000" placeholder="Write freely"></textarea>
     <div class="btns"><button class="btn pri msm" type="button" id="mJSave">Save entry</button><button class="btn msm" type="button" id="mJExport"${M.journal.length?'':' disabled'}>Export as text</button>
       <button class="btn warn msm" type="button" id="mJDel"${M.journal.length?'':' disabled'}>Delete all</button></div>
@@ -307,83 +304,6 @@ function exportJournal(){
   try{const txt='Sonnenblume private journal\nExported '+new Date().toISOString()+'\n\n'+M.journal.map(j=>`Mission day ${j.day} - ${fmtDate(j.ts)}\n${j.text}\n`).join('\n');
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download='sonnenblume-journal.txt';document.body.appendChild(a);a.click();
     setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}catch(e){SB.toast('Export failed');}
-}
-
-// 6. AI companion (opt-in, on-device, WebGPU)
-const AI={worker:null,state:'idle',progress:0,ptext:'',chat:[],busy:false,seq:0,err:''};
-function renderAI(){
-  const el=$('mAI');if(!el)return;const gpu=!!navigator.gpu;
-  let status='';
-  if(!gpu)status=`<p class="mnote">${dot('none')}The AI companion needs a browser with WebGPU (recent Chrome, Edge, or Safari on a supported device). Everything else in Mind works without it.</p>`;
-  else if(AI.state==='idle')status=`<p class="msmall">Opt-in. Downloads the Qwen2.5-1.5B model (about 1 GB) once; the browser caches it, so later starts work offline. Your messages never leave this device.</p>
-      <button class="btn pri msm" type="button" id="mAIStart">Download model and start (about 1 GB)</button>`;
-  else if(AI.state==='loading')status=`<p class="msmall" id="mAIPText">${esc(AI.ptext||'Starting')}</p><div class="mprog" role="progressbar" aria-label="Model download" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(AI.progress*100)}"><i id="mAIBar" style="width:${(AI.progress*100).toFixed(1)}%"></i></div>`;
-  else if(AI.state==='ready')status=`<p class="msmall">${dot('ok')}Companion ready. Runs on this device; chat is kept in memory only.</p>`;
-  else if(AI.state==='error')status=`<p class="mnote">${dot('alert')}The model could not start: ${esc(AI.err)}. Everything else in Mind still works.</p><button class="btn msm" type="button" id="mAIStart">Try again</button>`;
-  el.innerHTML=`<h2 id="mAIH">AI companion <span class="mtag">optional · on-device</span></h2>
-    <p class="msmall">A brief, practical listener. Not a therapist and not a doctor: it does not diagnose or give medication advice. For anything serious, talk to the crew medical officer.</p>
-    <div id="mAIStatus">${status}</div>
-    <div class="mchat" id="mChat" aria-live="polite"></div>
-    <form class="mchatform" id="mChatForm" novalidate><label class="sr" for="mChatIn">Message to the companion</label>
-      <input id="mChatIn" maxlength="1000" autocomplete="off" placeholder="How are you doing today?">
-      <button class="btn pri msm" type="submit" id="mChatSend">Send</button><button class="btn msm${AI.busy?'':' hidden'}" type="button" id="mChatStop">Stop</button></form>
-    <div class="btns"><button class="btn msm" type="button" id="mChatSave"${AI.chat.length?'':' disabled'}>Save chat to journal</button><button class="btn msm" type="button" id="mChatClear"${AI.chat.length?'':' disabled'}>Clear chat</button></div>`;
-  const st=$('mAIStart');if(st)st.onclick=startAI;
-  $('mChatForm').onsubmit=e=>{e.preventDefault();send();};
-  $('mChatStop').onclick=()=>{if(AI.worker)AI.worker.postMessage({type:'stop'});};
-  $('mChatSave').onclick=()=>{const t=AI.chat.map(m=>(m.role==='user'?'Me':m.role==='assistant'?'Companion ('+AI_LABEL+')':'Note')+': '+m.content).join('\n').slice(0,4000);
-    if(t){addJournal(t);renderJournal();SB.toast('Chat saved to your private journal');}};
-  $('mChatClear').onclick=()=>{AI.chat=[];renderAI();};
-  drawChat();
-}
-function drawChat(){
-  const box=$('mChat');if(!box)return;box.textContent='';
-  AI.chat.forEach(m=>{const d=document.createElement('div');d.className='mmsg '+m.role;
-    if(m.role==='assistant'){const l=document.createElement('div');l.className='mailabel';l.textContent=AI_LABEL;d.appendChild(l);}
-    if(m.role==='note'){const l=document.createElement('div');l.className='mailabel';l.textContent=m.safety?'Safety check (not AI)':'App note (not AI)';d.appendChild(l);}
-    const p=document.createElement('p');p.textContent=m.content||(m.pending?'...':'');d.appendChild(p);box.appendChild(d);});
-  box.classList.toggle('hidden',!AI.chat.length);box.scrollTop=box.scrollHeight;
-  const s=$('mChatSave'),c=$('mChatClear'),stop=$('mChatStop');if(s)s.disabled=!AI.chat.length;if(c)c.disabled=!AI.chat.length;if(stop)stop.classList.toggle('hidden',!AI.busy);
-}
-async function startAI(){
-  if(!navigator.gpu){renderAI();return;}
-  let adapter=null;try{adapter=await navigator.gpu.requestAdapter();}catch(e){}
-  if(!adapter){AI.state='error';AI.err='no WebGPU graphics adapter is available in this browser, so the companion needs a WebGPU browser on a supported device';renderAI();return;}
-  if(!AI.worker){
-    try{AI.worker=new Worker('js/mind-worker.js',{type:'module'});}catch(e){AI.state='error';AI.err='this browser cannot start module workers';renderAI();return;}
-    AI.worker.onmessage=onWorker;
-    AI.worker.onerror=e=>{AI.state='error';AI.err=String((e&&e.message)||'worker error').slice(0,200);AI.busy=false;if(isOpen())renderAI();};
-  }
-  AI.state='loading';AI.progress=0;AI.ptext='Starting';renderAI();AI.worker.postMessage({type:'load'});
-}
-function onWorker(e){
-  const d=e.data||{};const msg=typeof d.message==='string'?d.message.slice(0,300):'';
-  if(d.type==='progress'){AI.progress=Math.min(1,Math.max(0,Number(d.progress)||0));AI.ptext=typeof d.text==='string'?d.text.slice(0,300):'';
-    const b=$('mAIBar'),t=$('mAIPText');if(b){b.style.width=(AI.progress*100).toFixed(1)+'%';b.parentElement.setAttribute('aria-valuenow',String(Math.round(AI.progress*100)));}if(t)t.textContent=AI.ptext;return;}
-  if(d.type==='ready'){AI.state='ready';if(isOpen())renderAI();return;}
-  const cur=AI.chat.find(m=>m.id===d.id&&m.role==='assistant');
-  if(d.type==='delta'&&cur){cur.content=String(d.text||'').slice(0,4000);drawChat();return;}
-  if(d.type==='done'&&cur){cur.content=String(d.text||'').slice(0,4000)||'(no reply)';cur.pending=false;AI.busy=false;drawChat();return;}
-  if(d.type==='error'){if(cur){cur.content='The companion could not reply: '+msg;cur.pending=false;AI.busy=false;drawChat();}
-    else{AI.state='error';AI.err=msg||'unknown error';AI.busy=false;if(isOpen())renderAI();}}
-}
-function send(){
-  const inp=$('mChatIn');if(!inp)return;const text=inp.value.trim().slice(0,1000);if(!text)return;
-  if(AI.busy){SB.toast('Wait for the reply to finish, or press Stop');return;}
-  inp.value='';AI.chat.push({role:'user',content:text});
-  // Safety first, deterministic, before any model call.
-  if(redFlag(text)){
-    AI.chat.push({role:'note',safety:true,content:'What you wrote matters, and a person should hear it. This message was not sent to the AI. Please look at the support card above and talk to your crew medical officer now.'});
-    drawChat();showSafety('Your message mentioned something serious.');return;
-  }
-  if(AI.state!=='ready'){
-    AI.chat.push({role:'note',content:navigator.gpu?'The companion is not running. Start it above to get a reply. Your message stays on this device.':'The AI companion needs a WebGPU browser. Your message stays on this device; the coping tools and journal still work.'});
-    drawChat();return;
-  }
-  const id=++AI.seq;
-  const history=AI.chat.filter(m=>(m.role==='user'||m.role==='assistant')&&!m.pending).slice(-12).map(m=>({role:m.role,content:m.content}));
-  AI.chat.push({role:'assistant',content:'',pending:true,id});AI.busy=true;drawChat();
-  AI.worker.postMessage({type:'chat',id,messages:[{role:'system',content:SYSTEM_PROMPT}].concat(history)});
 }
 
 SB.onView('mind',render);

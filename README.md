@@ -38,7 +38,7 @@ NASA calls the goal **Earth-Independent Medical Operations**: crews beyond the M
 ## Tech
 
 - Vanilla HTML, CSS and JavaScript with no build step, so it runs anywhere.
-- **Mind** (`js/mind.js`): daily wellbeing check-in against the person's own baseline, weekly PHQ-9 and GAD-7 screens with a safety card and one-tap crew alert, isolation tracker, coping tools, a private journal and the optional on-device AI companion.
+- **Mind** (`js/mind.js`): daily wellbeing check-in against the person's own baseline, weekly PHQ-9 and GAD-7 screens with a safety card and one-tap crew alert, isolation tracker, coping tools and a private journal.
 - **Crew ops** (`js/ops.js`): crew medical officer view, EVA and task readiness (Go / Caution / No-go with reasons), countermeasure planner and a 7-day ground handover report under 1.5 KB.
 - **Label dose reference** (`data/kb-dosing.json`): adult doses traced to DailyMed plus a second source, with kidney, liver and older-adult notes and label vital-sign gates in the dose check.
 - **Rust status engine** (`rust/core`): vital-sign thresholds, critical values, personal-baseline shift detection and the radiation budget, written in Rust and compiled to a 2 KB WebAssembly file (`wasm/sonnenblume_core.wasm`). The console uses it when the browser supports WebAssembly and falls back to the identical JavaScript rules otherwise; a test sweeps thousands of values to prove both agree. Rebuild with `npm run build:wasm` (needs Rust with the `wasm32-unknown-unknown` target).
@@ -92,7 +92,6 @@ This project was built with AI assistance, as required by the NASA Space Apps ru
 
 - **Code:** the web app, Rust status engine, serverless API, service worker, tests and CI were written and debugged with Claude (Anthropic), directed and reviewed by the team.
 - **Data:** the medical library text (medicines, protocols, shielding, conditions) was drafted with Claude from the public sources listed above. It is educational demo content, not medical guidance.
-- **In the app:** the optional Mind companion runs Qwen2.5-1.5B-Instruct (4-bit, Apache-2.0) on the user's device through WebLLM (vendored in `vendor/web-llm`, Apache-2.0). It is opt-in, downloads about 0.9 GB once, needs WebGPU, labels every reply AI-generated, never diagnoses or gives doses, and a fixed non-AI safety check runs before it on every message. No conversation leaves the device.
 - **Medicine doses:** label-sourced dose references in `data/kb-dosing.json` were gathered with Claude from the official DailyMed labels plus a second authoritative source, then validated by `scripts/check-dosing.py`.
 - **Visuals:** the anatomical body map and landing animations are code-generated with Claude. The project image is AI-generated and carries a visible AI watermark.
 - No personal or health data is sent to any AI service; the app runs entirely in the browser.

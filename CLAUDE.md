@@ -13,7 +13,7 @@ Plain HTML/CSS/JS, no build step. Vercel serverless functions in `api/` (ES modu
 | `index.html`, `css/landing.css`, `js/landing.js` | Landing page (black theme, white vortex canvas — teammates chose this design, keep it) |
 | `app.html`, `css/styles.css`, `js/app.js` | Console: dashboard, log, trends, library, pharmacy, guide |
 | `rust/core/` → `wasm/sonnenblume_core.wasm` | Rust status engine (thresholds, critical values, baseline shift, radiation) compiled to WebAssembly; `js/app.js` loads it with a JavaScript fallback. Keep thresholds in Rust and `IND` in sync (parity test). Rebuild: `npm run build:wasm`, test: `npm run test:rust` |
-| `js/mind.js`, `js/mind-worker.js`, `vendor/web-llm/` | Mind tab: check-in, PHQ-9/GAD-7, safety card, journal, opt-in on-device Qwen2.5-1.5B companion (WebLLM, WebGPU). Non-AI red-flag check runs before the model. CSP connect-src allows Hugging Face + raw.githubusercontent.com only for the model download |
+| `js/mind.js`, `css/mind.css` | Mind tab: check-in vs own baseline, PHQ-9/GAD-7, safety card + crew alert, isolation tracker, coping tools, journal. No AI model in the app |
 | `js/ops.js` | Crew ops tab: medical officer view, EVA readiness, countermeasures, handover report |
 | `data/kb-dosing.json`, `scripts/check-dosing.py` | Label-sourced dose reference; rebuild with `python scripts/check-dosing.py data/dosing-*.json` |
 | `js/body.js` | Procedural SVG anatomy (`buildBody(rng)`), viewBox 880x980, two modes: Organs / Bones |
@@ -23,7 +23,7 @@ Plain HTML/CSS/JS, no build step. Vercel serverless functions in `api/` (ES modu
 | `api/spaceweather.mjs` | NASA DONKI proxy (FLR, SEP, GST), cached 1 h; env `NASA_API_KEY` optional |
 | `sw.js` | Offline cache, network-first; bump `VERSION` on every release |
 | `scripts/seed-azure.mjs` | Seeds Cosmos DB (`npm run seed`) |
-| `tests/smoke_test.py` | 113 Playwright checks; runs in GitHub Actions on every push |
+| `tests/smoke_test.py` | 112 Playwright checks; runs in GitHub Actions on every push |
 
 ## Commands
 ```bash

@@ -92,16 +92,3 @@
 .mind .mjentry{border-top:1px dashed var(--line);padding:8px 0}
 .mind .mjentry p{margin:4px 0 0;white-space:pre-wrap;font-size:13.5px;line-height:1.5;overflow-wrap:anywhere}
 
-/* AI companion */
-.mind .mprog{height:8px;border-radius:99px;background:#111113;border:1px solid var(--line);overflow:hidden;margin-top:6px}
-.mind .mprog i{display:block;height:100%;background:var(--sun);width:0;transition:width .3s}
-.mind .mchat{margin-top:12px;max-height:360px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.mind .mmsg{max-width:86%;border-radius:12px;padding:8px 11px;font-size:14px;line-height:1.5;border:1px solid var(--line)}
-.mind .mmsg p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
-.mind .mmsg.user{align-self:flex-end;background:#232327;border-color:var(--line2)}
-.mind .mmsg.assistant{align-self:flex-start;background:var(--panel)}
-.mind .mmsg.note{align-self:stretch;max-width:none;border-color:var(--sun);background:rgba(245,179,1,.06)}
-.mind .mailabel{font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
-.mind .mchatform{display:flex;gap:8px;margin-top:12px}
-.mind .mchatform input{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 10px;outline:none}
-.mind .mchatform input:focus{border-color:#55555c}
